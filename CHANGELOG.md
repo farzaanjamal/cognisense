@@ -1,0 +1,119 @@
+# Changelog
+
+Format: Keep a Changelog. Versions: semantic, `-dev` until the first device build.
+
+## [0.5.0-dev] — 2026-10-06
+### Changed
+- **The browser preview is now the web demo, the primary way to see Cognisense.**
+  - A landing page with a plain explanation and a live stage showing the real Go/No-Go stimuli at their configured timing.
+  - A guided five-task flow with numbered progress, and a single-task option.
+  - Task introductions with a looping example trial, plus the child-facing instructions with the Urdu switch.
+  - Neutral between-task screens.
+  - A results page with one chart per task, drawn from the recorded trials, with key measures and their timing class.
+  - A "For researchers" drawer holding the versions, the configuration hash and the full measures.
+  - The five unimplemented candidate tasks no longer appear in the demo; they remain in the specifications.
+- Visual system: Atkinson Hyperlegible and Noto Nastaliq Urdu, embedded (SIL Open Font License; `browser/web/fonts/OFL.txt`). The content-security policy now allows `data:` fonts only.
+- During tasks: the screen is kept awake where supported, pull-to-refresh is blocked, and leaving asks for confirmation. Nothing on the task stage is animated by CSS, and shell animations never run during a task.
+- The end-to-end test follows the new flow and adds a guided mode (`guided`, or `guided:T5,T9` for a subset). It also checks the between-task screen and that there is one chart per task part.
+- The cloud build runs the simulation tests, checks that `analysis/results/` matches a fresh run (numpy pinned), and runs the full guided demo.
+
+### Added
+- `README.md` rewritten: what, why, tasks, screenshots, architecture, research, status, limitations, ethics, development, AI use.
+- `CITATION.cff` (author: Farzaan Jamal).
+- `analysis/results/`: the simulation outputs used in the paper, recording the numpy version that produced them.
+- `examples/`: session files from the test's scripted participant (not a person), to show the data format. They are kept out of `/data/`, which stays ignored so real participant data can never be committed.
+- `docs/images/`: screenshots of the demo.
+
+## [0.4.0-dev] — 2026-10-04
+### Added
+- `analysis/timing_simulation.py` and `analysis/test_timing_simulation.py` (7 tests): a Monte Carlo study of how device timing error propagates into six battery metrics.
+  - 500 replicates × 200 simulated children; seed 20261004; about 20 s to run.
+  - Device offsets of 35–140 ms (the range reported by Nicosia et al., 2023) plus per-trial jitter.
+  - Sensitivity option `--gng-window`.
+
+### Fixed
+- **Browser preview tasks ran in a 300 × 150 box in the top-left corner (about 0.42× scale).** The safe-area change in 0.3.0 positioned the canvas with insets only, which does not stretch a replaced element. The canvas now sizes to the viewport minus the safe-area insets. The end-to-end test now checks that the stage fills the viewport, and it was confirmed to fail on the old bug.
+
+### Found (design issue, not yet changed)
+- The Go/No-Go response window is judged in device time, so device offsets censor slow responses. In simulation this biased RT ISD by about −10 ms and raised omission rates by about 2.5 percentage points.
+- Proposed remedy for the next config version: record late responses and apply the window after device correction. Referred to the expert panel.
+
+## [0.3.0-dev] — 2026-10-03
+### Added
+- **Browser preview** (`browser/`): review tool only. The unchanged Kotlin core is compiled to JavaScript.
+  - 72/72 scripted runs byte-identical with the JVM build.
+  - Single-file HTML with a strict CSP (no network connections), `noindex`, no cookies or storage.
+  - Review variants only; bilingual; keyboard on desktop.
+  - End-to-end tested in headless Chrome for all five core tasks; deterministic build.
+- **Reviewer APK flavour** (`reviewer`): opens in Expert Review; Session mode and dashboard unreachable. Release signing from environment variables only.
+- **Cloud build** (`.github/workflows/build.yml`): core, analysis and browser tests; preview rebuild check; Android build of both flavours; merged-manifest permission check; APK artifacts; signed reviewer pre-release on version tags. Plus `pages.yml` for GitHub Pages.
+- `config/strings.json`: all interface text shared by app and preview.
+- `core/util/Portable.kt`: pure-Kotlin SHA-256 (FIPS vectors; matches the JDK at block boundaries) and locale-free formatting. The core now has no JVM-only dependencies.
+- `core/verify/CrossPlatformCheck.kt`: deterministic scripted-child digest for cross-platform verification.
+- Docs:
+  - `docs/cloud_build.md`, `docs/reviewer_apk_install.md`, `docs/release_signing.md`;
+  - `measurement_precision.md` §9 (why browser timing is never data);
+  - rating-form requirement "Build reviewed".
+
+### Fixed
+- 76 Urdu drafts were corrupted to '?' while moving strings into `config/strings.json` (a non-UTF-8 console in the tooling). All were restored from the previous release. A permanent test now fails if any Urdu string loses its Arabic-script text.
+
+## [0.2.0-dev] — 2026-10-02 (third tranche)
+### Added
+- Core battery complete in code:
+  - spatial span forward/backward (T6): adaptive, fixed sequences;
+  - time reproduction (T9): press-and-hold with release events;
+  - choice-delay (T10): forced familiarisation, balanced sides.
+- `config/tasks.json`: single source of truth for all task parameters, display geometry, the task pool and the fixed span sequences. Strict loader (`BatteryConfig`) with JSON-path errors; SHA-256 recorded per session. `config/README.md` sets the versioning rules.
+- `CustomRunner` base and `TaskRun` interface: every task runs through one interface.
+- Dependency-free JSON parser in the core.
+- Data schema 0.2: `details` column; `task_config_version`, `task_config_sha256`.
+- App:
+  - all five core tasks playable; spatial span runs as two parts;
+  - drawing fully config-driven;
+  - finger-release events;
+  - span re-administration flagged in data and on the dashboard.
+- Tests: 188 checks, including simulated children for the three new tasks, config validation and sequence provenance.
+
+### Changed
+- Go/No-Go and Flanker parameters moved from Kotlin defaults to the config file. Behaviour unchanged; the existing tests pass with their original expected values.
+
+### Fixed
+- The generated backward-span practice sequence duplicated the first scored sequence. The generator now excludes scored sequences, and the loader rejects duplicates.
+
+## [0.1.0-dev] — 2026-10-02 (second tranche)
+### Added
+- Android app (`android/app`), framework-only, minSdk 26 / targetSdk 35:
+  - Expert Review, Session and Dashboard modes; Go/No-Go and Flanker playable;
+  - Choreographer-driven task view with a refresh-rate probe;
+  - MotionEvent timestamps (ns on API 34+);
+  - immersive mode, fixed brightness and 60 Hz mode request; interruption handling;
+  - SQLite storage with lossless JSON codecs;
+  - CSV/JSON export through the system file picker;
+  - administrator PIN (salted hash); pre-session checklist;
+  - neutral dashboard charts and data-quality flags;
+  - Urdu-first bilingual strings (drafts, unvalidated).
+- Gradle build (AGP 8.7.3, Kotlin 2.0.21, Gradle 8.10.2 wrapper); `:core:coreTests` task.
+- Manifest privacy guarantees: no permissions requested; INTERNET, CAMERA and RECORD_AUDIO stripped from merges; backup and device transfer disabled.
+- `android/README.md`: build instructions, troubleshooting, first-device smoke test.
+- Core:
+  - practice feedback state (tick/cross, practice only; scored phases reject it);
+  - attempt number on trial records;
+  - Expert Review task variants with distinct versions (`0.1-review`);
+  - 1 s fixation lead-in after an interruption;
+  - duplicate interruptions counted once;
+  - checklist field in session metadata.
+
+### Fixed
+- `.gitignore` would have excluded the Gradle wrapper jar and both source packages named `data`.
+- Core tests wrote to `/tmp`, which fails on Windows.
+
+## [0.1.0-dev] — 2026-10-02 (first tranche)
+### Added
+- `docs/task_specifications.md`: 10-task candidate pool, proposed core battery, timing-robustness classes, references with [VERIFY] markers.
+- `analysis/cvi.py` with tests: I-CVI, S-CVI/Ave, S-CVI/UA, modified kappa.
+- `android/core`: seeded RNG; frame-driven trial engine; Go/No-Go and Flanker definitions and scoring; TimingSource (software implemented, hardware designed); MotionSource (none implemented, IMU designed); session metadata; participant ID generator; CSV/JSON export; 100-check simulation test suite.
+- `docs/architecture.md`, `docs/measurement_precision.md`, `docs/data_schema.md`, `hardware/README.md`.
+
+### Superseded
+- `docs/archive_build_plan_superseded.md` (planning document, renamed): its two-task scope, adult-only plan and "do not buy an accelerometer" advice are superseded by the consolidated brief. Its bill of materials remains a useful price reference.

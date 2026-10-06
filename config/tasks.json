@@ -1,0 +1,427 @@
+{
+  "schema": "cognisense.tasks",
+  "config_version": "0.2",
+  "note": "Single source of truth for task parameters. Read by the Android app (and the browser preview, when built). Every value is a PROPOSED parameter pending expert review and piloting (docs/task_specifications.md). Rules in config/README.md: changing any value of a task requires bumping that task's version; every session records config_version and the SHA-256 of this file.",
+  "common": {
+    "anticipation_ms": 150,
+    "block_break_ms": 10000,
+    "between_task_rest_ms": 30000,
+    "max_practice_attempts": 3,
+    "practice_feedback_ms": 500,
+    "practice_feedback_gap_ms": 500,
+    "resume_lead_in_ms": 1000,
+    "refresh_probe_frames": 60
+  },
+  "display": {
+    "background_rgb": [128, 128, 128],
+    "text_rgb": [0, 0, 0],
+    "text_sp": 26,
+    "fixation": {
+      "size_dp": 24,
+      "stroke_dp": 3,
+      "rgb": [0, 0, 0]
+    },
+    "pads": {
+      "radius_dp": 60,
+      "side_margin_dp": 40,
+      "bottom_margin_dp": 28,
+      "hit_radius_factor": 1.25,
+      "fill_rgb": [90, 90, 90],
+      "pressed_rgb": [30, 30, 30],
+      "ring_rgb": [60, 60, 60],
+      "ring_dp": 3,
+      "cue_ring_rgb": [0, 0, 0],
+      "cue_ring_dp": 6
+    },
+    "feedback": {
+      "stroke_dp": 8,
+      "half_size_dp": 30,
+      "rgb": [0, 0, 0]
+    },
+    "onset_marker": {
+      "size_dp": 48,
+      "inset_dp": 24
+    }
+  },
+  "stimuli": {
+    "gng_go_circle": {
+      "shape": "circle",
+      "diameter_dp": 96,
+      "rgb": [0, 0, 0]
+    },
+    "gng_nogo_square": {
+      "shape": "square",
+      "side_dp": 85,
+      "rgb": [0, 0, 0]
+    },
+    "flanker": {
+      "shape": "arrow_row",
+      "count": 5,
+      "arrow_width_dp": 48,
+      "arrow_height_dp": 32,
+      "gap_dp": 8,
+      "shaft_height_fraction": 0.36,
+      "rgb": [0, 0, 0]
+    },
+    "span_board": {
+      "shape": "board",
+      "width_dp": 480,
+      "height_dp": 280,
+      "square_dp": 56,
+      "idle_rgb": [64, 64, 64],
+      "lit_rgb": [255, 255, 255],
+      "echo_rgb": [255, 255, 255],
+      "cue_frame_dp": 6,
+      "cue_frame_rgb": [0, 0, 0],
+      "note": "Adapted irregular 9-square layout, normalised to the board (x, y in 0-1). NOT the original Corsi coordinates [VERIFY against Kessels et al. 2000 if equivalence to the standard layout is wanted].",
+      "positions": [[0.1, 0.18], [0.42, 0.12], [0.8, 0.2], [0.24, 0.5], [0.58, 0.44], [0.9, 0.56], [0.08, 0.84], [0.44, 0.8], [0.74, 0.88]]
+    },
+    "trp_circle": {
+      "shape": "circle",
+      "diameter_dp": 96,
+      "rgb": [0, 114, 178]
+    },
+    "trp_feedback": {
+      "shape": "duration_bars",
+      "max_bar_dp": 360,
+      "bar_height_dp": 16,
+      "gap_dp": 14,
+      "target_rgb": [40, 40, 40],
+      "reproduced_rgb": [0, 114, 178]
+    },
+    "cdt_options": {
+      "shape": "choice_panels",
+      "token_dp": 34,
+      "token_gap_dp": 10,
+      "token_rgb": [230, 159, 0],
+      "token_outline_dp": 3,
+      "inactive_rgb": [160, 160, 160],
+      "bar_height_dp": 12,
+      "short_bar_dp": 30,
+      "long_bar_dp": 180,
+      "bar_rgb": [40, 40, 40]
+    }
+  },
+  "core_battery_order": [
+    "T2",
+    "T6",
+    "T5",
+    "T9",
+    "T10"
+  ],
+  "pool": [
+    {
+      "code": "T1",
+      "id": "SRT",
+      "name": "Simple reaction time",
+      "construct": "Speed and consistency of a simple detect-and-respond process (covariate; not executive function).",
+      "measures": "Median RT [C], RT SD [B], omissions [A], premature responses [A].",
+      "review_duration": "about 2 min",
+      "parts": []
+    },
+    {
+      "code": "T2",
+      "id": "GNG",
+      "name": "Go/No-Go with event-rate manipulation",
+      "construct": "Inhibition of a prepotent response; sustained responding; energetic regulation (event rate).",
+      "measures": "Commission and omission rates [A], d' [A], median Go RT [C], RT SD [B], slow-fast differences [B/A].",
+      "review_duration": "about 2 min (practice + one fast and one slow block)",
+      "parts": [
+        "GNG"
+      ]
+    },
+    {
+      "code": "T3",
+      "id": "CPT",
+      "name": "Rare-target continuous performance test",
+      "construct": "Vigilance: detection of infrequent targets over time.",
+      "measures": "Omissions, false alarms, d' [A], hit RT [C], vigilance decrement [A/B].",
+      "review_duration": "about 9 min (full)",
+      "parts": []
+    },
+    {
+      "code": "T4",
+      "id": "SST",
+      "name": "Stop-signal task (visual stop signal)",
+      "construct": "Action cancellation (stopping an initiated response).",
+      "measures": "SSRT [C], p(respond|signal) [A], Go RT and SD [C/B].",
+      "review_duration": "about 8 min (full)",
+      "parts": []
+    },
+    {
+      "code": "T5",
+      "id": "FLK",
+      "name": "Flanker (arrows)",
+      "construct": "Interference control: responding to a target while ignoring conflicting flankers.",
+      "measures": "RT interference cost [B], accuracy interference [A], median RT [C], RT SD [B].",
+      "review_duration": "about 1.5 min (practice + 16 trials)",
+      "parts": [
+        "FLK"
+      ]
+    },
+    {
+      "code": "T6",
+      "id": "SPS",
+      "name": "Spatial span, forward and backward",
+      "construct": "Visuospatial short-term memory (forward) and working memory (backward).",
+      "measures": "Span, total correct, product score [A]; first-tap latency [C, exploratory].",
+      "review_duration": "about 3-4 min (practice + adaptive; maximum length 5 forward, 4 backward)",
+      "parts": [
+        "SPF",
+        "SPB"
+      ]
+    },
+    {
+      "code": "T7",
+      "id": "NBK",
+      "name": "Spatial n-back (1-back, 2-back)",
+      "construct": "Working-memory updating and monitoring.",
+      "measures": "Hits, false alarms, d' per load [A]; load cost [A].",
+      "review_duration": "about 6 min (full)",
+      "parts": []
+    },
+    {
+      "code": "T8",
+      "id": "TSW",
+      "name": "Task switching (shape/colour)",
+      "construct": "Cognitive flexibility (set shifting).",
+      "measures": "Switch cost [B], mixing cost [B], error switch cost [A].",
+      "review_duration": "about 7 min (full)",
+      "parts": []
+    },
+    {
+      "code": "T9",
+      "id": "TRP",
+      "name": "Time reproduction",
+      "construct": "Temporal processing: encoding and reproducing supra-second durations.",
+      "measures": "Reproduction ratio, absolute error, precision, Vierordt slope [B].",
+      "review_duration": "about 1.5 min (practice + one trial per duration)",
+      "parts": [
+        "TRP"
+      ]
+    },
+    {
+      "code": "T10",
+      "id": "CDT",
+      "name": "Choice-delay task",
+      "construct": "Delay-related choice (preference for smaller-sooner over larger-later rewards).",
+      "measures": "Proportion of larger-later choices [A]; choice latency [C, exploratory].",
+      "review_duration": "1.5-2.5 min (2 forced + 4 free choices; depends on choices)",
+      "parts": [
+        "CDT"
+      ]
+    }
+  ],
+  "tasks": {
+    "GNG": {
+      "kind": "go_no_go",
+      "version": "0.1",
+      "pads": "SINGLE",
+      "stimuli": {
+        "go": "gng_go_circle",
+        "nogo": "gng_nogo_square"
+      },
+      "stimulus_ms": 300,
+      "response_window_ms": 1000,
+      "isi_ms": {
+        "fast": 1000,
+        "slow": 4000
+      },
+      "block_lead_in_ms": 1000,
+      "nogo_fraction": 0.25,
+      "leading_go": 3,
+      "max_consecutive_nogo": 2,
+      "blocks": [
+        {
+          "rate": "fast",
+          "trials": 48
+        },
+        {
+          "rate": "slow",
+          "trials": 24
+        },
+        {
+          "rate": "fast",
+          "trials": 48
+        },
+        {
+          "rate": "slow",
+          "trials": 24
+        }
+      ],
+      "practice": {
+        "rate": "fast",
+        "trials": 12,
+        "leading_go": 2,
+        "min_go_hits": 7,
+        "min_nogo_withheld": 2
+      },
+      "review": {
+        "blocks": [
+          {
+            "rate": "fast",
+            "trials": 16
+          },
+          {
+            "rate": "slow",
+            "trials": 8
+          }
+        ]
+      }
+    },
+    "FLK": {
+      "kind": "flanker",
+      "version": "0.1",
+      "pads": "LEFT_RIGHT",
+      "stimulus_prefix": "flanker",
+      "blocks": 2,
+      "trials_per_block": 40,
+      "foreperiod_ms": {
+        "min": 400,
+        "max": 800
+      },
+      "response_window_ms": 2000,
+      "iti_ms": 500,
+      "max_same_condition": 3,
+      "practice": {
+        "trials": 12,
+        "min_correct": 9
+      },
+      "review": {
+        "blocks": 1,
+        "trials_per_block": 16
+      }
+    },
+    "SPF": {
+      "kind": "spatial_span",
+      "version": "0.1",
+      "pads": "BOARD",
+      "direction": "forward",
+      "board": "span_board",
+      "fixation_before_ms": 1000,
+      "highlight_ms": 700,
+      "inter_highlight_ms": 300,
+      "cue_delay_ms": 500,
+      "echo_ms": 200,
+      "recall_timeout_ms": 30000,
+      "iti_ms": 1000,
+      "start_length": 2,
+      "max_length": 9,
+      "trials_per_length": 2,
+      "practice": {
+        "sequences": [[2, 7], [5, 1]],
+        "min_correct": 1
+      },
+      "sequence_generation": "SpanSequences.generate(seed=20261002, label=\"SPF\", perLength=2, squares=9); practice: SpanSequences.generatePractice(seed=20261002, label=\"SPF:practice\", excluding all scored sequences). CoreTests checks this file still matches.",
+      "sequences": {
+        "2": [[0, 7], [2, 6]],
+        "3": [[1, 6, 7], [0, 6, 3]],
+        "4": [[4, 2, 3, 0], [8, 3, 2, 4]],
+        "5": [[6, 4, 2, 0, 3], [0, 4, 6, 8, 2]],
+        "6": [[6, 4, 3, 8, 0, 7], [3, 8, 2, 4, 5, 6]],
+        "7": [[3, 1, 5, 6, 0, 7, 8], [7, 1, 0, 3, 2, 5, 4]],
+        "8": [[7, 6, 1, 5, 4, 0, 8, 3], [2, 1, 5, 4, 0, 8, 7, 3]],
+        "9": [[3, 5, 2, 8, 7, 6, 4, 1, 0], [0, 8, 1, 7, 6, 2, 5, 4, 3]]
+      },
+      "review": {
+        "max_length": 5
+      }
+    },
+    "SPB": {
+      "kind": "spatial_span",
+      "version": "0.1",
+      "pads": "BOARD",
+      "direction": "backward",
+      "board": "span_board",
+      "fixation_before_ms": 1000,
+      "highlight_ms": 700,
+      "inter_highlight_ms": 300,
+      "cue_delay_ms": 500,
+      "echo_ms": 200,
+      "recall_timeout_ms": 30000,
+      "iti_ms": 1000,
+      "start_length": 2,
+      "max_length": 8,
+      "trials_per_length": 2,
+      "practice": {
+        "sequences": [[0, 1], [8, 2]],
+        "min_correct": 1
+      },
+      "sequence_generation": "SpanSequences.generate(seed=20261002, label=\"SPB\", perLength=2, squares=9); practice: SpanSequences.generatePractice(seed=20261002, label=\"SPB:practice\", excluding all scored sequences). CoreTests checks this file still matches.",
+      "sequences": {
+        "2": [[8, 4], [7, 4]],
+        "3": [[2, 4, 7], [8, 1, 7]],
+        "4": [[3, 4, 0, 7], [8, 5, 7, 6]],
+        "5": [[3, 8, 7, 4, 5], [4, 6, 8, 7, 2]],
+        "6": [[3, 8, 0, 4, 6, 7], [8, 5, 3, 1, 2, 0]],
+        "7": [[3, 2, 6, 7, 8, 4, 5], [0, 4, 2, 8, 3, 1, 7]],
+        "8": [[1, 3, 4, 7, 0, 5, 6, 8], [3, 1, 8, 2, 7, 5, 0, 4]]
+      },
+      "review": {
+        "max_length": 4
+      }
+    },
+    "TRP": {
+      "kind": "time_reproduction",
+      "version": "0.1",
+      "pads": "SINGLE",
+      "stimulus": "trp_circle",
+      "durations_ms": [1000, 2000, 4000, 6000],
+      "repetitions": 4,
+      "max_consecutive_same": 2,
+      "fixation_before_ms": 1000,
+      "pause_before_response_ms": 500,
+      "press_timeout_ms": 10000,
+      "max_hold_ms": 20000,
+      "premature_release_ms": 200,
+      "iti_ms": 1000,
+      "practice": {
+        "durations_ms": [2000, 4000, 1000],
+        "feedback_ms": 2000,
+        "min_ratio": 0.3,
+        "max_ratio": 3.0
+      },
+      "review": {
+        "repetitions": 1
+      }
+    },
+    "CDT": {
+      "kind": "choice_delay",
+      "version": "0.1",
+      "pads": "LEFT_RIGHT",
+      "stimulus": "cdt_options",
+      "smaller_sooner": {
+        "tokens": 1,
+        "delay_ms": 2000
+      },
+      "larger_later": {
+        "tokens": 2,
+        "delay_ms": 20000
+      },
+      "post_reward_delay_ms": 0,
+      "reward_display_ms": 1000,
+      "fixation_before_ms": 500,
+      "iti_ms": 1000,
+      "choice_timeout_ms": 30000,
+      "practice": {
+        "forced": [
+          "SS",
+          "LL",
+          "SS",
+          "LL"
+        ]
+      },
+      "free_trials": 12,
+      "note": "Requires a reward outcome, which conflicts with the project's no-reward rule; implemented as option (a) in docs/task_specifications.md section 5 T10, pending the expert panel.",
+      "review": {
+        "free_trials": 4,
+        "practice": {
+          "forced": [
+            "SS",
+            "LL"
+          ]
+        }
+      }
+    }
+  }
+}

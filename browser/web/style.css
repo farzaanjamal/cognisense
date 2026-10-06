@@ -1,0 +1,175 @@
+/* Cognisense web demo.
+   Shell screens: "record white" paper, ink, one action colour; light/dark follows the viewer.
+   Task screens: never themed. Their background is the instrument's neutral grey from config/tasks.json,
+   nothing on the stage is animated by CSS, and nothing loads once a task has started.
+   Colours are the instrument's own: field grey (#808080) and the Okabe-Ito stimulus colours. */
+:root {
+  --record: #fafaf8;
+  --ink: #22272e;
+  --muted: #59616d;
+  --rule: #d5d8dc;
+  --wash: #eff1f2;
+  --signal: #0072b2;      /* action colour; also the time-reproduction stimulus */
+  --signal-ink: #ffffff;
+  --token: #e69f00;       /* "demo" marker only; also the choice-delay token */
+  --error: #d55e00;       /* charts only: errors */
+  --field: #808080;       /* the task stage */
+  --sans: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --urdu: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Noto Naskh Arabic', serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --s1: .25rem; --s2: .5rem; --s3: .75rem; --s4: 1rem; --s5: 1.5rem; --s6: 2rem; --s7: 3rem; --s8: 4.5rem;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --record: #15181c; --ink: #e6e9ed; --muted: #a1a9b4; --rule: #2e343c; --wash: #1d2126;
+    --signal: #56b4e9; --signal-ink: #0e1114; --error: #f0884a;
+  }
+}
+:root[data-theme="dark"] {
+  --record: #15181c; --ink: #e6e9ed; --muted: #a1a9b4; --rule: #2e343c; --wash: #1d2126;
+  --signal: #56b4e9; --signal-ink: #0e1114; --error: #f0884a;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0; min-height: 100%; background: var(--record); color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--sans); -webkit-text-size-adjust: 100%;
+  font-variant-numeric: tabular-nums;
+}
+[lang="ur"] { font-family: var(--urdu); line-height: 2.2; font-size: 1.08em; }
+a { color: var(--signal); text-underline-offset: .18em; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; border-radius: 4px; }
+
+/* ---- page frame */
+.page { max-width: 64rem; margin: 0 auto; padding: var(--s6) var(--s5) var(--s8); }
+.page > * { animation: enter .18s ease-out both; }
+@keyframes enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.measure { max-width: 38rem; }
+.topbar { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s4);
+  padding-bottom: var(--s3); margin-bottom: var(--s6); border-bottom: 1px solid var(--rule); }
+.wordmark { font-weight: 700; letter-spacing: -0.01em; font-size: 1.0625rem; color: var(--ink); text-decoration: none; }
+.demo-mark { font-size: .875rem; color: var(--muted); display: inline-flex; align-items: center; gap: .45em; }
+.demo-mark::before { content: ""; width: .6em; height: .6em; background: var(--token); border-radius: 1px; }
+
+h1, h2, h3 { line-height: 1.15; margin: 0 0 var(--s3); font-weight: 700; letter-spacing: -0.012em; }
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.1rem); }
+h2 { font-size: 1.6rem; margin-top: var(--s7); }
+h3 { font-size: 1.15rem; margin-top: var(--s5); }
+p { margin: 0 0 var(--s4); }
+.lede { font-size: 1.3rem; line-height: 1.45; max-width: 34rem; }
+.muted { color: var(--muted); }
+.small { font-size: .9rem; }
+
+/* ---- buttons: one primary per screen */
+.actions { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; margin: var(--s5) 0 var(--s4); }
+button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 6px; padding: .72rem 1.15rem; min-height: 2.9rem;
+  border: 1px solid transparent; background: var(--signal); color: var(--signal-ink);
+  transition: background-color .12s ease, border-color .12s ease; }
+button:hover { background: color-mix(in srgb, var(--signal) 86%, var(--ink)); }
+button.quiet { background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 400; }
+button.quiet:hover { border-color: var(--muted); background: transparent; }
+button.link { background: none; border: 0; padding: 0; min-height: 0; color: var(--signal); font-weight: 400; text-decoration: underline; text-underline-offset: .18em; }
+.hint { font-size: .9rem; color: var(--muted); margin-top: calc(-1 * var(--s2)); }
+
+/* ---- landing hero: text left, the live stage right */
+.hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s7); align-items: center; }
+.hero h1 { margin-bottom: var(--s4); }
+figure { margin: 0; }
+.field { background: var(--field); border-radius: 6px; display: block; width: 100%; }
+.hero .field { aspect-ratio: 4 / 3; }
+figcaption { font-size: .9rem; color: var(--muted); margin-top: var(--s2); line-height: 1.45; }
+
+/* ---- task list (single-task entry) */
+.tasks { list-style: none; margin: var(--s4) 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.tasks li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) auto; gap: var(--s5); align-items: center;
+  padding: var(--s4) 0; border-bottom: 1px solid var(--rule); }
+.tasks .field { width: 7.5rem; height: 4.5rem; }
+.tasks h3 { margin: 0 0 var(--s1); }
+.tasks p { margin: 0; }
+.tasks .duration { font-size: .9rem; color: var(--muted); }
+
+/* ---- reading timing classes */
+.classes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); margin-top: var(--s4); }
+.classes div { border-top: 3px solid var(--ink); padding-top: var(--s3); }
+.classes b { display: block; font-size: 1.05rem; margin-bottom: var(--s1); }
+.classes p { font-size: .95rem; color: var(--muted); margin: 0; }
+.classes + p { margin-top: var(--s5); }
+
+/* ---- guided progress: the battery is a real sequence, so it is numbered */
+.steps { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); padding: 0; margin: 0 0 var(--s6); counter-reset: step; font-size: .95rem; }
+.steps li { counter-increment: step; color: var(--muted); display: flex; align-items: center; gap: .5em; }
+.steps li::before { content: counter(step); display: inline-grid; place-items: center; width: 1.6em; height: 1.6em; border-radius: 50%;
+  border: 1px solid var(--rule); font-size: .85em; }
+.steps li.done::before { content: "\2713"; background: var(--wash); border-color: var(--wash); color: var(--ink); }
+.steps li.current { color: var(--ink); font-weight: 700; }
+.steps li.current::before { background: var(--ink); border-color: var(--ink); color: var(--record); }
+
+/* ---- task introduction: explanation left, the example trial right */
+.intro { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s7); align-items: start; }
+.intro .field { aspect-ratio: 16 / 10; }
+dl.facts { margin: var(--s4) 0; }
+dl.facts dt { font-weight: 700; margin-top: var(--s4); }
+dl.facts dd { margin: var(--s1) 0 0; }
+.childtext { border-left: 3px solid var(--rule); padding: var(--s1) 0 var(--s1) var(--s4); margin: var(--s5) 0; }
+.childtext .label { font-size: .875rem; color: var(--muted); margin: 0 0 var(--s1); }
+.childtext p { font-size: 1.15rem; margin: 0; }
+.keys { font-size: .95rem; color: var(--muted); }
+kbd { font: inherit; font-size: .9em; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0 .35em; color: var(--ink); background: var(--record); }
+
+/* ---- results */
+.result { border-top: 1px solid var(--rule); margin-top: var(--s7); padding-top: var(--s5); }
+.result h2 { margin-top: 0; }
+.chart { width: 100%; max-width: 44rem; height: auto; display: block; margin: var(--s4) 0 var(--s2); overflow: visible; }
+.chart text { font-family: var(--sans); fill: var(--muted); font-size: 12px; }
+.chart .ink { fill: var(--ink); stroke: var(--ink); }
+.chart .axis { stroke: var(--rule); }
+.chart .band { fill: var(--wash); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); font-size: .875rem; color: var(--muted); margin: 0 0 var(--s4); padding: 0; list-style: none; }
+.legend svg { width: 16px; height: 16px; vertical-align: -3px; margin-right: .4em; overflow: visible; }
+table.metrics { border-collapse: collapse; width: 100%; max-width: 44rem; font-size: .95rem; margin: var(--s3) 0; }
+table.metrics th, table.metrics td { text-align: left; padding: .45rem .75rem .45rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.metrics th { font-weight: 700; font-size: .875rem; color: var(--muted); }
+table.metrics td.num { text-align: right; padding-right: var(--s5); white-space: nowrap; }
+.cls { white-space: nowrap; }
+.quality { font-size: .9rem; color: var(--muted); }
+.notice { background: var(--wash); border-radius: 6px; padding: var(--s4) var(--s5); margin: var(--s5) 0; max-width: 44rem; }
+.notice p:last-child { margin-bottom: 0; }
+
+/* ---- researcher drawer and footer */
+details { border-top: 1px solid var(--rule); padding: var(--s3) 0; margin-top: var(--s6); }
+details summary { cursor: pointer; font-weight: 700; padding: var(--s2) 0; }
+details .code { font-family: var(--mono); font-size: .85rem; overflow-wrap: anywhere; }
+footer.disclaimer { margin-top: var(--s7); padding-top: var(--s4); border-top: 1px solid var(--rule); font-size: .875rem; color: var(--muted); max-width: 44rem; }
+
+/* Task screens: fixed neutral stage, full viewport, no scrolling, no gestures, no theme. */
+/* Kept inside the safe area so pads never sit under a notch or the home indicator. */
+#stage {
+  position: fixed; display: block;
+  top: env(safe-area-inset-top, 0px); bottom: env(safe-area-inset-bottom, 0px);
+  left: env(safe-area-inset-left, 0px); right: env(safe-area-inset-right, 0px);
+  /* A canvas is a replaced element: insets alone do not stretch it (it would stay 300 x 150). */
+  width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  background: #808080;
+}
+body.tasking { overflow: hidden; overscroll-behavior: none; background: #808080; }
+
+
+@media (max-width: 760px) {
+  .page { padding: var(--s5) var(--s4) var(--s7); }
+  .hero, .intro { grid-template-columns: 1fr; gap: var(--s5); }
+  .classes { grid-template-columns: 1fr; gap: var(--s4); }
+  .tasks li { grid-template-columns: 5rem minmax(0, 1fr); }
+  .tasks .field { width: 5rem; height: 3rem; }
+  .tasks li > button { grid-column: 2; justify-self: start; }
+  .lede { font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page > * { animation: none; }
+  button { transition: none; }
+}

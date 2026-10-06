@@ -1,0 +1,127 @@
+# Cloud build: everything that can be verified without a phone.
+# Runs on every push and pull request. On a version tag (v*) it also builds the signed reviewer APK
+# and attaches it, its SHA-256 and the browser preview to a GitHub pre-release.
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Core, analysis and browser preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - name: Kotlin compiler 2.0.21
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/kc.zip" https://github.com/JetBrains/kotlin/releases/download/v2.0.21/kotlin-compiler-2.0.21.zip
+          unzip -q "$RUNNER_TEMP/kc.zip" -d "$RUNNER_TEMP"
+      - name: Core tests (simulation, config, sequences, cross-checks)
+        working-directory: android/core
+        run: KOTLINC="$RUNNER_TEMP/kotlinc/bin/kotlinc" ./run_tests.sh
+      - name: Analysis tests (content validity, timing simulation)
+        working-directory: analysis
+        run: |
+          python3 -m pip install --quiet numpy==2.4.4   # results/ record this version; numpy streams can change between versions
+          python3 -m unittest test_cvi.py test_timing_simulation.py
+      - name: Simulation results in the repository are current
+        working-directory: analysis
+        run: |
+          python3 timing_simulation.py --reps 500 --out "$RUNNER_TEMP/main.json"
+          python3 -c "import json,sys; a=json.load(open('results/timing_simulation_main.json'))['summary']; b=json.load(open(sys.argv[1]))['summary']; sys.exit(0 if a==b else 'analysis/results/timing_simulation_main.json does not match a fresh run')" "$RUNNER_TEMP/main.json"
+      - name: Rebuild the browser preview; the committed file must be current
+        run: |
+          python3 browser/build.py --kotlin-home "$RUNNER_TEMP/kotlinc"
+          if ! git diff --quiet -- browser/dist/cognisense-preview.html; then
+            echo "::error::browser/dist/cognisense-preview.html is out of date. Run browser/build.py and commit the result."
+            exit 1
+          fi
+      - name: Web demo end-to-end tests in Chrome (each task, then the full guided demo)
+        working-directory: browser/test
+        run: |
+          npm install --no-save --no-audit --no-fund puppeteer-core@23
+          CHROME_PATH="$(command -v google-chrome)" node preview_test.js all 1280 800 "$RUNNER_TEMP/shots"
+          CHROME_PATH="$(command -v google-chrome)" node preview_test.js guided 1280 800 "$RUNNER_TEMP/shots-guided"
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-preview-screenshots
+          path: ${{ runner.temp }}/shots
+          if-no-files-found: ignore
+
+  android:
+    name: Android build (standard and reviewer)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # the git commit is embedded in every session record
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build debug APKs (first real Gradle build of the app)
+        working-directory: android
+        run: ./gradlew --no-daemon --stacktrace :core:coreTests :app:assembleStandardDebug :app:assembleReviewerDebug
+      - name: The merged manifest must request no permissions
+        run: |
+          found=0
+          for m in $(find android/app/build/intermediates -name AndroidManifest.xml -path '*merged_manifest*'); do
+            found=1
+            if grep -q '<uses-permission' "$m"; then echo "::error::permission requested in $m"; grep '<uses-permission' "$m"; exit 1; fi
+          done
+          if [ "$found" = 0 ]; then echo "::error::merged manifest not found"; exit 1; fi
+          echo "No permissions requested."
+      - name: Offer the APKs for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: cognisense-debug-apks
+          path: android/app/build/outputs/apk/**/*.apk
+
+  release:
+    name: Signed reviewer APK on a version tag
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [checks, android]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Decode the signing key (from repository secrets; never committed)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.COGNISENSE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then echo "::error::Signing secrets are not set. See docs/release_signing.md."; exit 1; fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+      - name: Build the signed reviewer APK
+        working-directory: android
+        env:
+          COGNISENSE_KEYSTORE: ${{ runner.temp }}/release.jks
+          COGNISENSE_KEYSTORE_PASSWORD: ${{ secrets.COGNISENSE_KEYSTORE_PASSWORD }}
+          COGNISENSE_KEY_ALIAS: ${{ secrets.COGNISENSE_KEY_ALIAS }}
+          COGNISENSE_KEY_PASSWORD: ${{ secrets.COGNISENSE_KEY_PASSWORD }}
+        run: ./gradlew --no-daemon :app:assembleReviewerRelease
+      - name: Attach APK, checksum and browser preview to a pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          name="cognisense-review-${GITHUB_REF_NAME}.apk"
+          cp android/app/build/outputs/apk/reviewer/release/app-reviewer-release.apk "$name"
+          sha256sum "$name" > "$name.sha256"
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || \
+            gh release create "$GITHUB_REF_NAME" --prerelease --title "Cognisense ${GITHUB_REF_NAME}" --notes-file docs/reviewer_apk_install.md
+          gh release upload "$GITHUB_REF_NAME" "$name" "$name.sha256" browser/dist/cognisense-preview.html --clobber

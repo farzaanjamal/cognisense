@@ -1,0 +1,25 @@
+# Build output
+build/
+.gradle/
+local.properties
+*.iml
+.idea/
+__pycache__/
+*.jar
+!android/gradle/wrapper/gradle-wrapper.jar
+
+# Browser preview build intermediates (dist/ IS committed)
+browser/build/
+node_modules/
+
+# Analysis output
+cvi_results/
+/results/
+
+# NEVER commit participant data. Real exports live outside the repository.
+# Patterns are anchored to the repo root (a bare "data/" would also ignore the source packages named data).
+/data/
+/exports/
+*_trials.csv
+*_session.json
+cognisense_all_trials.csv

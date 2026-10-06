@@ -1,0 +1,371 @@
+{
+  "schema": "cognisense.strings",
+  "version": "0.1",
+  "note": "Shared interface text for the Android app and the browser preview. English is the source text. EVERY Urdu string is an UNVALIDATED DRAFT requiring forward translation, independent back translation, reconciliation and a child-comprehension check before field use.",
+  "strings": {
+    "app_name": {
+      "en": "Cognisense",
+      "ur": "کوگنی سینس"
+    },
+    "disclaimer": {
+      "en": "Cognisense is a research prototype that records performance on computerised cognitive tasks; it does not diagnose, detect or identify ADHD or any other condition, has not been validated for screening, and its output must not be used to make decisions about any individual child.",
+      "ur": "کوگنی سینس ایک تحقیقی نمونہ (پروٹوٹائپ) ہے جو کمپیوٹر پر کیے جانے والے ذہنی کاموں میں کارکردگی ریکارڈ کرتا ہے؛ یہ اے ڈی ایچ ڈی یا کسی اور کیفیت کی تشخیص، نشاندہی یا شناخت نہیں کرتا، اسے اسکریننگ کے لیے جانچا نہیں گیا، اور اس کے نتائج کسی بھی بچے کے بارے میں فیصلے کرنے کے لیے استعمال نہیں کیے جانے چاہئیں۔"
+    },
+    "draft_translation_notice": {
+      "en": "Urdu text is an unvalidated draft.",
+      "ur": "اردو متن ابتدائی مسودہ ہے؛ باقاعدہ ترجمہ اور واپسی ترجمہ ابھی باقی ہے۔"
+    },
+    "lang_switch": {
+      "en": "اردو",
+      "ur": "English"
+    },
+    "continue": {
+      "en": "Continue",
+      "ur": "جاری رکھیں"
+    },
+    "start": {
+      "en": "Start",
+      "ur": "شروع کریں"
+    },
+    "back": {
+      "en": "Back",
+      "ur": "واپس"
+    },
+    "home_expert": {
+      "en": "Expert review",
+      "ur": "ماہرین کا جائزہ"
+    },
+    "home_expert_sub": {
+      "en": "Try each task yourself. No PIN needed.",
+      "ur": "ہر کام خود آزما کر دیکھیں۔ پن کی ضرورت نہیں۔"
+    },
+    "home_session": {
+      "en": "Run a session",
+      "ur": "سیشن چلائیں"
+    },
+    "home_session_sub": {
+      "en": "Field administration with a child. Administrator PIN required.",
+      "ur": "بچے کے ساتھ باقاعدہ سیشن۔ منتظم کا پن درکار ہے۔"
+    },
+    "home_dashboard": {
+      "en": "Researcher dashboard",
+      "ur": "محقق کا ڈیش بورڈ"
+    },
+    "home_settings": {
+      "en": "Settings",
+      "ur": "ترتیبات"
+    },
+    "pin_set_title": {
+      "en": "Set an administrator PIN (4–8 digits)",
+      "ur": "منتظم کا پن مقرر کریں (4 سے 8 ہندسے)"
+    },
+    "pin_enter_title": {
+      "en": "Administrator PIN",
+      "ur": "منتظم کا پن"
+    },
+    "pin_wrong": {
+      "en": "Incorrect PIN",
+      "ur": "غلط پن"
+    },
+    "pin_invalid": {
+      "en": "The PIN must be 4–8 digits",
+      "ur": "پن 4 سے 8 ہندسوں کا ہونا چاہیے"
+    },
+    "expert_title": {
+      "en": "Expert review — tasks",
+      "ur": "ماہرین کا جائزہ — کام"
+    },
+    "expert_note": {
+      "en": "Each task: a description, a practice block, a shortened scored block, then a plain summary of what was recorded. Data from this mode are labelled EXPERT_REVIEW and kept apart from child data.",
+      "ur": "ہر کام میں: تعارف، مشق، ایک مختصر اصل حصہ، اور پھر ریکارڈ شدہ معلومات کا سادہ خلاصہ۔ اس موڈ کا ڈیٹا EXPERT_REVIEW کے نام سے الگ رکھا جاتا ہے۔"
+    },
+    "open": {
+      "en": "Open",
+      "ur": "کھولیں"
+    },
+    "not_available": {
+      "en": "DESIGNED — not yet implemented",
+      "ur": "ڈیزائن شدہ — ابھی تیار نہیں"
+    },
+    "intro_construct": {
+      "en": "Construct",
+      "ur": "پیمائش کا ہدف"
+    },
+    "intro_measures": {
+      "en": "What is recorded",
+      "ur": "کیا ریکارڈ ہوتا ہے"
+    },
+    "intro_duration": {
+      "en": "Duration in this mode",
+      "ur": "اس موڈ میں دورانیہ"
+    },
+    "intro_timing": {
+      "en": "Each metric is labelled with a timing class: A = timing-independent; B = robust to a constant device delay; C = affected by device delay (compare only within a device model).",
+      "ur": "ہر پیمانے کے ساتھ ٹائمنگ کلاس لکھی ہے: A = وقت سے آزاد؛ B = آلے کی مستقل تاخیر سے متاثر نہیں؛ C = آلے کی تاخیر سے متاثر (صرف ایک ہی ماڈل کے آلات میں موازنہ کریں)۔"
+    },
+    "practice_first": {
+      "en": "First, a short practice.",
+      "ur": "پہلے تھوڑی سی مشق۔"
+    },
+    "practice_again": {
+      "en": "Let's try the practice again.",
+      "ur": "آئیں، مشق دوبارہ کرتے ہیں۔"
+    },
+    "real_start": {
+      "en": "Now the real game. There will be no ticks or crosses.",
+      "ur": "اب اصل کھیل۔ اس میں صحیح یا غلط کے نشان نہیں آئیں گے۔"
+    },
+    "rest": {
+      "en": "Take a short rest.",
+      "ur": "تھوڑا سا آرام کریں۔"
+    },
+    "tap_continue": {
+      "en": "Tap to continue",
+      "ur": "جاری رکھنے کے لیے چھوئیں"
+    },
+    "paused": {
+      "en": "Paused. Tap to continue.",
+      "ur": "رک گیا ہے۔ جاری رکھنے کے لیے چھوئیں۔"
+    },
+    "done_child": {
+      "en": "All done. Thank you!",
+      "ur": "سب مکمل ہو گیا۔ شکریہ!"
+    },
+    "done_admin": {
+      "en": "Administrator: return to home",
+      "ur": "منتظم: ہوم پر واپس جائیں"
+    },
+    "summary_title": {
+      "en": "What was recorded",
+      "ur": "کیا ریکارڈ ہوا"
+    },
+    "summary_note": {
+      "en": "Raw values from a shortened block. There are no norms; these cannot be interpreted as scores.",
+      "ur": "یہ ایک مختصر حصے کی خام قدریں ہیں۔ ان کا کوئی معیار (نارم) موجود نہیں؛ انہیں اسکور نہ سمجھا جائے۔"
+    },
+    "practice_result": {
+      "en": "Practice criterion met",
+      "ur": "مشق کا معیار پورا ہوا"
+    },
+    "yes": {
+      "en": "Yes",
+      "ur": "ہاں"
+    },
+    "no": {
+      "en": "No",
+      "ur": "نہیں"
+    },
+    "play_audio": {
+      "en": "Play instructions",
+      "ur": "ہدایات سنیں"
+    },
+    "gng_name": {
+      "en": "Circle game",
+      "ur": "دائرے والا کھیل"
+    },
+    "gng_instr": {
+      "en": "When you see the circle, touch the button as fast as you can. When you see the square, do not touch it.",
+      "ur": "جب دائرہ نظر آئے تو جتنی جلدی ہو سکے بٹن کو چھوئیں۔ جب چوکور نظر آئے تو بٹن کو نہ چھوئیں۔"
+    },
+    "flk_name": {
+      "en": "Arrow game",
+      "ur": "تیروں والا کھیل"
+    },
+    "flk_instr": {
+      "en": "Look at the middle arrow. Touch the button on the side it points to. Ignore the other arrows.",
+      "ur": "درمیان والے تیر کو دیکھیں۔ وہ جس طرف اشارہ کرے، اُس طرف والے بٹن کو چھوئیں۔ باقی تیروں کو نظر انداز کریں۔"
+    },
+    "spf_name": {
+      "en": "Squares game",
+      "ur": "چوکور خانوں والا کھیل"
+    },
+    "spf_instr": {
+      "en": "Watch the squares light up one by one. Then touch them in the same order.",
+      "ur": "دیکھیں کہ خانے ایک ایک کر کے روشن ہوتے ہیں۔ پھر انہیں اسی ترتیب سے چھوئیں۔"
+    },
+    "spb_name": {
+      "en": "Squares game: backwards",
+      "ur": "چوکور خانوں والا کھیل: الٹی ترتیب"
+    },
+    "spb_instr": {
+      "en": "Watch the squares light up. Then touch them in the reverse order, starting with the last one.",
+      "ur": "خانوں کو روشن ہوتے دیکھیں۔ پھر انہیں الٹی ترتیب سے چھوئیں، آخری خانے سے شروع کریں۔"
+    },
+    "trp_name": {
+      "en": "Time game",
+      "ur": "وقت والا کھیل"
+    },
+    "trp_instr": {
+      "en": "Watch how long the circle stays. When the button appears, press and hold it for the same time, then let go.",
+      "ur": "دیکھیں کہ دائرہ کتنی دیر نظر آتا ہے۔ جب بٹن نظر آئے تو اسے اتنی ہی دیر دبا کر رکھیں، پھر چھوڑ دیں۔"
+    },
+    "cdt_name": {
+      "en": "Waiting game",
+      "ur": "انتظار والا کھیل"
+    },
+    "cdt_instr": {
+      "en": "Choose a side. One side gives one token soon. The other side gives two tokens after a longer wait.",
+      "ur": "ایک طرف چنیں۔ ایک طرف سے جلد ایک ٹوکن ملتا ہے۔ دوسری طرف سے زیادہ انتظار کے بعد دو ٹوکن ملتے ہیں۔"
+    },
+    "config_error": {
+      "en": "The task configuration could not be loaded. The app cannot run tasks.",
+      "ur": "کاموں کی ترتیب لوڈ نہیں ہو سکی۔ ایپ کام نہیں چلا سکتی۔"
+    },
+    "checklist_title": {
+      "en": "Before the session",
+      "ur": "سیشن سے پہلے"
+    },
+    "chk_quiet": {
+      "en": "Airplane mode or Do Not Disturb is on",
+      "ur": "ایئرپلین موڈ یا ڈو ناٹ ڈسٹرب آن ہے"
+    },
+    "chk_table": {
+      "en": "Device is flat on a table and the child is seated",
+      "ur": "آلہ میز پر رکھا ہے اور بچہ بیٹھا ہے"
+    },
+    "chk_consent": {
+      "en": "Parental consent and child assent are recorded on paper",
+      "ur": "والدین کی رضامندی اور بچے کی رضامندی کاغذ پر درج ہے"
+    },
+    "chk_protector": {
+      "en": "Screen protector fitted",
+      "ur": "اسکرین پروٹیکٹر لگا ہوا ہے"
+    },
+    "battery": {
+      "en": "Battery",
+      "ur": "بیٹری"
+    },
+    "battery_low": {
+      "en": "Battery below 30%: charge before starting.",
+      "ur": "بیٹری 30 فیصد سے کم ہے: شروع کرنے سے پہلے چارج کریں۔"
+    },
+    "participant_title": {
+      "en": "Participant ID",
+      "ur": "شرکت کنندہ کی شناخت"
+    },
+    "participant_note": {
+      "en": "If your protocol uses a linkage sheet, write this ID on it. Never enter a name in this app.",
+      "ur": "اگر آپ کے طریقہ کار میں لنکیج شیٹ استعمال ہوتی ہے تو یہ شناخت اس پر لکھیں۔ اس ایپ میں کبھی کوئی نام درج نہ کریں۔"
+    },
+    "battery_tasks_note": {
+      "en": "Core battery tasks that are not yet implemented are skipped and logged.",
+      "ur": "بنیادی مجموعے کے جو کام ابھی تیار نہیں، وہ چھوڑ دیے جاتے ہیں اور اس کا اندراج ہوتا ہے۔"
+    },
+    "dash_title": {
+      "en": "Researcher dashboard",
+      "ur": "محقق کا ڈیش بورڈ"
+    },
+    "dash_rationale": {
+      "en": "No norms, percentiles, risk labels, colour codes or cut-offs are shown anywhere. No normative data exist, so any such display would be an unfounded diagnostic interpretation.",
+      "ur": "یہاں کوئی معیار (نارم)، پرسنٹائل، خطرے کے لیبل، رنگوں والے اشارے یا حد بندیاں نہیں دکھائی جاتیں، کیونکہ کوئی معیاری ڈیٹا موجود نہیں؛ ایسا کوئی بھی اشارہ بے بنیاد تشخیصی تشریح ہوگا۔"
+    },
+    "no_sessions": {
+      "en": "No sessions yet.",
+      "ur": "ابھی کوئی سیشن نہیں۔"
+    },
+    "export_csv": {
+      "en": "Export trials (CSV)",
+      "ur": "ٹرائلز برآمد کریں (CSV)"
+    },
+    "export_json": {
+      "en": "Export session (JSON)",
+      "ur": "سیشن برآمد کریں (JSON)"
+    },
+    "export_all": {
+      "en": "Export all trials (CSV)",
+      "ur": "تمام ٹرائلز برآمد کریں (CSV)"
+    },
+    "exported": {
+      "en": "Saved.",
+      "ur": "محفوظ ہو گیا۔"
+    },
+    "export_failed": {
+      "en": "Export failed.",
+      "ur": "برآمد ناکام رہی۔"
+    },
+    "quality": {
+      "en": "Data-quality flags",
+      "ur": "ڈیٹا کے معیار کے اشارے"
+    },
+    "metrics": {
+      "en": "Metrics [timing class] (n)",
+      "ur": "پیمانے [ٹائمنگ کلاس] (n)"
+    },
+    "runs": {
+      "en": "Task runs",
+      "ur": "کاموں کی تفصیل"
+    },
+    "chart_rt": {
+      "en": "RT across trials (filled = correct, hollow = other)",
+      "ur": "ٹرائلز کے دوران ردعمل کا وقت (بھرا = درست، خالی = دیگر)"
+    },
+    "chart_acc": {
+      "en": "Accuracy by condition",
+      "ur": "حالت کے لحاظ سے درستگی"
+    },
+    "chart_hist": {
+      "en": "RT distribution (50 ms bins)",
+      "ur": "ردعمل کے وقت کی تقسیم (50 ملی سیکنڈ)"
+    },
+    "settings_brightness": {
+      "en": "Task screen brightness",
+      "ur": "کام کی اسکرین کی روشنی"
+    },
+    "settings_marker": {
+      "en": "Onset marker (photodiode patch)",
+      "ur": "آغاز کا نشان (فوٹو ڈائیوڈ کے لیے)"
+    },
+    "settings_marker_note": {
+      "en": "Off by default. For timing calibration only; must be covered by the sensor housing whenever a child is present.",
+      "ur": "عام طور پر بند۔ صرف وقت کی جانچ کے لیے؛ بچے کی موجودگی میں اسے سینسر کے خول سے ڈھکا ہونا لازم ہے۔"
+    },
+    "on": {
+      "en": "On",
+      "ur": "آن"
+    },
+    "off": {
+      "en": "Off",
+      "ur": "آف"
+    },
+    "preview_title": {
+      "en": "Cognisense: browser preview for expert review",
+      "ur": "کوگنی سینس: ماہرین کے جائزے کے لیے براؤزر پیش منظر"
+    },
+    "preview_banner": {
+      "en": "Browser preview for expert review only. This is not the measurement instrument: browser timing differs from the Android app, and reaction times shown here are not measurements.",
+      "ur": "یہ صرف ماہرین کے جائزے کے لیے براؤزر پیش منظر ہے۔ یہ پیمائش کا آلہ نہیں: براؤزر کی ٹائمنگ اینڈرائیڈ ایپ سے مختلف ہے، اور یہاں دکھائے گئے ردعمل کے اوقات پیمائش نہیں ہیں۔"
+    },
+    "preview_privacy": {
+      "en": "Nothing you do here leaves this browser tab: no network requests, no cookies, no storage. Data are discarded when you close the tab unless you download them.",
+      "ur": "یہاں آپ جو کچھ کرتے ہیں وہ اس براؤزر ٹیب سے باہر نہیں جاتا: کوئی نیٹ ورک درخواست، کوکی یا اسٹوریج نہیں۔ ٹیب بند کرنے پر ڈیٹا ختم ہو جاتا ہے، جب تک آپ اسے ڈاؤن لوڈ نہ کریں۔"
+    },
+    "preview_keys_single": {
+      "en": "Keyboard: Space = the button. Touch or click also works.",
+      "ur": "کی بورڈ: اسپیس = بٹن۔ چھونا یا کلک کرنا بھی کام کرتا ہے۔"
+    },
+    "preview_keys_lr": {
+      "en": "Keyboard: F or ← = left button; J or → = right button. Touch or click also works.",
+      "ur": "کی بورڈ: F یا ← = بایاں بٹن؛ J یا → = دایاں بٹن۔ چھونا یا کلک کرنا بھی کام کرتا ہے۔"
+    },
+    "preview_keys_board": {
+      "en": "Use touch or the mouse to select squares. There is no keyboard equivalent.",
+      "ur": "خانے چننے کے لیے چھوئیں یا ماؤس استعمال کریں۔ اس کا کوئی کی بورڈ متبادل نہیں۔"
+    },
+    "preview_keys_hold": {
+      "en": "Keyboard: hold Space to press and hold the button; release Space to let go. Touch and hold also works.",
+      "ur": "کی بورڈ: بٹن دبا کر رکھنے کے لیے اسپیس دبا کر رکھیں؛ چھوڑنے کے لیے اسپیس چھوڑ دیں۔ چھو کر رکھنا بھی کام کرتا ہے۔"
+    },
+    "preview_download": {
+      "en": "Download my session (JSON)",
+      "ur": "اپنا سیشن ڈاؤن لوڈ کریں (JSON)"
+    },
+    "preview_rotate": {
+      "en": "Please turn your device to landscape.",
+      "ur": "براہ کرم اپنا آلہ افقی (لینڈ اسکیپ) رخ میں کریں۔"
+    },
+    "preview_review_only": {
+      "en": "Only shortened Expert Review blocks are available here. There is no session mode and no participant entry: this preview cannot be used to test children.",
+      "ur": "یہاں صرف ماہرین کے جائزے کے مختصر حصے دستیاب ہیں۔ کوئی سیشن موڈ یا شرکت کنندہ کا اندراج نہیں: یہ پیش منظر بچوں کی جانچ کے لیے استعمال نہیں ہو سکتا۔"
+    }
+  }
+}

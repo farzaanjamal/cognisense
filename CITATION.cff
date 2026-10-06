@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use or discuss Cognisense, please cite it as below."
+title: "Cognisense: an open, offline, timing-aware cognitive task platform for low-resource settings"
+abstract: >-
+  Research prototype that runs five standard cognitive tasks (Go/No-Go, spatial span,
+  Flanker, time reproduction, choice-delay) in a browser or on low-cost Android phones and
+  classifies every metric by its robustness to device timing error. It does not diagnose
+  ADHD or any other condition and has not been validated for screening.
+type: software
+authors:
+  - given-names: "Farzaan"
+    family-names: "Jamal"
+version: "0.5.0-dev"
+license: MIT
+repository-code: "https://github.com/farzaanjamal/cognisense"
+url: "https://farzaanjamal.github.io/cognisense/"
+keywords:
+  - cognitive assessment
+  - executive function
+  - reaction time
+  - device latency
+  - low-resource settings
+  - open-source software

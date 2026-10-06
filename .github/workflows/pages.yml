@@ -1,0 +1,39 @@
+# Publishes the browser preview (review tool only) to GitHub Pages, giving reviewers a link.
+# Enable once: repository Settings > Pages > Source: "GitHub Actions".
+# Note: the page itself makes no requests after loading, but GitHub's servers see the page
+# being loaded, as for any website (see docs/measurement_precision.md and browser/README.md).
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['browser/dist/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage the single-file preview as index.html
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          cp browser/dist/cognisense-preview.html "$RUNNER_TEMP/site/index.html"
+          touch "$RUNNER_TEMP/site/.nojekyll"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: '${{ runner.temp }}/site' }
+      - id: deployment
+        uses: actions/deploy-pages@v4
