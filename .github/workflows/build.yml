@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with: { distribution: temurin, java-version: '17' }
       - name: Kotlin compiler 2.0.21
         run: |
@@ -38,13 +38,10 @@ jobs:
         run: |
           python3 timing_simulation.py --reps 500 --out "$RUNNER_TEMP/main.json"
           python3 -c "import json,sys; a=json.load(open('results/timing_simulation_main.json'))['summary']; b=json.load(open(sys.argv[1]))['summary']; sys.exit(0 if a==b else 'analysis/results/timing_simulation_main.json does not match a fresh run')" "$RUNNER_TEMP/main.json"
-      - name: Rebuild the browser preview; the committed file must be current
-        run: |
-          python3 browser/build.py --kotlin-home "$RUNNER_TEMP/kotlinc"
-          if ! git diff --quiet -- browser/dist/cognisense-preview.html; then
-            echo "::error::browser/dist/cognisense-preview.html is out of date. Run browser/build.py and commit the result."
-            exit 1
-          fi
+      - name: The committed web demo was built from the current sources
+        run: python3 browser/build.py --check-current
+      - name: Build the web demo from source for testing
+        run: python3 browser/build.py --kotlin-home "$RUNNER_TEMP/kotlinc"
       - name: Web demo end-to-end tests in Chrome (each task, then the full guided demo)
         working-directory: browser/test
         run: |
@@ -65,10 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 } # the git commit is embedded in every session record
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with: { distribution: temurin, java-version: '17' }
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
+      # GitHub-hosted Ubuntu runners include the Android SDK (ANDROID_HOME), so no SDK setup step is needed.
       - name: Build debug APKs (first real Gradle build of the app)
         working-directory: android
         run: ./gradlew --no-daemon --stacktrace :core:coreTests :app:assembleStandardDebug :app:assembleReviewerDebug
@@ -97,9 +94,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with: { distribution: temurin, java-version: '17' }
-      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
       - name: Decode the signing key (from repository secrets; never committed)
         env:

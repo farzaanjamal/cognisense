@@ -7,7 +7,7 @@ Builds browser/dist/cognisense-preview.html, a single self-contained file:
      config/tasks.json and config/strings.json into browser/web/index.template.html.
 Usage: python3 browser/build.py --kotlin-home /path/to/kotlinc   (Kotlin 2.0.21 compiler zip)
 """
-import argparse, base64, hashlib, os, subprocess, sys
+import argparse, base64, hashlib, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, 'browser')
@@ -55,11 +55,45 @@ def font_faces():
     return '\n'.join(rules)
 
 
+SOURCES = ['android/core/src/main/kotlin', 'browser/src', 'browser/web', 'config/tasks.json', 'config/strings.json']
+
+
+def source_fingerprint():
+    """SHA-256 over every input of the demo (paths and bytes, in a fixed order).
+    Embedded in the built file so CI can check that the committed demo was built from the current
+    sources. Compiler output itself can differ between Java versions, so the output bytes are not compared."""
+    files = []
+    for rel in SOURCES:
+        p = os.path.join(ROOT, rel)
+        if os.path.isfile(p):
+            files.append(rel)
+        else:
+            for dp, _, fn in os.walk(p):
+                files += [os.path.relpath(os.path.join(dp, f), ROOT).replace(os.sep, '/') for f in fn]
+    h = hashlib.sha256()
+    for rel in sorted(files):
+        h.update(rel.encode() + b'\0' + read(os.path.join(ROOT, rel), True) + b'\0')
+    return h.hexdigest()
+
+
+def check_current():
+    dist = os.path.join(B, 'dist', 'cognisense-preview.html')
+    m = re.search(r'<meta name="cognisense-sources" content="([0-9a-f]{64})">', read(dist))
+    want = source_fingerprint()
+    if not m or m.group(1) != want:
+        sys.exit(f'browser/dist/cognisense-preview.html was not built from the current sources '
+                 f'(embedded {m.group(1) if m else "none"}, current {want}). Run browser/build.py and commit the result.')
+    print('the committed web demo was built from the current sources (' + want[:12] + ')')
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--kotlin-home', default=os.environ.get('KOTLIN_HOME'))
     ap.add_argument('--core-js', help='use an already compiled core bundle instead of compiling')
+    ap.add_argument('--check-current', action='store_true', help='only check that the committed demo matches the current sources')
     a = ap.parse_args()
+    if a.check_current:
+        return check_current()
     core_js = a.core_js or compile_core(a.kotlin_home or sys.exit('--kotlin-home or KOTLIN_HOME is required'))
     tasks_bytes = read(os.path.join(ROOT, 'config', 'tasks.json'), True)
     parts = {
@@ -68,6 +102,7 @@ def main():
         '@STRINGS_JSON@': read(os.path.join(ROOT, 'config', 'strings.json')),
         '@CORE_JS@': read(core_js),
         '@APP_JS@': read(os.path.join(B, 'web', 'app.js')),
+        '@SOURCES@': source_fingerprint(),
     }
     html = read(os.path.join(B, 'web', 'index.template.html'))
     for k, v in parts.items():
