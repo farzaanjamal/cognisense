@@ -155,6 +155,12 @@ data class TrialRecord(
     val timing: Map<String, TimingMeasurement> = emptyMap(),
     /** Task-specific fields (e.g. span sequence and taps, reproduced duration, choice). Documented per task. */
     val details: Map<String, String> = emptyMap(),
+    /**
+     * Software-timed latency (ms from onset) of the first response AFTER the response window, or null.
+     * The window is judged in device time, so a slow device can push a slow response past it; keeping
+     * this latency lets an analysis re-apply the window after device correction instead of losing it.
+     */
+    val lateRtMs: Double? = null,
 ) {
     val measuredStimulusMs: Double?
         get() = if (onsetNanos != null && offsetNanos != null) (offsetNanos - onsetNanos) / 1e6 else null

@@ -83,6 +83,7 @@ class PreviewRun internal constructor(private val def: TaskDefinition, private v
         "rt_ms_not_a_measurement" to r.rtMs, "stimulus_frames" to r.stimulusFrames,
         "displayed_stimulus_ms" to r.measuredStimulusMs, "premature_responses" to r.prematureResponses,
         "extra_responses" to r.extraResponses, "late_responses" to r.lateResponses,
+        "late_rt_ms_not_a_measurement" to r.lateRtMs,
         "off_target_touches" to r.offTargetTouches, "dropped_frames" to r.droppedFrames, "interrupted" to r.interrupted,
         "details" to r.details,
     )

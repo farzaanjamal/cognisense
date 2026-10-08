@@ -11,6 +11,8 @@ data class PartInfo(
     val pads: PadLayout,
     val standard: TaskDefinition,
     val review: TaskDefinition,
+    /** For a child's second (retest) session: alternate spatial-span sequences; identical to [standard] elsewhere. */
+    val retest: TaskDefinition,
 ) {
     val childNameKey: String get() = "${id.lowercase()}_name"
     val instructionKey: String get() = "${id.lowercase()}_instr"
@@ -33,7 +35,7 @@ data class TaskInfo(
 class TaskCatalog(cfg: BatteryConfig) {
     val pool: List<TaskInfo> = cfg.pool.map { e ->
         TaskInfo(e.code, e.id, e.name, e.construct, e.measures, e.reviewDuration,
-            e.parts.map { p -> PartInfo(p, PadLayout.valueOf(cfg.pads(p)), cfg.standard(p), cfg.review(p)) })
+            e.parts.map { p -> PartInfo(p, PadLayout.valueOf(cfg.pads(p)), cfg.standard(p), cfg.review(p), cfg.retest(p)) })
     }
     val coreOrder: List<TaskInfo> = cfg.coreOrder.map { code -> pool.first { it.code == code } }
 }

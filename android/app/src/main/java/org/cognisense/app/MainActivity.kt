@@ -12,6 +12,7 @@ import org.cognisense.app.data.Store
 import org.cognisense.app.task.Audio
 import org.cognisense.app.task.StimulusPainter
 import org.cognisense.app.task.TaskRunner
+import org.cognisense.app.task.TaskView
 import org.cognisense.app.task.WindowControl
 import org.cognisense.app.ui.Settings
 import org.cognisense.app.ui.Strings
@@ -41,6 +42,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         settings = Settings(this)
         store = Store(this)
+        Ui.init(this)
+        Ui.shellBars(this)
         try {
             Strings.load(assets.open("strings.json").use { it.readBytes() })
             config = BatteryConfig.parse(assets.open("tasks.json").use { it.readBytes() })
@@ -68,6 +71,7 @@ class MainActivity : Activity() {
 
     fun show(view: View, onBack: (() -> Unit)?) {
         Audio.stop()
+        if (view !is TaskView) Ui.shellBars(this)
         setContentView(view)
         backHandler = onBack
     }

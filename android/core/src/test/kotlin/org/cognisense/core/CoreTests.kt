@@ -43,8 +43,20 @@ fun testGngPlans() {
     val p3 = task.plan(SeededRandom.derive(100, task.rngLabel(Phase.SCORED)), Phase.SCORED)
     T.check("gng plan deterministic", p1 == p2)
     T.check("gng plan seed-specific", p1.map { it.condition } != p3.map { it.condition })
-    T.check("gng 144 trials", p1.size == 144)
-    val expected = mapOf(1 to (36 to 12), 2 to (18 to 6), 3 to (36 to 12), 4 to (18 to 6))
+    T.check("gng 128 trials", p1.size == 128)
+    val expected = mapOf(1 to (24 to 8), 2 to (24 to 8), 3 to (24 to 8), 4 to (24 to 8))
+    // v0.2 design: fast-slow-slow-fast, so a steady drift (fatigue, practice) affects both rates equally,
+    // and equal trial and No-Go counts per rate, so both commission rates rest on the same number of trials.
+    T.check("gng block order fast-slow-slow-fast", p1.groupBy { it.block }.toSortedMap().values.map { it.first().blockCondition } ==
+        listOf("fast", "slow", "slow", "fast"))
+    for (rate in listOf("fast", "slow")) {
+        val r = p1.filter { it.blockCondition == rate }
+        T.check("gng $rate rate: 64 trials, 16 No-Go", r.size == 64 && r.count { it.condition == "nogo" } == 16,
+            "${r.size}/${r.count { it.condition == "nogo" }}")
+    }
+    T.check("gng mean block position equal for both rates",
+        p1.filter { it.blockCondition == "fast" }.map { it.block }.distinct().average() ==
+        p1.filter { it.blockCondition == "slow" }.map { it.block }.distinct().average())
     for ((b, plans) in p1.groupBy { it.block }) {
         val go = plans.count { it.condition == "go" }; val nogo = plans.count { it.condition == "nogo" }
         T.check("gng block $b counts", (go to nogo) == expected[b], "$go/$nogo")
@@ -102,6 +114,8 @@ fun testEngineTimingAndOutcomes() {
     T.check("t4 premature counted", r[4].prematureResponses == 1, "${r[4].prematureResponses}")
     T.check("t4 correct with extra", r[4].outcome == Outcome.CORRECT && r[4].extraResponses == 1)
     T.check("t5 late -> omission", r[5].outcome == Outcome.OMISSION && r[5].lateResponses == 1)
+    T.near("t5 late response latency kept", r[5].lateRtMs, 1100.0, 1e-6)
+    T.check("no late latency when nothing was late", r.take(5).all { it.lateRtMs == null })
     T.near("first onset at 1000 ms", (r[0].onsetNanos!! - r[0].trialStartNanos) / 1e6, 1000.0, 8.4)
     T.check("18 stimulus frames", r.all { it.stimulusFrames == 18 }, r.map { it.stimulusFrames }.toString())
     T.check("SOA 1300 ms", (1 until r.size).filter { r[it].plan.foreperiodMs == 0 }
@@ -194,8 +208,8 @@ fun testPracticeFeedbackAndVariants() {
     var anyFeedback = false
     while (!scored.isFinished) { s2.frame(); if (s2.lastContent.feedback != null) anyFeedback = true }
     T.check("no feedback in scored phase", !anyFeedback)
-    T.check("review variant versions", cfg.review("GNG").version == "0.1-review" && cfg.review("FLK").version == "0.1-review"
-        && cfg.standard("GNG").version == "0.1")
+    T.check("review variant versions", cfg.review("GNG").version == "0.2-review" && cfg.review("FLK").version == "0.1-review"
+        && cfg.standard("GNG").version == "0.2")
     T.check("review GNG 24 trials", (cfg.review("GNG") as GoNoGoTask).plan(SeededRandom(1), Phase.SCORED).size == 24)
     T.check("review FLK 16 trials", (cfg.review("FLK") as FlankerTask).plan(SeededRandom(1), Phase.SCORED).size == 16)
 }
@@ -240,9 +254,9 @@ fun testFullGngRun(): List<TrialRecord> {
     }
     sim.runToEnd()
     val r = e.records()
-    T.check("full run 144 records", r.size == 144)
-    // Arithmetic expectation: 2*(1000+48*1300) + 2*(1000+24*4300) ms of trials + 3 breaks of 10 s
-    T.near("full run duration (simulated) ~365.2 s", (r.last().endNanos - r.first().trialStartNanos) / 1e9, 365.2, 0.5)
+    T.check("full run 128 records", r.size == 128)
+    // Arithmetic expectation: 2*(1000+32*1300) + 2*(1000+32*4300) ms of trials + 3 breaks of 10 s
+    T.near("full run duration (simulated) ~392.4 s", (r.last().endNanos - r.first().trialStartNanos) / 1e9, 392.4, 0.5)
     val m = task.score(r).associateBy { it.name }
     T.check("scores computed", m["d_prime"]?.value != null && m["event_rate_median_rt_effect"]?.value != null)
     T.check("commission rate plausible", m["commission_rate"]!!.value!! in 0.05..0.5)

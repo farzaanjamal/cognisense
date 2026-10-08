@@ -51,10 +51,26 @@ class TestFormulas(unittest.TestCase):
         self.assertEqual(cvi.kappa_label(0.45), "fair")
         self.assertEqual(cvi.kappa_label(0.10), "poor")
 
-    def test_decision_not_set_by_default(self):
-        self.assertIsNone(cvi.DECISION_BANDS)
-        r = cvi.item_result(1, "relevance", "T", [4, 4, 4])
-        self.assertEqual(r.decision, "not_set")
+    def test_decision_bands_fixed_by_protocol1(self):
+        self.assertEqual(cvi.DECISION_BANDS, [(0.78, "retain"), (0.70, "revise"), (0.0, "remove")])
+
+    def test_decisions_follow_protocol1(self):
+        # agrees with meets_lynn at the rounding edge: 7 of 9 = .7778 rounds to .78
+        self.assertTrue(cvi.meets_lynn(9, 7 / 9))
+        self.assertEqual(cvi.decide(9, 7 / 9), "retain")
+        self.assertEqual(cvi.decide(7, 5 / 7), "revise")      # .714
+        self.assertEqual(cvi.decide(8, 6 / 8), "revise")      # .75
+        self.assertEqual(cvi.decide(6, 4 / 6), "remove")      # .667
+        # small panels: Lynn requires full agreement, so 4 of 5 is not "retain"
+        self.assertEqual(cvi.decide(5, 1.0), "retain")
+        self.assertEqual(cvi.decide(5, 4 / 5), "revise")
+        # only relevance can remove a task
+        self.assertEqual(cvi.decide(6, 4 / 6, "clarity"), "major_revision")
+        self.assertEqual(cvi.decide(9, 7 / 9, "cultural"), "acceptable")
+        r = cvi.item_result(1, "relevance", "T", [4, 4, 4])       # 3 of 3 agree: meets Lynn for N <= 5
+        self.assertEqual(r.decision, "retain")
+        r = cvi.item_result(1, "clarity", "T", [4, 2, 2, 4, 1, 3])  # 3 of 6 = .50
+        self.assertEqual(r.decision, "major_revision")
 
 
 class TestScale(unittest.TestCase):

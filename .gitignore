@@ -23,3 +23,6 @@ cvi_results/
 *_trials.csv
 *_session.json
 cognisense_all_trials.csv
+
+# graphify knowledge-graph output (rebuild with /graphify .)
+graphify-out/

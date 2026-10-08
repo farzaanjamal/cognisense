@@ -64,7 +64,7 @@ fun testConfig() {
         T.throws("json rejects $bad") { Json.parse(bad) }
 
     // shipped config
-    T.check("config version", cfg.configVersion == "0.2")
+    T.check("config version", cfg.configVersion == "0.3")
     T.check("config sha256 is 64 hex", cfg.sha256.length == 64 && cfg.sha256.all { it in "0123456789abcdef" })
     T.check("config hash stable", BatteryConfig.parse(CONFIG_FILE.readBytes()).sha256 == cfg.sha256)
     T.check("pool has 10 tasks", cfg.pool.size == 10)
@@ -80,6 +80,29 @@ fun testConfig() {
         T.check("$id practice matches generator",
             c.practiceSequences == SpanSequences.generatePractice(20261002L, "$id:practice", 2, 2, 9, gen.values.flatten().toSet()))
     }
+
+    // retest form: provenance, matching and separation from the standard form
+    @Suppress("UNCHECKED_CAST")
+    val root = JObj(Json.parse(CONFIG_FILE.readText()) as Map<String, Any?>)
+    for (id in listOf("SPF", "SPB")) {
+        val std = (cfg.standard(id) as SpatialSpanTask).config
+        val re = (cfg.retest(id) as SpatialSpanTask).config
+        val board = root.obj("stimuli").obj(std.board)
+        val w = board.num("width_dp"); val h = board.num("height_dp")
+        val pos = board.arr("positions").map { p -> (p as List<Any?>).let { (it[0] as Double) * w to (it[1] as Double) * h } }
+        val gen = SpanSequences.generateMatched(20261002L, "$id:retest", std.sequences, pos, 0.10,
+            (std.sequences.values.flatten() + std.practiceSequences).toSet())
+        T.check("$id retest sequences match generator", re.sequences == gen)
+        T.check("$id retest version suffix", re.version == std.version + "-retest")
+        T.check("$id retest shares no sequence with the standard form or practice",
+            re.sequences.values.flatten().none { it in std.sequences.values.flatten() || it in std.practiceSequences })
+        val worst = std.sequences.keys.flatMap { len -> std.sequences.getValue(len).indices.map { k ->
+            val a = SpanSequences.pathLength(std.sequences.getValue(len)[k], pos)
+            kotlin.math.abs(SpanSequences.pathLength(re.sequences.getValue(len)[k], pos) - a) / a } }.maxOrNull()!!
+        T.check("$id retest path lengths within 10% of the standard form", worst <= 0.10, "worst ${"%.3f".format(worst)}")
+        T.check("$id retest keeps every other setting", re.copy(sequences = std.sequences, version = std.version) == std)
+    }
+    T.check("retest of a task without a retest form is the standard task", cfg.retest("GNG").version == cfg.standard("GNG").version)
 
     // validation fails with the JSON path
     val text = CONFIG_FILE.readText()
@@ -165,7 +188,7 @@ fun testSpan() {
     T.check("span bwd: reversed taps scored correct; span 3, total 4", mb["span"]!!.value == 3.0 && mb["total_correct"]!!.value == 4.0)
 
     val (runR, _) = runSpan("SPF", Phase.SCORED, maxCorrect = 9, review = true)
-    T.check("span review: stops at review max length 5", runR.records().size == 8 && cfg.review("SPF").version == "0.1-review")
+    T.check("span review: stops at review max length 5", runR.records().size == 8 && cfg.review("SPF").version == "0.2-review")
 
     val (runP, simP) = runSpan("SPF", Phase.PRACTICE, maxCorrect = 9)
     T.check("span practice: 2 trials, criterion met", runP.records().size == 2 && cfg.standard("SPF").practiceCriterionMet(runP.records()))

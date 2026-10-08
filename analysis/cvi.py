@@ -75,10 +75,14 @@ LYNN_SMALL_PANEL_MAX = 5  # N <= 5 requires I-CVI = 1.00
 LYNN_ICVI_MIN = 0.78      # N >= 6 requires I-CVI >= .78
 SCVI_AVE_BENCHMARK = 0.90
 
-# Decision bands are a Protocol 1 decision. Leave as None until the protocol
-# fixes them; the script then reports indices without a retain/revise call.
-# Example of the form expected: [(0.78, "retain"), (0.70, "revise"), (0.0, "remove")]
-DECISION_BANDS: Optional[List[Tuple[float, str]]] = None
+# Decision bands: fixed by Protocol 1 (docs/protocol1_expert_review.md, section 5)
+# BEFORE any rating was collected. Applied to I-CVI rounded to two decimals, the
+# same rule as meets_lynn, so a task that meets the criterion is never "revise".
+# The top band is "meets the Lynn criterion" (I-CVI = 1.00 when N <= 5).
+DECISION_BANDS: Optional[List[Tuple[float, str]]] = [(0.78, "retain"), (0.70, "revise"), (0.0, "remove")]
+# Only relevance can remove a task; low clarity, cultural fit or feasibility
+# triggers revision instead (Protocol 1, section 5).
+OTHER_DIMENSION_LABELS = {"retain": "acceptable", "revise": "revise", "remove": "major_revision"}
 
 
 class RatingError(ValueError):
@@ -139,13 +143,17 @@ def meets_lynn(n: int, i_cvi: float) -> bool:
     return round(i_cvi, 2) >= LYNN_ICVI_MIN
 
 
-def decide(i_cvi: float) -> str:
+def decide(n: int, i_cvi: float, dimension: str = "relevance") -> str:
+    """Protocol 1 decision for one item. Top band = meets_lynn; lower bands on I-CVI rounded to 2 decimals."""
     if DECISION_BANDS is None:
         return "not_set"
-    for threshold, decision in sorted(DECISION_BANDS, reverse=True):
-        if i_cvi >= threshold - 1e-12:
-            return decision
-    return DECISION_BANDS[-1][1]
+    bands = sorted(DECISION_BANDS, reverse=True)
+    if meets_lynn(n, i_cvi):
+        decision = bands[0][1]
+    else:
+        r = round(i_cvi, 2)
+        decision = next((d for t, d in bands[1:] if r >= t - 1e-12), bands[-1][1])
+    return decision if dimension == "relevance" else OTHER_DIMENSION_LABELS.get(decision, decision)
 
 
 def item_result(round_: int, dimension: str, task_id: str,
@@ -159,7 +167,7 @@ def item_result(round_: int, dimension: str, task_id: str,
     pc = chance_agreement(n, a)
     k = modified_kappa(i_cvi, pc)
     return ItemResult(round_, dimension, task_id, n, a, i_cvi, pc, k,
-                      kappa_label(k), meets_lynn(n, i_cvi), decide(i_cvi))
+                      kappa_label(k), meets_lynn(n, i_cvi), decide(n, i_cvi, dimension))
 
 
 def read_ratings(path: str) -> Dict[Tuple[int, str, str], Dict[str, Optional[int]]]:
