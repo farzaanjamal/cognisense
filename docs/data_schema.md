@@ -71,6 +71,7 @@ Touch timestamp resolution is not stored separately; it follows from `sdk_int`: 
 | rt_ms | Software-timed RT |
 | outcome | CORRECT, COMMISSION, OMISSION, INCORRECT, ANTICIPATION, INTERRUPTED |
 | premature_responses, extra_responses, late_responses, off_target_touches | Counts; nothing discarded |
+| late_rt_ms | Software-timed latency (ms from onset) of the first response after the response window; empty if none. Added in 0.6.0 (config 0.3) so the window can be re-applied after device correction |
 | dropped_frames | Missed vsyncs during the trial |
 | interrupted | bool |
 | timing_sources | Sources with a measurement for this trial |
@@ -116,3 +117,7 @@ The browser preview lets a reviewer download their own session as JSON. Format:
 - Records use the field `rt_ms_not_a_measurement`.
 
 These files are review material only and must never be merged with app data (see `measurement_precision.md` §9).
+
+## Retest sessions (0.6.0)
+
+A session's checklist records `session_form`: `first` or `retest`. In a retest session, spatial-span parts run their retest variant (task version suffix `-retest`: alternate sequences matched for path length); every other task is identical to a first session. Analyses of test–retest reliability should pair a child's `first` and `retest` sessions.

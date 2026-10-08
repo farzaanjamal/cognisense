@@ -71,6 +71,44 @@ object SpanSequences {
         }
     }
 
+    /**
+     * Alternate form for retest sessions: for each sequence of the [reference] form, a new sequence of the same
+     * length whose path length on the board (sum of distances between successive squares, in board units) is
+     * within [tolerance] (proportion) of the reference sequence's. Drawn from its own stream; never repeats a
+     * sequence in [exclude] or one already chosen. Matching path length equates one known source of difficulty;
+     * equivalence of the two forms must still be checked empirically.
+     */
+    fun generateMatched(
+        seed: Long, label: String, reference: Map<Int, List<List<Int>>>, positions: List<Pair<Double, Double>>,
+        tolerance: Double, exclude: Set<List<Int>>,
+    ): Map<Int, List<List<Int>>> {
+        val rng = SeededRandom.derive(seed, label)
+        val used = exclude.toMutableSet()
+        fun path(s: List<Int>): Double = s.zipWithNext { a, b ->
+            val dx = positions[a].first - positions[b].first; val dy = positions[a].second - positions[b].second
+            kotlin.math.sqrt(dx * dx + dy * dy)
+        }.sum()
+        return reference.keys.sorted().associateWith { len ->
+            reference.getValue(len).map { ref ->
+                val target = path(ref)
+                var tries = 0
+                var s: List<Int>
+                do {
+                    s = positions.indices.toMutableList().also { rng.shuffle(it) }.take(len)
+                    tries++
+                    require(tries < 200_000) { "no matched sequence of length $len within tolerance $tolerance" }
+                } while (s in used || kotlin.math.abs(path(s) - target) > tolerance * target)
+                used += s
+                s
+            }
+        }
+    }
+
+    fun pathLength(s: List<Int>, positions: List<Pair<Double, Double>>): Double = s.zipWithNext { a, b ->
+        val dx = positions[a].first - positions[b].first; val dy = positions[a].second - positions[b].second
+        kotlin.math.sqrt(dx * dx + dy * dy)
+    }.sum()
+
     /** Practice sequences: drawn from their own stream, skipping any sequence used in scored trials. */
     fun generatePractice(seed: Long, label: String, count: Int, len: Int, squares: Int, exclude: Set<List<Int>>): List<List<Int>> {
         val rng = SeededRandom.derive(seed, label)

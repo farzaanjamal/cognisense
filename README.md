@@ -34,7 +34,7 @@ All stimuli are language-free: shapes, arrows and squares on a neutral grey scre
 | Spatial span, forwards and backwards | Visuospatial short-term and working memory | Watch squares light up, then tap them in the same or reverse order |
 | Flanker | Interference control | Press the side the middle arrow points to |
 | Time reproduction | Temporal processing (1–6 s) | Watch a circle, then hold the button for the same time |
-| Choice-delay | Preference for smaller-sooner versus larger-later rewards | Choose one token after a short wait or two after a long wait |
+| Choice-delay (exploratory) | Preference for smaller-sooner versus larger-later rewards | Choose one token after a short wait or two after a long wait |
 
 ![A task introduction, with an example trial](docs/images/demo-instructions.png)
 
@@ -58,7 +58,7 @@ All stimuli are language-free: shapes, arrows and squares on a neutral grey scre
 - **A clock-free engine.** Tasks are driven only by display-frame and touch-event timestamps, so their timing behaviour can be verified in simulation.
 - **Privacy by construction.** The app requests no permissions; the web demo's content-security policy forbids all network connections; participant IDs are generated and cannot contain names.
 
-Details: [`docs/architecture.md`](docs/architecture.md), [`docs/measurement_precision.md`](docs/measurement_precision.md), [`docs/task_specifications.md`](docs/task_specifications.md), [`docs/data_schema.md`](docs/data_schema.md).
+Expert review method, fixed in advance: [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md). Details: [`docs/architecture.md`](docs/architecture.md), [`docs/measurement_precision.md`](docs/measurement_precision.md), [`docs/task_specifications.md`](docs/task_specifications.md), [`docs/data_schema.md`](docs/data_schema.md).
 
 ## Research
 
@@ -68,7 +68,8 @@ Main findings of the simulation:
 
 - **Robust across devices:** commission rate (agreement r ≥ .995) and the Flanker interference cost (r = .976 under plausible jitter).
 - **Degraded across devices:** median reaction time (r = .906, against .996 on one device model). Its test–retest reliability fell from .95 to .79 when children changed device.
-- **A design flaw found:** a response window judged in device time lets device delay push slow responses past it. That biased reaction-time variability and omission rates. The proposed fix is referred to the expert panel.
+- **A design flaw found:** a response window judged in device time lets device delay push slow responses past it. That biased reaction-time variability and omission rates. Version 0.3 now records those late responses, so the window can be re-applied after device correction; whether to lengthen the window is referred to the expert panel.
+- **Robustness:** a rerun with the version 0.3 Go/No-Go design gave the same conclusions (`analysis/results/timing_simulation_v03_counts.json`).
 
 Reproduce it with `python analysis/timing_simulation.py`; the outputs used in the paper are in [`analysis/results/`](analysis/results/).
 
@@ -78,12 +79,13 @@ Reproduce it with `python analysis/timing_simulation.py`; the outputs used in th
 
 | Component | Status | What the claim rests on |
 |---|---|---|
-| Five core tasks: logic, scoring, export | IMPLEMENTED | 203 automated checks, including simulated children; 6 of 6 planted defects detected |
+| Five core tasks: logic, scoring, export | IMPLEMENTED | 220 automated checks, including simulated children; 6 of 6 planted defects detected |
+| Version 0.3 design fixes: balanced Go/No-Go (fast–slow–slow–fast, 16 No-Go per rate), late-response latencies kept, matched retest sequences for spatial span, choice-delay marked exploratory | IMPLEMENTED | Tests of balance, latencies (exact values), retest provenance and path-length matching; storage round trip; 72/72 identical runs across platforms |
 | Web demo (guided five-task flow, results visualisations) | IMPLEMENTED | End-to-end tests of every task and the guided flow in headless Chrome; zero network requests; no errors |
 | Shared configuration with SHA-256 per session | IMPLEMENTED | Loader and validation tests |
 | Timing-error simulation study | IMPLEMENTED | 7 unit tests; results reproducible from a fixed seed |
 | Content-validity analysis (`analysis/cvi.py`) | IMPLEMENTED | 12 tests against published worked values |
-| Android app (Expert Review, Session, Dashboard) | Code complete; **never built or run on a phone** | Compiles against the Android 15 API |
+| Android app (Expert Review, Session with first/retest sessions, Dashboard) | Builds in the cloud build (both variants; no permissions requested); **not yet run on a phone** | GitHub Actions build; compiles with 0 errors and 0 warnings |
 | Hardware timing unit (ESP32 + photodiode), motion sensing | DESIGNED | Interfaces only |
 | Urdu interface text | Draft, unvalidated | Needs forward and back translation |
 | Expert content review, device timing study, child pilot | PLANNED | Requires a supervising academic and ethics approval |
@@ -95,7 +97,7 @@ Reproduce it with `python analysis/timing_simulation.py`; the outputs used in th
 - No data from children, adults or real devices yet: every psychometric statement describes other instruments in other populations.
 - The tasks are not specific to ADHD, and most children with ADHD show no deficit on any single task. The platform cannot screen.
 - Browser timing in the demo is not a measurement.
-- The choice-delay task has no tangible reward, so it may not measure delay aversion.
+- The choice-delay task has no tangible reward, so it may not measure delay aversion; it is treated as exploratory.
 - The Flanker interference cost has weak individual reliability at this trial count.
 
 The full list is in section 5.4 of the paper.
@@ -140,9 +142,18 @@ No Android Studio? [`docs/cloud_build.md`](docs/cloud_build.md) explains how Git
 2. Measurement of real device timing error, first with high-speed video, then with the hardware timing unit.
 3. A supervised, ethics-approved pilot with children, measuring test–retest reliability and agreement with teacher ratings.
 
-## Use of AI
+## Authorship and contributions
 
-The software, simulation and documentation were developed with substantial assistance from an AI system (Claude, Anthropic). The author is responsible for every claim, number and citation.
+**Cognisense is Farzaan Jamal's work.** He did the substantial intellectual work behind it:
+
+- **The idea:** an assessment platform that could work for children in Pakistan.
+- **The research question:** can low-cost phones deliver cognitive tasks, and which measurements survive the phones' timing error?
+- **The logic of how the system works:** what to measure in children, why device timing matters, and how each measurement should be treated.
+- **The choice of tasks, and every design decision.**
+
+He directed the development from start to finish, reviewed the results at each stage, and decided every change.
+
+The code, the simulation code and the first drafts of the documentation and paper were written with an AI system (Claude, Anthropic), following his direction and design. He reviewed them and is responsible for every claim, number and citation. This is stated because universities and journals require AI assistance with code and writing to be disclosed.
 
 ## Citation
 

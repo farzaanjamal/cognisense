@@ -79,7 +79,7 @@ object CsvExport {
         "condition", "stimulus", "expected_response", "planned_foreperiod_ms", "planned_stimulus_ms",
         "response_window_ms", "trial_start_ns", "onset_ns", "offset_ns", "end_ns", "measured_stimulus_ms",
         "stimulus_frames", "response_ns", "response_key", "touch_x", "touch_y", "rt_ms", "outcome",
-        "premature_responses", "extra_responses", "late_responses", "off_target_touches",
+        "premature_responses", "extra_responses", "late_responses", "late_rt_ms", "off_target_touches",
         "dropped_frames", "interrupted", "timing_sources", "hw_rt_us", "details",
     )
 
@@ -104,7 +104,7 @@ object CsvExport {
                 p.block, p.blockCondition, p.condition, p.stimulus, p.expectedResponse ?: "WITHHOLD",
                 p.foreperiodMs, p.stimulusMs, p.responseWindowMs, r.trialStartNanos, r.onsetNanos, r.offsetNanos,
                 r.endNanos, r.measuredStimulusMs, r.stimulusFrames, r.responseNanos, r.responseKey, r.touchX,
-                r.touchY, r.rtMs, r.outcome, r.prematureResponses, r.extraResponses, r.lateResponses,
+                r.touchY, r.rtMs, r.outcome, r.prematureResponses, r.extraResponses, r.lateResponses, r.lateRtMs,
                 r.offTargetTouches, r.droppedFrames, r.interrupted, r.timing.keys.sorted().joinToString("|"),
                 r.timing["hardware-esp32"]?.rtMicros, JsonExport.value(r.details),
             )

@@ -179,12 +179,16 @@ Each specification lists: construct · rationale · stimuli and trial structure 
 
 | Block | Event rate | Stimulus duration | ISI (offset to next onset) | Trials | Go / No-Go |
 |---|---|---|---|---|---|
-| F1 | Fast | 300 ms | 1000 ms | 48 | 36 / 12 |
-| S1 | Slow | 300 ms | 4000 ms | 24 | 18 / 6 |
-| F2 | Fast | 300 ms | 1000 ms | 48 | 36 / 12 |
-| S2 | Slow | 300 ms | 4000 ms | 24 | 18 / 6 |
+| F1 | Fast | 300 ms | 1000 ms | 32 | 24 / 8 |
+| S1 | Slow | 300 ms | 4000 ms | 32 | 24 / 8 |
+| S2 | Slow | 300 ms | 4000 ms | 32 | 24 / 8 |
+| F2 | Fast | 300 ms | 1000 ms | 32 | 24 / 8 |
 
-Response window: 1000 ms from onset (extends past stimulus offset). Fixation shown during ISI. Go probability 0.75 in every block. Constraints: first 3 trials of each block are Go; no more than 2 consecutive No-Go. Fixed block order F1–S1–F2–S2.
+Response window: 1000 ms from onset (extends past stimulus offset). Fixation shown during ISI. Go probability 0.75 in every block. Constraints: first 3 trials of each block are Go; no more than 2 consecutive No-Go. Fixed block order F1–S1–S2–F2.
+
+**Why this design (task version 0.2, config 0.3).** Version 0.1 ran fast–slow–fast–slow with 48-trial fast and 24-trial slow blocks. That placed the slow blocks later on average, so steady drift (fatigue, practice) was confounded with event rate, and it gave fast and slow 24 and 12 No-Go trials respectively. The ABBA order (fast–slow–slow–fast) gives both rates the same mean block position, so a linear drift cancels in the slow − fast difference. Equal counts (64 trials and 16 No-Go per rate) give both commission rates the same precision. Slow blocks still take longer, because the gaps are longer, which is the manipulation itself.
+
+**Late responses.** A response after the 1000 ms window counts as an omission, as before, but the latency of the first late response is now recorded (`late_rt_ms`). The window is judged in device time, so a slow device can push a slow response past it; the recorded latency lets an analysis re-apply the window after device correction. Whether the window itself should be longer is referred to the expert panel.
 
 **Practice.** 12 trials at fast rate (9 Go / 3 No-Go). Criterion: ≥ 7 of 9 Go hits and ≥ 2 of 3 No-Go withheld.
 
@@ -303,6 +307,8 @@ Response window: 1000 ms from onset (extends past stimulus offset). Fixation sho
 
 **Structure (proposed).** Forward first, then backward. Start length 2; 2 trials per length; advance if ≥ 1 of 2 correct; discontinue when both trials at a length are incorrect; maximum length 9 (forward) and 8 (backward). Sequences are **fixed per task version** (generated once from a documented seed, identical for every child) so that difficulty is comparable across children; no square repeats within a sequence.
 
+**Retest form.** A child's second session uses an alternate sequence set (config `retest`; task version suffix `-retest`). It contains no sequence from the standard form or practice. Each retest sequence has a path length on the board within 10% of its standard counterpart, which equates one known source of difficulty. Whether the two forms are truly equivalent must be checked in the pilot.
+
 **Practice.** Forward: 2 trials at length 2, with administrator demonstration. Backward: demonstration of reversal, then 2 trials at length 2. Criterion for each: ≥ 1 correct.
 
 **Metrics.** Span (longest length with ≥ 1 correct) (A); total correct trials (A); product score = span × total correct (Kessels et al., 2000 [VERIFY]) (A); backward − forward span (A); per-tap latencies (C, exploratory).
@@ -380,6 +386,8 @@ Response window: 1000 ms from onset (extends past stimulus offset). Fixation sho
 ---
 
 ### T10 — Choice-delay task
+
+**Status: EXPLORATORY.** Tokens are never exchanged for anything, so there is no real reward, and choices may not reflect delay aversion. Its measures are not primary outcomes in any planned analysis unless the expert panel and supervisor approve a real-reward version.
 
 **Construct.** Delay-related choice: preference for a smaller immediate reward over a larger delayed one when choosing the latter extends waiting time.
 

@@ -1,0 +1,470 @@
+{
+ "settings": {
+  "reps": 500,
+  "children": 200,
+  "seed": 20261004,
+  "gng_window_ms": 1000,
+  "gng_go": 96,
+  "gng_nogo": 32,
+  "numpy_version": "2.4.4",
+  "child_population": {
+   "mu": [
+    450.0,
+    60.0
+   ],
+   "sigma": [
+    50.0,
+    12.0
+   ],
+   "tau": [
+    150.0,
+    50.0
+   ],
+   "flanker_shift": 50.0,
+   "cost": [
+    60.0,
+    25.0
+   ],
+   "pcomm_beta": [
+    2.0,
+    8.0
+   ]
+  },
+  "scenarios": {
+   "single_device": {
+    "offset": [
+     "fixed",
+     87.5
+    ],
+    "jitter": [
+     "fixed",
+     10.0
+    ]
+   },
+   "mixed_devices": {
+    "offset": [
+     "uniform",
+     35.0,
+     140.0
+    ],
+    "jitter": [
+     "uniform",
+     5.0,
+     20.0
+    ]
+   },
+   "mixed_high_jitter": {
+    "offset": [
+     "uniform",
+     35.0,
+     140.0
+    ],
+    "jitter": [
+     "uniform",
+     10.0,
+     40.0
+    ]
+   }
+  },
+  "metric_classes": {
+   "commission_rate": "A",
+   "omission_rate": "A",
+   "go_rt_isd": "B",
+   "flanker_cost": "B",
+   "go_rt_median": "C",
+   "go_rt_cv": "C"
+  }
+ },
+ "summary": {
+  "agreement": {
+   "single_device": {
+    "commission_rate": {
+     "mean": 0.9954,
+     "lo": 0.9925,
+     "hi": 0.9972
+    },
+    "omission_rate": {
+     "mean": 0.9465,
+     "lo": 0.9291,
+     "hi": 0.9625
+    },
+    "go_rt_isd": {
+     "mean": 0.9298,
+     "lo": 0.9066,
+     "hi": 0.9501
+    },
+    "flanker_cost": {
+     "mean": 0.9834,
+     "lo": 0.9784,
+     "hi": 0.9875
+    },
+    "go_rt_median": {
+     "mean": 0.9952,
+     "lo": 0.993,
+     "hi": 0.9967
+    },
+    "go_rt_cv": {
+     "mean": 0.9642,
+     "lo": 0.9521,
+     "hi": 0.9742
+    }
+   },
+   "mixed_devices": {
+    "commission_rate": {
+     "mean": 0.9949,
+     "lo": 0.9913,
+     "hi": 0.9974
+    },
+    "omission_rate": {
+     "mean": 0.9219,
+     "lo": 0.8957,
+     "hi": 0.9476
+    },
+    "go_rt_isd": {
+     "mean": 0.9061,
+     "lo": 0.8719,
+     "hi": 0.9332
+    },
+    "flanker_cost": {
+     "mean": 0.9763,
+     "lo": 0.968,
+     "hi": 0.9832
+    },
+    "go_rt_median": {
+     "mean": 0.9061,
+     "lo": 0.8813,
+     "hi": 0.9256
+    },
+    "go_rt_cv": {
+     "mean": 0.8958,
+     "lo": 0.8654,
+     "hi": 0.9221
+    }
+   },
+   "mixed_high_jitter": {
+    "commission_rate": {
+     "mean": 0.9949,
+     "lo": 0.9917,
+     "hi": 0.9972
+    },
+    "omission_rate": {
+     "mean": 0.9207,
+     "lo": 0.8892,
+     "hi": 0.9447
+    },
+    "go_rt_isd": {
+     "mean": 0.8939,
+     "lo": 0.858,
+     "hi": 0.9241
+    },
+    "flanker_cost": {
+     "mean": 0.9385,
+     "lo": 0.9175,
+     "hi": 0.955
+    },
+    "go_rt_median": {
+     "mean": 0.9024,
+     "lo": 0.8796,
+     "hi": 0.9235
+    },
+    "go_rt_cv": {
+     "mean": 0.885,
+     "lo": 0.8513,
+     "hi": 0.9145
+    }
+   }
+  },
+  "bias": {
+   "single_device": {
+    "commission_rate": {
+     "mean": -0.0047,
+     "lo": -0.0066,
+     "hi": -0.0031
+    },
+    "omission_rate": {
+     "mean": 0.0234,
+     "lo": 0.0206,
+     "hi": 0.0264
+    },
+    "go_rt_isd": {
+     "mean": -10.109,
+     "lo": -11.2549,
+     "hi": -9.0105
+    },
+    "flanker_cost": {
+     "mean": -0.0575,
+     "lo": -1.199,
+     "hi": 0.9523
+    },
+    "go_rt_median": {
+     "mean": 83.6863,
+     "lo": 82.81,
+     "hi": 84.6325
+    },
+    "go_rt_cv": {
+     "mean": -0.041,
+     "lo": -0.0429,
+     "hi": -0.0391
+    }
+   },
+   "mixed_devices": {
+    "commission_rate": {
+     "mean": -0.0049,
+     "lo": -0.0067,
+     "hi": -0.0031
+    },
+    "omission_rate": {
+     "mean": 0.0245,
+     "lo": 0.021,
+     "hi": 0.0277
+    },
+    "go_rt_isd": {
+     "mean": -10.0141,
+     "lo": -11.2204,
+     "hi": -8.6651
+    },
+    "flanker_cost": {
+     "mean": 0.0177,
+     "lo": -1.3363,
+     "hi": 1.5005
+    },
+    "go_rt_median": {
+     "mean": 83.6806,
+     "lo": 79.6196,
+     "hi": 88.2041
+    },
+    "go_rt_cv": {
+     "mean": -0.0402,
+     "lo": -0.0428,
+     "hi": -0.0376
+    }
+   },
+   "mixed_high_jitter": {
+    "commission_rate": {
+     "mean": -0.005,
+     "lo": -0.007,
+     "hi": -0.0033
+    },
+    "omission_rate": {
+     "mean": 0.025,
+     "lo": 0.0214,
+     "hi": 0.0288
+    },
+    "go_rt_isd": {
+     "mean": -8.1436,
+     "lo": -9.6615,
+     "hi": -6.7187
+    },
+    "flanker_cost": {
+     "mean": -0.0388,
+     "lo": -2.1738,
+     "hi": 2.2467
+    },
+    "go_rt_median": {
+     "mean": 84.5498,
+     "lo": 80.3294,
+     "hi": 88.4339
+    },
+    "go_rt_cv": {
+     "mean": -0.0373,
+     "lo": -0.0403,
+     "hi": -0.0345
+    }
+   }
+  },
+  "retest": {
+   "no_device_error": {
+    "commission_rate": {
+     "mean": 0.7519,
+     "lo": 0.679,
+     "hi": 0.8186
+    },
+    "omission_rate": {
+     "mean": 0.7738,
+     "lo": 0.6909,
+     "hi": 0.8373
+    },
+    "go_rt_isd": {
+     "mean": 0.8072,
+     "lo": 0.7464,
+     "hi": 0.854
+    },
+    "flanker_cost": {
+     "mean": 0.3201,
+     "lo": 0.1857,
+     "hi": 0.4403
+    },
+    "go_rt_median": {
+     "mean": 0.9432,
+     "lo": 0.9248,
+     "hi": 0.9568
+    },
+    "go_rt_cv": {
+     "mean": 0.8646,
+     "lo": 0.8249,
+     "hi": 0.899
+    }
+   },
+   "single_device_same_device": {
+    "commission_rate": {
+     "mean": 0.7471,
+     "lo": 0.6744,
+     "hi": 0.812
+    },
+    "omission_rate": {
+     "mean": 0.8202,
+     "lo": 0.7637,
+     "hi": 0.8689
+    },
+    "go_rt_isd": {
+     "mean": 0.7993,
+     "lo": 0.7361,
+     "hi": 0.8495
+    },
+    "flanker_cost": {
+     "mean": 0.3192,
+     "lo": 0.1783,
+     "hi": 0.4395
+    },
+    "go_rt_median": {
+     "mean": 0.9429,
+     "lo": 0.9256,
+     "hi": 0.9566
+    },
+    "go_rt_cv": {
+     "mean": 0.869,
+     "lo": 0.83,
+     "hi": 0.8994
+    }
+   },
+   "mixed_devices_same_device": {
+    "commission_rate": {
+     "mean": 0.7471,
+     "lo": 0.6745,
+     "hi": 0.8107
+    },
+    "omission_rate": {
+     "mean": 0.8293,
+     "lo": 0.7683,
+     "hi": 0.8816
+    },
+    "go_rt_isd": {
+     "mean": 0.8082,
+     "lo": 0.748,
+     "hi": 0.8551
+    },
+    "flanker_cost": {
+     "mean": 0.3182,
+     "lo": 0.1853,
+     "hi": 0.4395
+    },
+    "go_rt_median": {
+     "mean": 0.9525,
+     "lo": 0.9385,
+     "hi": 0.9653
+    },
+    "go_rt_cv": {
+     "mean": 0.8856,
+     "lo": 0.8485,
+     "hi": 0.9149
+    }
+   },
+   "mixed_devices_new_device": {
+    "commission_rate": {
+     "mean": 0.7468,
+     "lo": 0.6754,
+     "hi": 0.8111
+    },
+    "omission_rate": {
+     "mean": 0.7829,
+     "lo": 0.7115,
+     "hi": 0.845
+    },
+    "go_rt_isd": {
+     "mean": 0.7579,
+     "lo": 0.6896,
+     "hi": 0.8184
+    },
+    "flanker_cost": {
+     "mean": 0.318,
+     "lo": 0.1793,
+     "hi": 0.4414
+    },
+    "go_rt_median": {
+     "mean": 0.7826,
+     "lo": 0.7207,
+     "hi": 0.829
+    },
+    "go_rt_cv": {
+     "mean": 0.7496,
+     "lo": 0.6803,
+     "hi": 0.8126
+    }
+   },
+   "mixed_high_jitter_same_device": {
+    "commission_rate": {
+     "mean": 0.7468,
+     "lo": 0.6724,
+     "hi": 0.8095
+    },
+    "omission_rate": {
+     "mean": 0.8303,
+     "lo": 0.7796,
+     "hi": 0.8758
+    },
+    "go_rt_isd": {
+     "mean": 0.799,
+     "lo": 0.7426,
+     "hi": 0.8503
+    },
+    "flanker_cost": {
+     "mean": 0.3116,
+     "lo": 0.175,
+     "hi": 0.4288
+    },
+    "go_rt_median": {
+     "mean": 0.9506,
+     "lo": 0.9364,
+     "hi": 0.9631
+    },
+    "go_rt_cv": {
+     "mean": 0.8816,
+     "lo": 0.8438,
+     "hi": 0.9117
+    }
+   },
+   "mixed_high_jitter_new_device": {
+    "commission_rate": {
+     "mean": 0.7464,
+     "lo": 0.6736,
+     "hi": 0.8088
+    },
+    "omission_rate": {
+     "mean": 0.782,
+     "lo": 0.7095,
+     "hi": 0.8383
+    },
+    "go_rt_isd": {
+     "mean": 0.7411,
+     "lo": 0.6698,
+     "hi": 0.795
+    },
+    "flanker_cost": {
+     "mean": 0.3124,
+     "lo": 0.1799,
+     "hi": 0.4315
+    },
+    "go_rt_median": {
+     "mean": 0.7797,
+     "lo": 0.7264,
+     "hi": 0.8262
+    },
+    "go_rt_cv": {
+     "mean": 0.7389,
+     "lo": 0.6733,
+     "hi": 0.7937
+    }
+   }
+  }
+ }
+}

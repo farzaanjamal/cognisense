@@ -51,6 +51,9 @@ import kotlin.math.roundToInt
 /** Per-session state held in memory while a session runs. */
 class SessionCtx(var meta: SessionMetadata) {
     private var runIndex = 0
+    /** A retest session (the child's second visit) uses each part's retest variant; recorded in the checklist. */
+    val retest: Boolean get() = meta.checklist["session_form"] == "retest"
+    fun variant(p: PartInfo): TaskDefinition = if (retest) p.retest else p.standard
     val motion: MotionSource = NoMotionSource()
 
     /** Each run gets its own block of 1000 trial sequence numbers, unique within the session. */
@@ -331,6 +334,8 @@ class AppFlow(private val a: MainActivity) {
         }
         val protector = CheckBox(a).apply { text = t("chk_protector"); textSize = 16f; textLocale = Ui.locale(lang) }
         c.addView(protector)
+        val retest = CheckBox(a).apply { text = t("chk_retest"); textSize = 16f; textLocale = Ui.locale(lang) }
+        c.addView(retest)
         val dnd = DeviceInfo.doNotDisturb(a)
         c.addView(Ui.text(a, "Do Not Disturb detected: ${dnd?.toString() ?: "unknown"}", Lang.EN, 13f, Ui.MUTED))
         val battery = DeviceInfo.batteryPercent(a)
@@ -339,6 +344,7 @@ class AppFlow(private val a: MainActivity) {
         val go = Ui.button(a, t("continue"), lang) {
             val answers = required.associateWith { if (boxes.getValue(it).isChecked) "yes" else "no" } +
                 mapOf("chk_protector" to if (protector.isChecked) "yes" else "no",
+                    "session_form" to if (retest.isChecked) "retest" else "first",
                     "battery_percent" to (battery?.toString() ?: "unknown"))
             participantScreen(newSession("SESSION", answers))
         }
@@ -380,7 +386,7 @@ class AppFlow(private val a: MainActivity) {
     private fun runParts(sc: SessionCtx, info: TaskInfo, j: Int, onDone: () -> Unit) {
         if (j >= info.parts.size) { onDone(); return }
         val part = info.parts[j]
-        val def = part.standard
+        val def = sc.variant(part)
         practiceLoop(sc, part, def, 1,
             onPassed = {
                 runPhase(sc, def, part, Phase.SCORED, 1) { e ->
@@ -390,7 +396,7 @@ class AppFlow(private val a: MainActivity) {
             },
             onFailed = {
                 info.parts.drop(j).forEachIndexed { k, p ->
-                    a.store.saveRun(sc.meta.sessionId, p.standard.id, p.standard.version, Phase.SCORED, 1,
+                    a.store.saveRun(sc.meta.sessionId, sc.variant(p).id, sc.variant(p).version, Phase.SCORED, 1,
                         if (k == 0) "skipped_practice_criterion_not_met" else "skipped_after_earlier_part_failed",
                         null, null, null)
                 }

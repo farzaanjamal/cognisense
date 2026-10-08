@@ -221,7 +221,7 @@ object Codec {
         .put("endNanos", r.endNanos).put("stimulusFrames", r.stimulusFrames).num("responseNanos", r.responseNanos)
         .str("responseKey", r.responseKey?.name).num("touchX", r.touchX).num("touchY", r.touchY).num("rtMs", r.rtMs)
         .put("outcome", r.outcome.name).put("prematureResponses", r.prematureResponses)
-        .put("extraResponses", r.extraResponses).put("lateResponses", r.lateResponses)
+        .put("extraResponses", r.extraResponses).put("lateResponses", r.lateResponses).num("lateRtMs", r.lateRtMs)
         .put("offTargetTouches", r.offTargetTouches).put("droppedFrames", r.droppedFrames)
         .put("interrupted", r.interrupted)
         .put("timing", JSONObject().also { t -> r.timing.forEach { (k, v) -> t.put(k, timing(v)) } })
@@ -237,7 +237,8 @@ object Codec {
             Outcome.valueOf(o.getString("outcome")), o.getInt("prematureResponses"), o.getInt("extraResponses"),
             o.getInt("lateResponses"), o.getInt("offTargetTouches"), o.getInt("droppedFrames"),
             o.getBoolean("interrupted"), t.keys().asSequence().associateWith { timing(t.getJSONObject(it)) },
-            o.getJSONObject("details").let { dt -> dt.keys().asSequence().associateWith { dt.getString(it) } })
+            o.getJSONObject("details").let { dt -> dt.keys().asSequence().associateWith { dt.getString(it) } },
+            lateRtMs = o.doubleOrNull("lateRtMs"))
     }
 
     fun session(m: SessionMetadata): JSONObject = JSONObject().put("participantId", m.participantId)

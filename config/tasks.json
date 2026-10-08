@@ -1,6 +1,6 @@
 {
   "schema": "cognisense.tasks",
-  "config_version": "0.2",
+  "config_version": "0.3",
   "note": "Single source of truth for task parameters. Read by the Android app (and the browser preview, when built). Every value is a PROPOSED parameter pending expert review and piloting (docs/task_specifications.md). Rules in config/README.md: changing any value of a task requires bumping that task's version; every session records config_version and the SHA-256 of this file.",
   "common": {
     "anticipation_ms": 150,
@@ -205,7 +205,7 @@
       "id": "CDT",
       "name": "Choice-delay task",
       "construct": "Delay-related choice (preference for smaller-sooner over larger-later rewards).",
-      "measures": "Proportion of larger-later choices [A]; choice latency [C, exploratory].",
+      "measures": "EXPLORATORY, not a primary measure (tokens are never exchanged, so there is no real reward): proportion of larger-later choices [A]; choice latency [C].",
       "review_duration": "1.5-2.5 min (2 forced + 4 free choices; depends on choices)",
       "parts": [
         "CDT"
@@ -215,7 +215,7 @@
   "tasks": {
     "GNG": {
       "kind": "go_no_go",
-      "version": "0.1",
+      "version": "0.2",
       "pads": "SINGLE",
       "stimuli": {
         "go": "gng_go_circle",
@@ -234,19 +234,19 @@
       "blocks": [
         {
           "rate": "fast",
-          "trials": 48
+          "trials": 32
         },
         {
           "rate": "slow",
-          "trials": 24
+          "trials": 32
+        },
+        {
+          "rate": "slow",
+          "trials": 32
         },
         {
           "rate": "fast",
-          "trials": 48
-        },
-        {
-          "rate": "slow",
-          "trials": 24
+          "trials": 32
         }
       ],
       "practice": {
@@ -260,11 +260,11 @@
         "blocks": [
           {
             "rate": "fast",
-            "trials": 16
+            "trials": 12
           },
           {
             "rate": "slow",
-            "trials": 8
+            "trials": 12
           }
         ]
       }
@@ -294,7 +294,7 @@
     },
     "SPF": {
       "kind": "spatial_span",
-      "version": "0.1",
+      "version": "0.2",
       "pads": "BOARD",
       "direction": "forward",
       "board": "span_board",
@@ -325,11 +325,24 @@
       },
       "review": {
         "max_length": 5
+      },
+      "retest": {
+        "sequence_generation": "SpanSequences.generateMatched(seed=20261002, label=\"SPF:retest\", reference=this part's sequences, positions in dp, tolerance=0.10, excluding all standard and practice sequences): path length on the board within 10% of the matching standard sequence. CoreTests checks this file still matches.",
+        "sequences": {
+          "2": [[6, 1], [8, 0]],
+          "3": [[5, 4, 0], [3, 4, 8]],
+          "4": [[7, 6, 1, 3], [6, 2, 4, 5]],
+          "5": [[4, 1, 2, 6, 0], [3, 1, 8, 0, 4]],
+          "6": [[6, 1, 0, 2, 3, 8], [8, 0, 2, 5, 7, 3]],
+          "7": [[6, 2, 1, 0, 4, 7, 8], [6, 3, 0, 7, 5, 4, 2]],
+          "8": [[5, 6, 3, 8, 1, 0, 2, 7], [8, 2, 3, 1, 4, 6, 5, 7]],
+          "9": [[5, 1, 0, 6, 8, 2, 4, 7, 3], [6, 8, 4, 7, 0, 5, 2, 3, 1]]
+        }
       }
     },
     "SPB": {
       "kind": "spatial_span",
-      "version": "0.1",
+      "version": "0.2",
       "pads": "BOARD",
       "direction": "backward",
       "board": "span_board",
@@ -359,6 +372,18 @@
       },
       "review": {
         "max_length": 4
+      },
+      "retest": {
+        "sequence_generation": "SpanSequences.generateMatched(seed=20261002, label=\"SPB:retest\", reference=this part's sequences, positions in dp, tolerance=0.10, excluding all standard and practice sequences): path length on the board within 10% of the matching standard sequence. CoreTests checks this file still matches.",
+        "sequences": {
+          "2": [[1, 0], [4, 7]],
+          "3": [[2, 4, 1], [2, 5, 3]],
+          "4": [[1, 3, 2, 8], [3, 1, 5, 4]],
+          "5": [[1, 7, 3, 5, 8], [5, 3, 0, 6, 2]],
+          "6": [[0, 2, 7, 8, 3, 5], [1, 2, 0, 3, 8, 5]],
+          "7": [[3, 0, 2, 8, 7, 6, 5], [3, 0, 1, 4, 6, 8, 7]],
+          "8": [[7, 2, 6, 5, 4, 1, 8, 3], [8, 3, 7, 1, 0, 4, 6, 5]]
+        }
       }
     },
     "TRP": {

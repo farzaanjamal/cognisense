@@ -429,9 +429,10 @@
   }
   function scenesFor(partId) {
     const G = CFG.tasks.GNG, on = G.stimulus_ms, gap = fastIsi();
+    // The real task shows a fixation cross whenever no shape is on screen (engine: fixationInForeperiod/AfterStimulus).
     if (partId === 'GNG') return [
-      scene(900, one(false)), scene(on, stim(G.stimuli.go), one(false)), scene(100, one(false)), scene(160, one(true)),
-      scene(gap - 260, one(false)), scene(on, stim(G.stimuli.nogo), one(false)), scene(gap + 200, one(false))];
+      scene(900, fix(), one(false)), scene(on, stim(G.stimuli.go), one(false)), scene(100, fix(), one(false)), scene(160, fix(), one(true)),
+      scene(gap - 260, fix(), one(false)), scene(on, stim(G.stimuli.nogo), one(false)), scene(gap + 200, fix(), one(false))];
     if (partId === 'FLK') { const p = CFG.tasks.FLK.stimulus_prefix; return [
       scene(700, fix(), two(null)), scene(560, stim(p + '_incongruent_right'), two(null)), scene(160, two('RIGHT')),
       scene(800, fix(), two(null)), scene(520, stim(p + '_congruent_left'), two(null)), scene(160, two('LEFT')), scene(700, two(null))]; }

@@ -37,17 +37,28 @@ class BatteryConfig private constructor(
         val reviewDuration: String, val parts: List<String>,
     )
 
-    private val built = HashMap<Pair<String, Boolean>, TaskDefinition>()
+    private enum class Variant { STANDARD, REVIEW, RETEST }
+    private val built = HashMap<Pair<String, Variant>, TaskDefinition>()
 
-    fun standard(partId: String): TaskDefinition = build(partId, review = false)
-    fun review(partId: String): TaskDefinition = build(partId, review = true)
+    fun standard(partId: String): TaskDefinition = build(partId, Variant.STANDARD)
+    fun review(partId: String): TaskDefinition = build(partId, Variant.REVIEW)
+    /**
+     * The task for a second (retest) session. Parts with a "retest" object in the config (spatial span: an
+     * alternate, difficulty-matched sequence set) get it, with version suffix "-retest"; every other part is
+     * identical to [standard], so a retest session differs from a first session only where the config says so.
+     */
+    fun retest(partId: String): TaskDefinition = build(partId, Variant.RETEST)
     fun pads(partId: String): String = tasks.obj(partId).str("pads")
     fun poolEntry(code: String): PoolEntry = pool.first { it.code == code }
 
-    private fun build(id: String, review: Boolean): TaskDefinition = built.getOrPut(id to review) {
+    private fun build(id: String, variant: Variant): TaskDefinition = built.getOrPut(id to variant) {
         val base = tasks.obj(id)
-        val o = if (review) base.merged(base.obj("review")) else base
-        val v = base.str("version") + if (review) "-review" else ""
+        val (o, v) = when (variant) {
+            Variant.STANDARD -> base to base.str("version")
+            Variant.REVIEW -> base.merged(base.obj("review")) to base.str("version") + "-review"
+            Variant.RETEST -> if (base.has("retest")) base.merged(base.obj("retest")) to base.str("version") + "-retest"
+                              else base to base.str("version")
+        }
         when (val kind = base.str("kind")) {
             "go_no_go" -> GoNoGoTask(goNoGo(id, v, o))
             "flanker" -> FlankerTask(flanker(id, v, o))
@@ -152,7 +163,7 @@ class BatteryConfig private constructor(
             // Fail fast: every referenced part must build in both variants; core order must name pool tasks.
             require(cfg.coreOrder.all { code -> pool.any { it.code == code } }) { "config: core_battery_order names an unknown task" }
             for (part in pool.flatMap { it.parts }) {
-                cfg.standard(part); cfg.review(part)
+                cfg.standard(part); cfg.review(part); cfg.retest(part)
                 require(cfg.pads(part) in setOf("SINGLE", "LEFT_RIGHT", "BOARD")) { "config: bad pads for $part" }
             }
             return cfg

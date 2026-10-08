@@ -1,6 +1,6 @@
 {
   "schema": "cognisense.strings",
-  "version": "0.1",
+  "version": "0.2",
   "note": "Shared interface text for the Android app and the browser preview. English is the source text. EVERY Urdu string is an UNVALIDATED DRAFT requiring forward translation, independent back translation, reconciliation and a child-comprehension check before field use.",
   "strings": {
     "app_name": {
@@ -230,6 +230,10 @@
     "chk_protector": {
       "en": "Screen protector fitted",
       "ur": "اسکرین پروٹیکٹر لگا ہوا ہے"
+    },
+    "chk_retest": {
+      "en": "Second session for this child (retest): use the alternate spatial-span sequences",
+      "ur": "اس بچے کا دوسرا سیشن (دوبارہ جانچ): مقامی یادداشت کے کام کے متبادل سلسلے استعمال کریں"
     },
     "battery": {
       "en": "Battery",

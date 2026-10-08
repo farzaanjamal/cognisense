@@ -27,7 +27,7 @@ import sys
 import numpy as np
 
 # ---- trial structure from config/tasks.json v0.2 -------------------------------------
-GNG_GO, GNG_NOGO = 108, 36          # 144 trials, 25% No-Go
+GNG_GO, GNG_NOGO = 108, 36          # config v0.2: 144 trials, 25% No-Go (the paper's main analysis)
 GNG_WINDOW_MS = 1000                # response window, measured in logged (device) time
 FLK_PER_COND = 40                   # 80 trials, half congruent
 FLK_WINDOW_MS = 2000
@@ -161,20 +161,24 @@ def _get(d, path):
 
 
 def main(argv=None):
-    global GNG_WINDOW_MS
+    global GNG_WINDOW_MS, GNG_GO, GNG_NOGO
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--reps", type=int, default=500)
     ap.add_argument("--children", type=int, default=200)
     ap.add_argument("--seed", type=int, default=20261004)
+    ap.add_argument("--gng-go", type=int, default=GNG_GO, help="Go trials (default: config v0.2, as in the paper)")
+    ap.add_argument("--gng-nogo", type=int, default=GNG_NOGO, help="No-Go trials (config v0.3: --gng-go 96 --gng-nogo 32)")
     ap.add_argument("--gng-window", type=float, default=GNG_WINDOW_MS,
                     help="Go/No-Go response window in ms (sensitivity analysis; 'inf' = none)")
     ap.add_argument("--out")
     a = ap.parse_args(argv)
     GNG_WINDOW_MS = a.gng_window
+    GNG_GO, GNG_NOGO = a.gng_go, a.gng_nogo
     rng = np.random.default_rng(a.seed)
     reps = [one_replicate(rng, a.children) for _ in range(a.reps)]
     result = dict(settings=dict(reps=a.reps, children=a.children, seed=a.seed,
-                                gng_window_ms=a.gng_window, numpy_version=np.__version__,
+                                gng_window_ms=a.gng_window, gng_go=a.gng_go, gng_nogo=a.gng_nogo,
+                                numpy_version=np.__version__,
                                 child_population=CHILD, scenarios=SCENARIOS,
                                 metric_classes=METRICS),
                   summary=summarise(reps))

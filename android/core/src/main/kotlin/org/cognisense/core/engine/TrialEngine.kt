@@ -217,6 +217,7 @@ class TrialEngine(
         val premature = sorted.count { onset == null || it.eventTimeNanos < onset }
         val inWindow = if (onset == null) emptyList() else sorted.filter { it.eventTimeNanos in onset until windowEnd!! }
         val late = if (windowEnd == null) 0 else sorted.count { it.eventTimeNanos >= windowEnd }
+        val firstLate = if (windowEnd == null) null else sorted.firstOrNull { it.eventTimeNanos >= windowEnd }
         val first = inWindow.firstOrNull()
         if (first != null) ctx.timingSources.forEach { it.onResponseEvent(c.seq, first.eventTimeNanos) }
         val rtMs = if (first != null && onset != null) (first.eventTimeNanos - onset) / 1e6 else null
@@ -229,6 +230,7 @@ class TrialEngine(
             prematureResponses = premature, extraResponses = (inWindow.size - 1).coerceAtLeast(0),
             lateResponses = late, offTargetTouches = c.offTarget, droppedFrames = c.dropped,
             interrupted = interrupted,
+            lateRtMs = if (firstLate != null && onset != null) (firstLate.eventTimeNanos - onset) / 1e6 else null,
         )
         cur = null
     }
