@@ -504,6 +504,8 @@
     return el('ol', { class: 'steps', 'aria-label': 'Demo progress' }, ...flow.infos.map((info, i) =>
       el('li', { class: i < current ? 'done' : i === current ? 'current' : null, 'aria-current': i === current ? 'step' : null }, COPY[info.code].name)));
   }
+  /** A timing class as a small letter badge; deliberately neutral (no colour that reads as good or bad). */
+  const clsBadge = (c, decorative) => el('span', { class: 'cls-badge', 'aria-hidden': decorative ? 'true' : null }, c);
   const capitalise = (x) => x.charAt(0).toUpperCase() + x.slice(1);
   const lowerFirst = (x) => x.charAt(0).toLowerCase() + x.slice(1);
   function keysFor(partId) {
@@ -527,16 +529,16 @@
           el('p', { class: 'hint' }, 'Best on a laptop, or on a phone turned sideways. Nothing you do leaves this page.')),
         el('figure', null, hero, el('figcaption', null, 'The Go/No-Go task as participants see it, at its real timing: tap for the circle, hold back for the square.'))),
       el('h2', null, 'Or try one task'),
-      el('ul', { class: 'tasks' }, ...GUIDED.map((info) => el('li', null,
+      el('ul', { class: 'tasks' }, ...GUIDED.map((info) => el('li', { class: 'task-row' },
         thumb(info),
         el('div', null, el('h3', null, COPY[info.code].name), el('p', null, COPY[info.code].measures), el('p', { class: 'duration' }, capitalise(info.review_duration) + '.')),
         el('button', { type: 'button', class: 'quiet', 'data-task': info.code, 'aria-label': 'Try ' + COPY[info.code].name, onclick: () => startFlow('single', [info]) }, 'Try')))),
       el('h2', null, 'How to read what it records'),
       el('p', { class: 'measure' }, 'Phones and browsers add their own delay between something appearing on screen and the moment a touch is timestamped. Cognisense labels every measurement by how much that delay can distort it.'),
       el('div', { class: 'classes' },
-        el('div', null, el('b', null, 'Class A'), el('p', null, 'Timing-independent: counts, choices and accuracy.')),
-        el('div', null, el('b', null, 'Class B'), el('p', null, 'Robust to a constant device delay, because the delay cancels in a difference between two reaction times.')),
-        el('div', null, el('b', null, 'Class C'), el('p', null, 'Affected by device delay: absolute reaction times. Comparable only within one device model.'))),
+        el('div', null, el('b', null, clsBadge('A', true), 'Class A'), el('p', null, 'Timing-independent: counts, choices and accuracy.')),
+        el('div', null, el('b', null, clsBadge('B', true), 'Class B'), el('p', null, 'Robust to a constant device delay, because the delay cancels in a difference between two reaction times.')),
+        el('div', null, el('b', null, clsBadge('C', true), 'Class C'), el('p', null, 'Affected by device delay: absolute reaction times. Comparable only within one device model.'))),
       el('p', { class: 'measure small muted' }, 'In this demo every value is an illustration: the blocks are shortened and the timing comes from your browser.'),
       researcherDrawer(), linksRow(), footer());
     ambient = loop(hero, scenesFor('GNG'), STILL.GNG);
@@ -748,7 +750,9 @@
       el('tbody', null, ...rows.map((m) => el('tr', null,
         el('td', null, names ? (METRIC_LABEL[m.name] || m.name) : m.name),
         el('td', { class: 'num' }, fmtVal(m)),
-        el('td', { class: 'cls' }, m.timing_class ? m.timing_class + (CLASS_LABEL[m.timing_class] ? ', ' + CLASS_LABEL[m.timing_class] : '') : '')))));
+        el('td', { class: 'cls' }, ...(m.timing_class
+          ? [clsBadge(m.timing_class), el('span', null, CLASS_LABEL[m.timing_class] || '')]
+          : []))))));
   }
   function quality(scored, practice) {
     const hz = scored.measured_hz ? Math.round(scored.measured_hz) : null;
@@ -758,14 +762,13 @@
   }
   function partResult(p, sub) {
     const ch = CHARTS[p.partId](p.scored.records, p.scored);
-    return [
+    return el('div', { class: 'part' },
       sub ? el('h3', null, PART_TITLE[p.partId]) : null,
       ch.svg, ch.legend,
       el('p', { class: 'small muted measure' }, ch.caption),
       metricsTable(p.scored.metrics, KEY_METRICS[p.partId]),
       el('p', { class: 'quality' }, quality(p.scored, p.practice)),
-      el('details', null, el('summary', null, 'All recorded measures'), metricsTable(p.scored.metrics, null)),
-    ];
+      el('details', { class: 'all-measures' }, el('summary', null, 'All recorded measures'), metricsTable(p.scored.metrics, null)));
   }
   function summary() {
     const res = flow ? flow.results : [];
@@ -773,10 +776,15 @@
       el('div', { class: 'measure' },
         el('h1', null, 'What the demo recorded'),
         el('p', { class: 'lede' }, 'Raw values from shortened blocks, timed by your browser. They show what Cognisense records. They are not scores, and there is nothing to compare them with.')),
-      ...res.map((r) => el('section', { class: 'result' },
+      res.length > 1 ? el('nav', { class: 'toc', 'aria-label': 'Tasks on this page' },
+        el('ol', null, ...res.map((r) => el('li', null, el('a', {
+          href: '#result-' + r.info.code,
+          onclick: (e) => { e.preventDefault(); document.getElementById('result-' + r.info.code).scrollIntoView(); },
+        }, COPY[r.info.code].name))))) : null,
+      ...res.map((r) => el('section', { class: 'result', id: 'result-' + r.info.code },
         el('h2', null, COPY[r.info.code].name),
         el('p', { class: 'muted measure' }, COPY[r.info.code].measures),
-        ...r.parts.flatMap((p) => partResult(p, r.parts.length > 1)))),
+        ...r.parts.map((p) => partResult(p, r.parts.length > 1)))),
       el('div', { class: 'actions' }, act('Download this session (JSON)', download, 'download'), act('Back to the start', landing, 'home', true)),
       researcherDrawer(), linksRow(), footer());
   }

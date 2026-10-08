@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; font-src data:; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="cognisense-sources" content="fccb65d4adcf709aa25c7deed595986e3b0169ed71930a446147d9ef38a56ef6">
+<meta name="cognisense-sources" content="b99214af055b672e1d82c29d6a9725589123e2fa8964b4a0819b0d32cc6d83a2">
 <link rel="icon" href="data:,">
 <title>Cognisense: research prototype demo</title>
 <style>
@@ -84,8 +84,10 @@ button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 6px; p
   border: 1px solid transparent; background: var(--signal); color: var(--signal-ink);
   transition: background-color .12s ease, border-color .12s ease; }
 button:hover { background: color-mix(in srgb, var(--signal) 86%, var(--ink)); }
+button:active { background: color-mix(in srgb, var(--signal) 74%, var(--ink)); }
 button.quiet { background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 400; }
 button.quiet:hover { border-color: var(--muted); background: transparent; }
+button.quiet:active { background: var(--wash); }
 button.link { background: none; border: 0; padding: 0; min-height: 0; color: var(--signal); font-weight: 400; text-decoration: underline; text-underline-offset: .18em; }
 .hint { font-size: .9rem; color: var(--muted); margin-top: calc(-1 * var(--s2)); }
 
@@ -100,7 +102,15 @@ figcaption { font-size: .9rem; color: var(--muted); margin-top: var(--s2); line-
 /* ---- task list (single-task entry) */
 .tasks { list-style: none; margin: var(--s4) 0 0; padding: 0; border-top: 1px solid var(--rule); }
 .tasks li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) auto; gap: var(--s5); align-items: center;
-  padding: var(--s4) 0; border-bottom: 1px solid var(--rule); }
+  padding: var(--s4) 0; border-bottom: 1px solid var(--rule); position: relative; }
+/* The row's hover wash reaches a little past the text column without moving the dividers. */
+.tasks li::before { content: ""; position: absolute; inset: 2px calc(-1 * var(--s3)); border-radius: 6px; z-index: -1;
+  transition: background-color .12s ease; }
+.tasks li:hover::before { background: var(--wash); }
+.tasks li > button::after { content: ""; position: absolute; inset: 0; }
+.tasks li > button:focus-visible { outline: none; }
+.tasks li:has(> button:focus-visible)::before { outline: 3px solid var(--signal); }
+.tasks li:hover > button.quiet { border-color: var(--muted); }
 .tasks .field { width: 7.5rem; height: 4.5rem; }
 .tasks h3 { margin: 0 0 var(--s1); }
 .tasks p { margin: 0; }
@@ -109,7 +119,10 @@ figcaption { font-size: .9rem; color: var(--muted); margin-top: var(--s2); line-
 /* ---- reading timing classes */
 .classes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); margin-top: var(--s4); }
 .classes div { border-top: 3px solid var(--ink); padding-top: var(--s3); }
-.classes b { display: block; font-size: 1.05rem; margin-bottom: var(--s1); }
+.classes b { display: flex; align-items: center; font-size: 1.05rem; margin-bottom: var(--s1); }
+.cls-badge { display: inline-grid; place-items: center; min-width: 1.55em; height: 1.55em; padding: 0 .3em; margin-inline-end: .55em;
+  border-radius: 4px; background: var(--wash); color: var(--ink); font-weight: 700; font-size: .8rem; line-height: 1; flex: none; }
+.classes .cls-badge { background: var(--ink); color: var(--record); }
 .classes p { font-size: .95rem; color: var(--muted); margin: 0; }
 .classes + p { margin-top: var(--s5); }
 
@@ -135,8 +148,18 @@ dl.facts dd { margin: var(--s1) 0 0; }
 kbd { font: inherit; font-size: .9em; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0 .35em; color: var(--ink); background: var(--record); }
 
 /* ---- results */
-.result { border-top: 1px solid var(--rule); margin-top: var(--s7); padding-top: var(--s5); }
+.result { border-top: 1px solid var(--rule); margin-top: var(--s7); padding-top: var(--s5); scroll-margin-top: var(--s5); }
 .result h2 { margin-top: 0; }
+.part + .part { margin-top: var(--s6); padding-top: var(--s2); }
+.part h3 { margin-top: var(--s5); }
+.result details.all-measures { border-top: 0; margin-top: 0; padding: 0; }
+.result details.all-measures summary { font-weight: 400; color: var(--signal); font-size: .95rem; }
+.toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s2); padding: 0; margin: var(--s5) 0 0; counter-reset: toc; }
+.toc li { counter-increment: toc; }
+.toc a { display: inline-flex; align-items: center; gap: .5em; padding: .45rem .85rem; border: 1px solid var(--rule); border-radius: 999px;
+  color: var(--ink); text-decoration: none; font-size: .95rem; }
+.toc a::before { content: counter(toc); font-size: .8em; color: var(--muted); }
+.toc a:hover { border-color: var(--muted); }
 .chart { width: 100%; max-width: 44rem; height: auto; display: block; margin: var(--s4) 0 var(--s2); overflow: visible; }
 .chart text { font-family: var(--sans); fill: var(--muted); font-size: 12px; }
 .chart .ink { fill: var(--ink); stroke: var(--ink); }
@@ -148,7 +171,8 @@ table.metrics { border-collapse: collapse; width: 100%; max-width: 44rem; font-s
 table.metrics th, table.metrics td { text-align: left; padding: .45rem .75rem .45rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 table.metrics th { font-weight: 700; font-size: .875rem; color: var(--muted); }
 table.metrics td.num { text-align: right; padding-right: var(--s5); white-space: nowrap; }
-.cls { white-space: nowrap; }
+.cls { color: var(--muted); }
+.cls .cls-badge { color: var(--ink); }
 .quality { font-size: .9rem; color: var(--muted); }
 .notice { background: var(--wash); border-radius: 6px; padding: var(--s4) var(--s5); margin: var(--s5) 0; max-width: 44rem; }
 .notice p:last-child { margin-bottom: 0; }
@@ -183,10 +207,27 @@ body.tasking { overflow: hidden; overscroll-behavior: none; background: #808080;
   .tasks .field { width: 5rem; height: 3rem; }
   .tasks li > button { grid-column: 2; justify-self: start; }
   .lede { font-size: 1.15rem; }
+  table.metrics td.cls span:not(.cls-badge) { display: none; }
+}
+@media (max-width: 480px) {
+  .actions > button { flex: 1 1 100%; }
+}
+
+/* Printing the results page: the record only, no controls. */
+@media print {
+  :root { --record: #fff; --ink: #000; --muted: #444; --rule: #bbb; --wash: #eee; }
+  body { font-size: 11pt; }
+  .page { max-width: none; padding: 0; }
+  .page > * { animation: none; }
+  button, .actions, .toc, details:not(.all-measures), .demo-mark { display: none !important; }
+  details.all-measures > summary { display: none; }
+  details.all-measures:not([open]) { display: none; }
+  .result { break-inside: avoid-page; }
+  a { color: inherit; text-decoration: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .page > * { animation: none; }
-  button { transition: none; }
+  button, .tasks li::before { transition: none; }
 }
 
 </style>
@@ -15437,6 +15478,8 @@ if (typeof String.prototype.startsWith === 'undefined') {
     return el('ol', { class: 'steps', 'aria-label': 'Demo progress' }, ...flow.infos.map((info, i) =>
       el('li', { class: i < current ? 'done' : i === current ? 'current' : null, 'aria-current': i === current ? 'step' : null }, COPY[info.code].name)));
   }
+  /** A timing class as a small letter badge; deliberately neutral (no colour that reads as good or bad). */
+  const clsBadge = (c, decorative) => el('span', { class: 'cls-badge', 'aria-hidden': decorative ? 'true' : null }, c);
   const capitalise = (x) => x.charAt(0).toUpperCase() + x.slice(1);
   const lowerFirst = (x) => x.charAt(0).toLowerCase() + x.slice(1);
   function keysFor(partId) {
@@ -15460,16 +15503,16 @@ if (typeof String.prototype.startsWith === 'undefined') {
           el('p', { class: 'hint' }, 'Best on a laptop, or on a phone turned sideways. Nothing you do leaves this page.')),
         el('figure', null, hero, el('figcaption', null, 'The Go/No-Go task as participants see it, at its real timing: tap for the circle, hold back for the square.'))),
       el('h2', null, 'Or try one task'),
-      el('ul', { class: 'tasks' }, ...GUIDED.map((info) => el('li', null,
+      el('ul', { class: 'tasks' }, ...GUIDED.map((info) => el('li', { class: 'task-row' },
         thumb(info),
         el('div', null, el('h3', null, COPY[info.code].name), el('p', null, COPY[info.code].measures), el('p', { class: 'duration' }, capitalise(info.review_duration) + '.')),
         el('button', { type: 'button', class: 'quiet', 'data-task': info.code, 'aria-label': 'Try ' + COPY[info.code].name, onclick: () => startFlow('single', [info]) }, 'Try')))),
       el('h2', null, 'How to read what it records'),
       el('p', { class: 'measure' }, 'Phones and browsers add their own delay between something appearing on screen and the moment a touch is timestamped. Cognisense labels every measurement by how much that delay can distort it.'),
       el('div', { class: 'classes' },
-        el('div', null, el('b', null, 'Class A'), el('p', null, 'Timing-independent: counts, choices and accuracy.')),
-        el('div', null, el('b', null, 'Class B'), el('p', null, 'Robust to a constant device delay, because the delay cancels in a difference between two reaction times.')),
-        el('div', null, el('b', null, 'Class C'), el('p', null, 'Affected by device delay: absolute reaction times. Comparable only within one device model.'))),
+        el('div', null, el('b', null, clsBadge('A', true), 'Class A'), el('p', null, 'Timing-independent: counts, choices and accuracy.')),
+        el('div', null, el('b', null, clsBadge('B', true), 'Class B'), el('p', null, 'Robust to a constant device delay, because the delay cancels in a difference between two reaction times.')),
+        el('div', null, el('b', null, clsBadge('C', true), 'Class C'), el('p', null, 'Affected by device delay: absolute reaction times. Comparable only within one device model.'))),
       el('p', { class: 'measure small muted' }, 'In this demo every value is an illustration: the blocks are shortened and the timing comes from your browser.'),
       researcherDrawer(), linksRow(), footer());
     ambient = loop(hero, scenesFor('GNG'), STILL.GNG);
@@ -15681,7 +15724,9 @@ if (typeof String.prototype.startsWith === 'undefined') {
       el('tbody', null, ...rows.map((m) => el('tr', null,
         el('td', null, names ? (METRIC_LABEL[m.name] || m.name) : m.name),
         el('td', { class: 'num' }, fmtVal(m)),
-        el('td', { class: 'cls' }, m.timing_class ? m.timing_class + (CLASS_LABEL[m.timing_class] ? ', ' + CLASS_LABEL[m.timing_class] : '') : '')))));
+        el('td', { class: 'cls' }, ...(m.timing_class
+          ? [clsBadge(m.timing_class), el('span', null, CLASS_LABEL[m.timing_class] || '')]
+          : []))))));
   }
   function quality(scored, practice) {
     const hz = scored.measured_hz ? Math.round(scored.measured_hz) : null;
@@ -15691,14 +15736,13 @@ if (typeof String.prototype.startsWith === 'undefined') {
   }
   function partResult(p, sub) {
     const ch = CHARTS[p.partId](p.scored.records, p.scored);
-    return [
+    return el('div', { class: 'part' },
       sub ? el('h3', null, PART_TITLE[p.partId]) : null,
       ch.svg, ch.legend,
       el('p', { class: 'small muted measure' }, ch.caption),
       metricsTable(p.scored.metrics, KEY_METRICS[p.partId]),
       el('p', { class: 'quality' }, quality(p.scored, p.practice)),
-      el('details', null, el('summary', null, 'All recorded measures'), metricsTable(p.scored.metrics, null)),
-    ];
+      el('details', { class: 'all-measures' }, el('summary', null, 'All recorded measures'), metricsTable(p.scored.metrics, null)));
   }
   function summary() {
     const res = flow ? flow.results : [];
@@ -15706,10 +15750,15 @@ if (typeof String.prototype.startsWith === 'undefined') {
       el('div', { class: 'measure' },
         el('h1', null, 'What the demo recorded'),
         el('p', { class: 'lede' }, 'Raw values from shortened blocks, timed by your browser. They show what Cognisense records. They are not scores, and there is nothing to compare them with.')),
-      ...res.map((r) => el('section', { class: 'result' },
+      res.length > 1 ? el('nav', { class: 'toc', 'aria-label': 'Tasks on this page' },
+        el('ol', null, ...res.map((r) => el('li', null, el('a', {
+          href: '#result-' + r.info.code,
+          onclick: (e) => { e.preventDefault(); document.getElementById('result-' + r.info.code).scrollIntoView(); },
+        }, COPY[r.info.code].name))))) : null,
+      ...res.map((r) => el('section', { class: 'result', id: 'result-' + r.info.code },
         el('h2', null, COPY[r.info.code].name),
         el('p', { class: 'muted measure' }, COPY[r.info.code].measures),
-        ...r.parts.flatMap((p) => partResult(p, r.parts.length > 1)))),
+        ...r.parts.map((p) => partResult(p, r.parts.length > 1)))),
       el('div', { class: 'actions' }, act('Download this session (JSON)', download, 'download'), act('Back to the start', landing, 'home', true)),
       researcherDrawer(), linksRow(), footer());
   }

@@ -69,8 +69,10 @@ button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 6px; p
   border: 1px solid transparent; background: var(--signal); color: var(--signal-ink);
   transition: background-color .12s ease, border-color .12s ease; }
 button:hover { background: color-mix(in srgb, var(--signal) 86%, var(--ink)); }
+button:active { background: color-mix(in srgb, var(--signal) 74%, var(--ink)); }
 button.quiet { background: transparent; color: var(--ink); border-color: var(--rule); font-weight: 400; }
 button.quiet:hover { border-color: var(--muted); background: transparent; }
+button.quiet:active { background: var(--wash); }
 button.link { background: none; border: 0; padding: 0; min-height: 0; color: var(--signal); font-weight: 400; text-decoration: underline; text-underline-offset: .18em; }
 .hint { font-size: .9rem; color: var(--muted); margin-top: calc(-1 * var(--s2)); }
 
@@ -85,7 +87,15 @@ figcaption { font-size: .9rem; color: var(--muted); margin-top: var(--s2); line-
 /* ---- task list (single-task entry) */
 .tasks { list-style: none; margin: var(--s4) 0 0; padding: 0; border-top: 1px solid var(--rule); }
 .tasks li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) auto; gap: var(--s5); align-items: center;
-  padding: var(--s4) 0; border-bottom: 1px solid var(--rule); }
+  padding: var(--s4) 0; border-bottom: 1px solid var(--rule); position: relative; }
+/* The row's hover wash reaches a little past the text column without moving the dividers. */
+.tasks li::before { content: ""; position: absolute; inset: 2px calc(-1 * var(--s3)); border-radius: 6px; z-index: -1;
+  transition: background-color .12s ease; }
+.tasks li:hover::before { background: var(--wash); }
+.tasks li > button::after { content: ""; position: absolute; inset: 0; }
+.tasks li > button:focus-visible { outline: none; }
+.tasks li:has(> button:focus-visible)::before { outline: 3px solid var(--signal); }
+.tasks li:hover > button.quiet { border-color: var(--muted); }
 .tasks .field { width: 7.5rem; height: 4.5rem; }
 .tasks h3 { margin: 0 0 var(--s1); }
 .tasks p { margin: 0; }
@@ -94,7 +104,10 @@ figcaption { font-size: .9rem; color: var(--muted); margin-top: var(--s2); line-
 /* ---- reading timing classes */
 .classes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); margin-top: var(--s4); }
 .classes div { border-top: 3px solid var(--ink); padding-top: var(--s3); }
-.classes b { display: block; font-size: 1.05rem; margin-bottom: var(--s1); }
+.classes b { display: flex; align-items: center; font-size: 1.05rem; margin-bottom: var(--s1); }
+.cls-badge { display: inline-grid; place-items: center; min-width: 1.55em; height: 1.55em; padding: 0 .3em; margin-inline-end: .55em;
+  border-radius: 4px; background: var(--wash); color: var(--ink); font-weight: 700; font-size: .8rem; line-height: 1; flex: none; }
+.classes .cls-badge { background: var(--ink); color: var(--record); }
 .classes p { font-size: .95rem; color: var(--muted); margin: 0; }
 .classes + p { margin-top: var(--s5); }
 
@@ -120,8 +133,18 @@ dl.facts dd { margin: var(--s1) 0 0; }
 kbd { font: inherit; font-size: .9em; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0 .35em; color: var(--ink); background: var(--record); }
 
 /* ---- results */
-.result { border-top: 1px solid var(--rule); margin-top: var(--s7); padding-top: var(--s5); }
+.result { border-top: 1px solid var(--rule); margin-top: var(--s7); padding-top: var(--s5); scroll-margin-top: var(--s5); }
 .result h2 { margin-top: 0; }
+.part + .part { margin-top: var(--s6); padding-top: var(--s2); }
+.part h3 { margin-top: var(--s5); }
+.result details.all-measures { border-top: 0; margin-top: 0; padding: 0; }
+.result details.all-measures summary { font-weight: 400; color: var(--signal); font-size: .95rem; }
+.toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s2); padding: 0; margin: var(--s5) 0 0; counter-reset: toc; }
+.toc li { counter-increment: toc; }
+.toc a { display: inline-flex; align-items: center; gap: .5em; padding: .45rem .85rem; border: 1px solid var(--rule); border-radius: 999px;
+  color: var(--ink); text-decoration: none; font-size: .95rem; }
+.toc a::before { content: counter(toc); font-size: .8em; color: var(--muted); }
+.toc a:hover { border-color: var(--muted); }
 .chart { width: 100%; max-width: 44rem; height: auto; display: block; margin: var(--s4) 0 var(--s2); overflow: visible; }
 .chart text { font-family: var(--sans); fill: var(--muted); font-size: 12px; }
 .chart .ink { fill: var(--ink); stroke: var(--ink); }
@@ -133,7 +156,8 @@ table.metrics { border-collapse: collapse; width: 100%; max-width: 44rem; font-s
 table.metrics th, table.metrics td { text-align: left; padding: .45rem .75rem .45rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 table.metrics th { font-weight: 700; font-size: .875rem; color: var(--muted); }
 table.metrics td.num { text-align: right; padding-right: var(--s5); white-space: nowrap; }
-.cls { white-space: nowrap; }
+.cls { color: var(--muted); }
+.cls .cls-badge { color: var(--ink); }
 .quality { font-size: .9rem; color: var(--muted); }
 .notice { background: var(--wash); border-radius: 6px; padding: var(--s4) var(--s5); margin: var(--s5) 0; max-width: 44rem; }
 .notice p:last-child { margin-bottom: 0; }
@@ -168,8 +192,25 @@ body.tasking { overflow: hidden; overscroll-behavior: none; background: #808080;
   .tasks .field { width: 5rem; height: 3rem; }
   .tasks li > button { grid-column: 2; justify-self: start; }
   .lede { font-size: 1.15rem; }
+  table.metrics td.cls span:not(.cls-badge) { display: none; }
+}
+@media (max-width: 480px) {
+  .actions > button { flex: 1 1 100%; }
+}
+
+/* Printing the results page: the record only, no controls. */
+@media print {
+  :root { --record: #fff; --ink: #000; --muted: #444; --rule: #bbb; --wash: #eee; }
+  body { font-size: 11pt; }
+  .page { max-width: none; padding: 0; }
+  .page > * { animation: none; }
+  button, .actions, .toc, details:not(.all-measures), .demo-mark { display: none !important; }
+  details.all-measures > summary { display: none; }
+  details.all-measures:not([open]) { display: none; }
+  .result { break-inside: avoid-page; }
+  a { color: inherit; text-decoration: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .page > * { animation: none; }
-  button { transition: none; }
+  button, .tasks li::before { transition: none; }
 }

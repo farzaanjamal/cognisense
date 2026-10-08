@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.View
+import org.cognisense.app.ui.Lang
+import org.cognisense.app.ui.Ui
 import org.cognisense.core.engine.Outcome
 import org.cognisense.core.engine.TrialRecord
 import kotlin.math.ceil
@@ -18,12 +20,14 @@ import kotlin.math.max
 @SuppressLint("ViewConstructor")
 abstract class Chart(ctx: Context) : View(ctx) {
     protected val d = ctx.resources.displayMetrics.density
-    protected val ink = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(38, 70, 83); style = Paint.Style.FILL }
+    protected val ink = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Ui.TEXT; style = Paint.Style.FILL }
     protected val hollow = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.rgb(38, 70, 83); style = Paint.Style.STROKE; strokeWidth = 1.5f * d
+        color = Ui.TEXT; style = Paint.Style.STROKE; strokeWidth = 1.5f * d
     }
-    protected val axis = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(120, 120, 120); strokeWidth = 1f * d }
-    protected val label = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.rgb(80, 80, 80); textSize = 11f * d }
+    protected val axis = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Ui.RULE; strokeWidth = 1f * d }
+    protected val label = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Ui.MUTED; textSize = 11f * d; typeface = Ui.typeface(Lang.EN)
+    }
     protected val left get() = 44f * d
     protected val bottom get() = height - 22f * d
     protected val top get() = 8f * d

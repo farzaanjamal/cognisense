@@ -5,6 +5,27 @@ Format: Keep a Changelog. Versions: semantic, `-dev` until the first device buil
 ## [0.6.0-dev] — 2026-10-07 (config 0.3)
 Design fixes in response to an expert-style critique, made before the expert review so the panel rates the improved battery.
 
+### Changed (interface; task stage untouched)
+Nothing that a child sees during a task changed: stimuli, colours, timing, the grey stage and the task configuration (`config/` and its hash) are as before.
+- **Android app, shell screens:**
+  - The app now bundles the web demo's fonts (Atkinson Hyperlegible; Noto Nastaliq Urdu, so Urdu shows in Nastaliq even on phones without an Urdu font). The fonts are converted to TrueType, with the glyphs unchanged, and their OFL licence is in `assets/fonts/`.
+  - The colours now match the web demo.
+  - Disabled buttons now look disabled; previously the locked "Continue" on the session checklist looked active.
+  - Menus (home, expert review, dashboard) use tappable cards.
+  - Facts, measures and run details are shown as aligned rows, with timing-class badges.
+  - The checklist is grouped into required and optional items.
+  - The ready, rest and completion screens are centred.
+  - Content width is capped on tablets.
+  - Pages now pad themselves by the system bars. With target SDK 35, Android 15 draws apps edge to edge, which would otherwise put the top of each screen under the status bar.
+  - The status and navigation bars match the page colour.
+- **Web demo:**
+  - Timing-class badges in the results tables and in "How to read what it records".
+  - On the landing page, the whole task row can be clicked.
+  - With more than one task, the results page has a contents list.
+  - Each part's "All recorded measures" now sits with that part.
+  - Action buttons are full-width on narrow phones.
+  - The results page has a print style.
+
 ### Added (expert review, before any invitation)
 - README and paper: authorship section rewritten to state Farzaan Jamal's substantial contribution (idea, research question, system logic, task choices, design decisions, direction), with accurate AI disclosure.
 - `CLAUDE.md`: handoff instructions so Claude Code sessions start with the project's context, rules, state and open tasks.

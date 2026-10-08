@@ -161,4 +161,4 @@ See [`CITATION.cff`](CITATION.cff); GitHub's "Cite this repository" button uses 
 
 ## Licence
 
-Code: MIT (see [`LICENSE`](LICENSE)). The "MIT" in the licence name refers to the licence text, not to any affiliation with the Massachusetts Institute of Technology. Embedded fonts: SIL Open Font License 1.1 (see `browser/web/fonts/OFL.txt`).
+Code: MIT (see [`LICENSE`](LICENSE)). The "MIT" in the licence name refers to the licence text, not to any affiliation with the Massachusetts Institute of Technology. Embedded fonts (web demo and Android app): SIL Open Font License 1.1 (see `browser/web/fonts/OFL.txt` and `android/app/src/main/assets/fonts/OFL.txt`).
