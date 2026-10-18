@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Document status | DRAFT v0.1, unreviewed. Prepared 2026-10-02. |
-| Implementation status | Core battery (T2, T5, T6, T9, T10): logic **IMPLEMENTED** and simulation-tested; Android code complete; **not yet run on a device**. All other tasks: **DESIGNED**. |
+| Implementation status | Core battery (T2, T5, T6, T9, T10): logic **IMPLEMENTED** and simulation-tested; Android code complete; **runs on one phone** (adult smoke test, `docs/device_tests.md`); timing on real devices not yet measured. All other tasks: **DESIGNED**. |
 | Parameter authority | For implemented tasks, `config/tasks.json` is authoritative; values here are mirrored for reading (see §10). |
 | Intended readers | Expert panel (psychology, psychiatry, education), technical reviewers, the author |
 | Supersedes | The two-task plan in `cognisense_build_plan.md` (Go/No-Go + Flanker only) |

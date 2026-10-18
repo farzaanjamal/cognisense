@@ -6,8 +6,8 @@
 
 | Module | Contents | Verified by |
 |---|---|---|
-| `core/` | Pure-Kotlin engine, all five core tasks, config loader, scoring, export | 188-check simulation test suite (`core/run_tests.sh`) |
-| `app/` | Android app: Expert Review, Session and Dashboard modes; all five core tasks playable | Compiles against the Android 15 API with no errors; storage codecs round-trip-tested. **Not yet run on a phone.** |
+| `core/` | Pure-Kotlin engine, all five core tasks, config loader, scoring, export | 220-check test suite (`core/run_tests.sh`), including simulated children |
+| `app/` | Android app: Expert Review, Session and Dashboard modes; all five core tasks playable | Built by the cloud build (Gradle, both variants); storage codecs round-trip-tested. **Runs on one phone** (Samsung A15, Android 16; adult smoke test, [`docs/device_tests.md`](../docs/device_tests.md)). |
 
 The app has **no third-party runtime dependencies**: only the Android framework and `:core`. It targets Android 15 (API 35) and runs on Android 8.0+ (API 26). On Android 14+ touch timestamps have nanosecond resolution; on older versions millisecond resolution. The dashboard shows which applied.
 
@@ -40,7 +40,7 @@ Run the core tests without a phone: **Gradle panel → core → Tasks → verifi
 | "Unsupported class file major version" / JDK errors | **Settings → Build Tools → Gradle → Gradle JDK**: choose the bundled JetBrains Runtime (17 or newer). |
 | Gradle wrapper error | In a terminal in `android/`, run `gradle wrapper --gradle-version 8.10.2` (if Gradle is installed), or let Studio fix the wrapper when it offers. |
 | Phone not listed | Try another cable (some are charge-only); re-accept the USB-debugging prompt; on Windows, install the manufacturer's USB driver. |
-| Build error in a `.kt` file | Copy the **complete** error text (file, line, message) and send it. The code was compile-checked but never built with Gradle, so first-build errors are possible. |
+| Build error in a `.kt` file | Copy the **complete** error text (file, line, message) and send it. The cloud build builds the app with Gradle on every push, so a local error usually means a local setup problem. |
 
 ## First-device smoke test
 
@@ -51,7 +51,7 @@ Do this on your own phone, as an adult tester, before showing the app to anyone.
 | 1 | Open the app | Disclaimer screen in Urdu; the toggle switches to English and back |
 | 2 | Home → Settings → set a PIN | PIN accepted; brightness slider and marker switch shown |
 | 3 | Turn on airplane mode | — |
-| 4 | Home → Expert review | All 10 tasks listed; only T2 and T5 openable; the others say DESIGNED |
+| 4 | Home → Expert review | All 10 tasks listed; the five core tasks (T2, T5, T6, T9, T10) open; the others say "DESIGNED — not yet implemented" |
 | 5 | Open T2 → Start → Start | About 1 s of fixation (refresh-rate probe), then practice: tick or cross after each trial |
 | 6 | Finish practice → real block | No ticks or crosses; one 10 s break with a neutral bar, then tap to continue |
 | 7 | Mid-block, press Home, then reopen the app | "Paused. Tap to continue." After the tap, 1 s of fixation before the next stimulus |
@@ -69,3 +69,5 @@ Do this on your own phone, as an adult tester, before showing the app to anyone.
 | 14 | Settings → Onset marker on → run T2 | A small white square flashes in the top-left corner with each stimulus (calibration use only) |
 
 If any step fails, note the step number and what happened, and send the exact error text where there is one.
+
+Record each completed smoke test in [`docs/device_tests.md`](../docs/device_tests.md).

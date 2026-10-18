@@ -1,6 +1,42 @@
 # Changelog
 
-Format: Keep a Changelog. Versions: semantic, `-dev` until the first device build.
+Format: Keep a Changelog. Versions: semantic, `-dev` until the first tagged release.
+
+## [0.6.1-dev] — 2026-10-18 (config 0.3, unchanged)
+### Added
+- **First phone smoke test** (`docs/device_tests.md`): Samsung A15, Android 16, adult self-test by Farzaan Jamal Khan, no other participants. The test completed with no problems seen. The dashboard reported:
+  - refresh rate 60 Hz nominal and 60 Hz measured;
+  - clock check passed, with a difference under 0.5 ms;
+  - 0–10 dropped frames per task part;
+  - no interruptions.
+
+  This is one device and one adult self-test: it shows that the app works on that phone, and says nothing about timing accuracy or about children. The test date, the app build and the per-part dropped-frame counts are TODO.
+- **Protocol 1 deviation** (18 October 2026): one invited reviewer is the investigator's parent. Her ratings are excluded from the content validity indices, and her comments are used informally. Reviewers with a close personal relationship to the investigator are not counted toward the minimum of 6.
+- README: a "Contact" section; TODO placeholders for the contact email, the demo video link and the paper link (also `LINKS.paper` in the web demo and a comment in `CITATION.cff`).
+
+### Changed
+- **Release workflow:** on a version tag without the signing secrets, the "Signed reviewer APK on a version tag" job no longer fails. It shows a notice naming the missing secrets, skips the build and release steps, and finishes green. `docs/release_signing.md` describes this.
+- Every "not yet run on a phone/device" statement now states the smoke-test result accurately (README, `android/README.md`, `docs/architecture.md`, `docs/measurement_precision.md`, `docs/task_specifications.md`, `docs/cloud_build.md`, `docs/release_signing.md`, `TrialEngine.kt` comment, `CLAUDE.md`). The web demo was rebuilt because that comment is part of its sources.
+
+### Fixed (consistency check)
+- **Versions:**
+  - The Android app reported version `0.1.0-dev` (its `versionName` had never been updated); it now reports `0.6.1-dev`.
+  - `CITATION.cff` said `0.5.0-dev`; it now says `0.6.1-dev`.
+- **Test counts:**
+  - README: content-validity tests 12 → 13 (the actual count).
+  - `android/README.md`: core checks 188 → 220.
+- **Component status:**
+  - `docs/architecture.md`: scoring and the Android app are complete for all five core tasks, not just T2 and T5.
+  - Smoke-test step 4 in `android/README.md`: all five core tasks open, not only T2 and T5.
+  - `config/README.md`: the web demo already embeds the config, and Protocol 1 exists; neither is PLANNED any more.
+  - `docs/cloud_build.md`: removed the out-of-date "the first build will probably fail" section.
+- **README status table:**
+  - The device timing study (phones only) and the child pilot (supervisor, psychologist and ethics approval) are now separate rows with their own requirements.
+  - The expert review row points to Protocol 1.
+- **Example sessions** (`examples/`): re-recorded with the current build (task config 0.3). The old files were recorded under config 0.2.
+- **Smaller fixes:**
+  - CHANGELOG versioning note: `-dev` until the first tagged release (the old trigger, "the first device build", has happened).
+  - `CLAUDE.md`: the cloud build runs on pushes to `main` and on pull requests, not on every push.
 
 ## [0.6.0-dev] — 2026-10-07 (config 0.3)
 Design fixes in response to an expert-style critique, made before the expert review so the panel rates the improved battery.

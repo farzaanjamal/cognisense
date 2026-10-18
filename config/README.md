@@ -8,7 +8,7 @@
 - the fixed spatial-span sequences;
 - the shared timing values (anticipation threshold, breaks, rest, practice attempts).
 
-The Android app packages this file unchanged as an asset and builds every task from it; none of these parameters are hard-coded in Kotlin. The browser preview (PLANNED) will read the same file.
+The Android app packages this file unchanged as an asset and builds every task from it; none of these parameters are hard-coded in Kotlin. The web demo embeds the same file at build time.
 
 For the implemented tasks, **this file is authoritative**. `docs/task_specifications.md` explains and justifies the values; if the two ever disagree, this file is what ran, and the document must be corrected.
 
@@ -25,4 +25,4 @@ For the implemented tasks, **this file is authoritative**. `docs/task_specificat
 
 ## Every value is a proposed parameter
 
-None of these values has been piloted or expert-reviewed. They are the starting point the expert panel will rate (Protocol 1, PLANNED).
+None of these values has been piloted or expert-reviewed. They are the starting point the expert panel will rate (Protocol 1, `docs/protocol1_expert_review.md`).

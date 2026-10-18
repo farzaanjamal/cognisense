@@ -25,7 +25,7 @@ android {
         minSdk = 26        // Android 8.0: keeps older, cheaper field phones supported
         targetSdk = 35     // Android 15
         versionCode = 1
-        versionName = "0.1.0-dev"
+        versionName = "0.6.1-dev"
         buildConfigField("String", "GIT_COMMIT", "\"$gitCommit\"")
     }
     buildFeatures { buildConfig = true }

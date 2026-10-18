@@ -12,6 +12,8 @@
 
 The demo runs shortened versions of the tasks and is timed by your browser. It shows what Cognisense does and records; it is not a measurement.
 
+**Demo video:** TODO: add the link once the video is posted.
+
 ## Why it exists
 
 Specialist assessment for attention and executive-function difficulties is scarce in Pakistan, which has about 0.19 psychiatrists per 100,000 people. Computerised cognitive tasks could add objective information where specialist time is scarce. However, the low-cost Android phones available in these settings add tens of milliseconds of device-specific timing error, and that error distorts some measurements and not others.
@@ -58,11 +60,13 @@ All stimuli are language-free: shapes, arrows and squares on a neutral grey scre
 - **A clock-free engine.** Tasks are driven only by display-frame and touch-event timestamps, so their timing behaviour can be verified in simulation.
 - **Privacy by construction.** The app requests no permissions; the web demo's content-security policy forbids all network connections; participant IDs are generated and cannot contain names.
 
-Expert review method, fixed in advance: [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md). Details: [`docs/architecture.md`](docs/architecture.md), [`docs/measurement_precision.md`](docs/measurement_precision.md), [`docs/task_specifications.md`](docs/task_specifications.md), [`docs/data_schema.md`](docs/data_schema.md).
+Expert review method, fixed in advance: [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md). Phone tests: [`docs/device_tests.md`](docs/device_tests.md). Details: [`docs/architecture.md`](docs/architecture.md), [`docs/measurement_precision.md`](docs/measurement_precision.md), [`docs/task_specifications.md`](docs/task_specifications.md), [`docs/data_schema.md`](docs/data_schema.md).
 
 ## Research
 
-A research paper describes the design, the software verification and a **Monte Carlo study of timing error** (500 replicates × 200 simulated children, device offsets of 35–140 ms from published measurements). [PAPER LINK: add once posted as a preprint]
+A research paper describes the design, the software verification and a **Monte Carlo study of timing error** (500 replicates × 200 simulated children, device offsets of 35–140 ms from published measurements).
+
+**Paper:** TODO: add the preprint link once it is posted.
 
 Main findings of the simulation:
 
@@ -84,17 +88,19 @@ Reproduce it with `python analysis/timing_simulation.py`; the outputs used in th
 | Web demo (guided five-task flow, results visualisations) | IMPLEMENTED | End-to-end tests of every task and the guided flow in headless Chrome; zero network requests; no errors |
 | Shared configuration with SHA-256 per session | IMPLEMENTED | Loader and validation tests |
 | Timing-error simulation study | IMPLEMENTED | 7 unit tests; results reproducible from a fixed seed |
-| Content-validity analysis (`analysis/cvi.py`) | IMPLEMENTED | 12 tests against published worked values |
-| Android app (Expert Review, Session with first/retest sessions, Dashboard) | Builds in the cloud build (both variants; no permissions requested); **not yet run on a phone** | GitHub Actions build; compiles with 0 errors and 0 warnings |
+| Content-validity analysis (`analysis/cvi.py`) | IMPLEMENTED | 13 tests, including published worked values and the Protocol 1 decision bands |
+| Android app (Expert Review, Session with first/retest sessions, Dashboard) | Builds in the cloud build (both variants; no permissions requested). **Runs on one phone** (Samsung A15, Android 16): adult smoke test passed with no problems seen | GitHub Actions build; one adult self-test, [`docs/device_tests.md`](docs/device_tests.md). Shows the app works on that phone; says nothing about timing accuracy or children |
 | Hardware timing unit (ESP32 + photodiode), motion sensing | DESIGNED | Interfaces only |
 | Urdu interface text | Draft, unvalidated | Needs forward and back translation |
-| Expert content review, device timing study, child pilot | PLANNED | Requires a supervising academic and ethics approval |
+| Expert content review | Protocol fixed in advance; reviewers being invited | [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md), including its Deviations section |
+| Device timing study (slow-motion video) | PLANNED | Measures phones only; no participants |
+| Child pilot | PLANNED | Requires a supervising academic, a supervising psychologist and ethics approval |
 
 **No accuracy, reliability or validity figure has been measured for Cognisense with real people or devices. None is claimed.**
 
 ## Limitations
 
-- No data from children, adults or real devices yet: every psychometric statement describes other instruments in other populations.
+- No data from children or from any group of adults. The only real-device run is one adult smoke test on one phone ([`docs/device_tests.md`](docs/device_tests.md)), which checks that the app works, not how well it measures. Every psychometric statement describes other instruments in other populations.
 - The tasks are not specific to ADHD, and most children with ADHD show no deficit on any single task. The platform cannot screen.
 - Browser timing in the demo is not a measurement.
 - The choice-delay task has no tangible reward, so it may not measure delay aversion; it is treated as exploratory.
@@ -114,7 +120,7 @@ The full list is in section 5.4 of the paper.
 # Core task logic (JDK 17+ and Kotlin 2.0.21 compiler)
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
 
-# Analysis scripts (Python 3.8+; the simulation needs numpy)
+# Analysis scripts (Python 3.8+; the simulation needs numpy, and numpy 2.4.4 reproduces analysis/results/ exactly)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py
 
 # Web demo: build, then run the end-to-end tests in Chrome
@@ -154,6 +160,10 @@ No Android Studio? [`docs/cloud_build.md`](docs/cloud_build.md) explains how Git
 He directed the development from start to finish, reviewed the results at each stage, and decided every change.
 
 The code, the simulation code and the first drafts of the documentation and paper were written with an AI system (Claude, Anthropic), following his direction and design. He reviewed them and is responsible for every claim, number and citation. This is stated because universities and journals require AI assistance with code and writing to be disclosed.
+
+## Contact
+
+Farzaan Jamal: TODO: add a contact email address. Until then, use [GitHub issues](https://github.com/farzaanjamal/cognisense/issues).
 
 ## Citation
 

@@ -12,17 +12,17 @@
 | Component | Status | Where |
 |---|---|---|
 | Seeded random generator, per-task seed derivation | IMPLEMENTED | `core/rng/SeededRandom.kt` |
-| Frame-driven trial engine | IMPLEMENTED (simulation-tested; not yet on a device) | `core/engine/TrialEngine.kt` |
+| Frame-driven trial engine | IMPLEMENTED (simulation-tested; runs on one phone in the smoke test, `docs/device_tests.md`) | `core/engine/TrialEngine.kt` |
 | Core battery task definitions: Go/No-Go (T2), Flanker (T5), spatial span (T6), time reproduction (T9), choice-delay (T10) | IMPLEMENTED (core logic, simulation-tested) | `core/tasks/` |
 | Task definitions: other five pool tasks | DESIGNED (specification only) | `docs/task_specifications.md` |
 | Shared task configuration (`config/tasks.json`), strict loader, SHA-256 | IMPLEMENTED | `config/`, `core/config/` |
-| Scoring with timing class per metric | IMPLEMENTED for T2, T5 | `core/tasks/`, `core/scoring/` |
+| Scoring with timing class per metric | IMPLEMENTED for all five core tasks | `core/tasks/`, `core/scoring/` |
 | TimingSource interface; SoftwareTimingSource | IMPLEMENTED | `core/timing/` |
 | HardwareTimingSource | DESIGNED (interface + data contract; stub throws) | `core/timing/`, `hardware/` |
 | MotionSource interface; NoMotionSource | IMPLEMENTED | `core/motion/` |
 | ImuMotionSource | DESIGNED (stub throws; body placement undecided) | `core/motion/`, `hardware/` |
 | Session metadata, generated participant IDs, CSV/JSON export | IMPLEMENTED | `core/data/` |
-| Android app: rendering, input bridge, storage, three modes, Urdu/English UI | Code complete for T2/T5; compiles; **not yet run on a device** | `android/app/` |
+| Android app: rendering, input bridge, storage, three modes, Urdu/English UI | Code complete for all five core tasks; built by the cloud build; **runs on one phone** (Samsung A15, Android 16; adult smoke test, `docs/device_tests.md`) | `android/app/` |
 | ESP32 firmware | DESIGNED (data contract only) | `hardware/` |
 
 ## 2. Layers

@@ -82,7 +82,11 @@ Every task part and scale is reported (I-CVI, modified kappa, N), including thos
 
 ## 10. Deviations
 
-None so far. Any change after the first invitation is listed here with its date and reason.
+Any change after the first invitation is listed here with its date and reason.
+
+| Date | Deviation and reason |
+|---|---|
+| 18 October 2026 | One invited reviewer is the investigator's parent. To avoid a conflict of interest, her ratings are excluded from the content validity indices; her comments are used informally. Reviewers with a close personal relationship to the investigator are not counted toward the minimum of 6. |
 
 ## References
 

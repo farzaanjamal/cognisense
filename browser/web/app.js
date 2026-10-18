@@ -341,6 +341,7 @@
   // ------------------------------------------------------------------ visitor-facing copy (English; the demo shell only)
   // Participant-facing text (task names, instructions, keyboard hints) stays in config/strings.json with its Urdu drafts.
   // Links appear only once they are set (when the repository and paper are public).
+  // TODO: set paper to the preprint link once it is posted (an empty link is hidden).
   const LINKS = { paper: '', code: 'https://github.com/farzaanjamal/cognisense', feedback: 'https://github.com/farzaanjamal/cognisense/issues' };
   const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const GUIDED = CFG.core_battery_order.map((code) => CFG.pool.find((p) => p.code === code));
