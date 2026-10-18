@@ -26,7 +26,7 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 
 ## Current state (18 October 2026)
 
-- **Software 0.6.1-dev, task config 0.3.** All 220 core checks, 13 + 7 analysis tests and the browser end-to-end tests pass. GitHub (`farzaanjamal/cognisense`) `main` holds 0.6.0-dev (merged 8 October); 0.6.1-dev is on a pull request.
+- **Software 0.6.1-dev, task config 0.3.** All 221 core checks, 13 + 7 analysis tests and the browser end-to-end tests pass. GitHub (`farzaanjamal/cognisense`) `main` holds 0.6.0-dev (merged 8 October); 0.6.1-dev is on a pull request.
 - **The Android app runs on one phone:** Samsung A15, Android 16, adult self-test by Farzaan, no problems seen (`docs/device_tests.md`). This shows the app works on that phone; it says nothing about timing accuracy or about children. The test date and app build are still TODO in that file.
 - **GitHub Pages is enabled;** the "pages" workflow publishes the web demo whenever `browser/dist/` changes on `main`.
 - **Protocol 1 has one deviation** (18 October 2026): a reviewer who is Farzaan's parent is excluded from the content validity indices, and close personal relations do not count toward the minimum of 6 reviewers.
@@ -40,8 +40,10 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 ## Commands
 
 ```bash
-# Core task logic: 220 checks (needs JDK 17+ and the Kotlin 2.0.21 compiler)
+# Core task logic: 221 checks (needs JDK 17+ and the Kotlin 2.0.21 compiler)
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
+# Mutation check: six planted defects, each must make the core tests fail (about 3 min)
+KOTLINC=/path/to/kotlinc/bin/kotlinc ./mutation_check.sh   # still in android/core
 # Analysis (Python 3; numpy 2.4.4 for the simulation)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py
 # Web demo: rebuild after changing anything in browser/, config/ or the core,
@@ -51,7 +53,7 @@ python3 browser/build.py --kotlin-home /path/to/kotlinc && python3 browser/build
 cd browser/test && npm install --no-save puppeteer-core@23 && CHROME_PATH=/path/to/chrome node preview_test.js T2
 ```
 
-The cloud build (`.github/workflows/build.yml`) runs all of these on every push to `main` and on every pull request.
+The cloud build (`.github/workflows/build.yml`) runs all of these except the mutation check on every push to `main` and on every pull request.
 
 ## Open tasks, in priority order
 

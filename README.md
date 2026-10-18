@@ -83,7 +83,7 @@ Reproduce it with `python analysis/timing_simulation.py`; the outputs used in th
 
 | Component | Status | What the claim rests on |
 |---|---|---|
-| Five core tasks: logic, scoring, export | IMPLEMENTED | 220 automated checks, including simulated children; 6 of 6 planted defects detected |
+| Five core tasks: logic, scoring, export | IMPLEMENTED | 221 automated checks, including simulated children; 6 of 6 planted defects detected (`android/core/mutation_check.sh`) |
 | Version 0.3 design fixes: balanced Go/No-Go (fast–slow–slow–fast, 16 No-Go per rate), late-response latencies kept, matched retest sequences for spatial span, choice-delay marked exploratory | IMPLEMENTED | Tests of balance, latencies (exact values), retest provenance and path-length matching; storage round trip; 72/72 identical runs across platforms |
 | Web demo (guided five-task flow, results visualisations) | IMPLEMENTED | End-to-end tests of every task and the guided flow in headless Chrome; zero network requests; no errors |
 | Shared configuration with SHA-256 per session | IMPLEMENTED | Loader and validation tests |
@@ -119,6 +119,8 @@ The full list is in section 5.4 of the paper.
 ```bash
 # Core task logic (JDK 17+ and Kotlin 2.0.21 compiler)
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
+# Mutation check: plants six defects one at a time and confirms the tests catch each
+KOTLINC=/path/to/kotlinc/bin/kotlinc ./mutation_check.sh   # still in android/core
 
 # Analysis scripts (Python 3.8+; the simulation needs numpy, and numpy 2.4.4 reproduces analysis/results/ exactly)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py

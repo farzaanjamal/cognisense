@@ -6,7 +6,7 @@
 
 | Module | Contents | Verified by |
 |---|---|---|
-| `core/` | Pure-Kotlin engine, all five core tasks, config loader, scoring, export | 220-check test suite (`core/run_tests.sh`), including simulated children |
+| `core/` | Pure-Kotlin engine, all five core tasks, config loader, scoring, export | 221-check test suite (`core/run_tests.sh`), including simulated children; mutation check (`core/mutation_check.sh`) |
 | `app/` | Android app: Expert Review, Session and Dashboard modes; all five core tasks playable | Built by the cloud build (Gradle, both variants); storage codecs round-trip-tested. **Runs on one phone** (Samsung A15, Android 16; adult smoke test, [`docs/device_tests.md`](../docs/device_tests.md)). |
 
 The app has **no third-party runtime dependencies**: only the Android framework and `:core`. It targets Android 15 (API 35) and runs on Android 8.0+ (API 26). On Android 14+ touch timestamps have nanosecond resolution; on older versions millisecond resolution. The dashboard shows which applied.

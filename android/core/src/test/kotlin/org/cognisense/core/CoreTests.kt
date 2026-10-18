@@ -7,6 +7,7 @@ import org.cognisense.core.data.SessionMetadata
 import org.cognisense.core.engine.Outcome
 import org.cognisense.core.engine.Phase
 import org.cognisense.core.engine.ResponseKey
+import org.cognisense.core.engine.ResponseEvent
 import org.cognisense.core.engine.TrialEngine
 import org.cognisense.core.engine.TrialRecord
 import org.cognisense.core.motion.NoMotionSource
@@ -126,6 +127,15 @@ fun testEngineTimingAndOutcomes() {
         val e2 = engineFor(listOf(gngPlan(0, "go"))); val s2 = FrameSim(e2, 60.0)
         s2.onsetHandler = { t, _ -> s2.releaseAt(t + 200 * MS); s2.respondAt(t + 400 * MS, ResponseKey.SINGLE) }
         s2.runToEnd(); e2.records().single().let { it.outcome == Outcome.CORRECT && it.extraResponses == 0 && e2.unassignedResponses == 0 }
+    })
+    T.check("responses classified by timestamp, not arrival order", run {
+        // Two touches delivered out of time order (the later one arrives first): RT comes from the earlier one.
+        val e3 = engineFor(listOf(gngPlan(0, "go"))); val s3 = FrameSim(e3, 60.0)
+        s3.onsetHandler = { t, _ ->
+            e3.onResponse(ResponseEvent(t + 450 * MS, ResponseKey.SINGLE, 10f, 20f))
+            e3.onResponse(ResponseEvent(t + 300 * MS, ResponseKey.SINGLE, 10f, 20f))
+        }
+        s3.runToEnd(); e3.records().single().let { it.outcome == Outcome.CORRECT && abs(it.rtMs!! - 300.0) < 1e-6 && it.extraResponses == 1 }
     })
 }
 
