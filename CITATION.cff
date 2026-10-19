@@ -8,10 +8,10 @@ abstract: >-
   ADHD or any other condition and has not been validated for screening.
 type: software
 authors:
-  - given-names: "Farzaan"
-    family-names: "Jamal"
-    # TODO: add email once a contact address is chosen (same as the README "Contact" section).
-version: "0.6.1-dev"
+  - given-names: "Farzaan Jamal"
+    family-names: "Khan"
+    email: "farzaanjamal2009@gmail.com"
+version: "0.6.2-dev"
 license: MIT
 repository-code: "https://github.com/farzaanjamal/cognisense"
 url: "https://farzaanjamal.github.io/cognisense/"

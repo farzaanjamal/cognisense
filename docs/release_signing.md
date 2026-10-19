@@ -42,4 +42,4 @@ The build workflow then:
 
 **If the four secrets are not set**, the job "Signed reviewer APK on a version tag" does not fail. It shows a notice, "Signed reviewer APK skipped", naming the missing secrets, and finishes green without building an APK or creating a release. The checks and the unsigned debug builds still run as usual.
 
-**Recommendation:** do not tag `v1.0` until the app has passed the smoke test on at least one real Android phone. That condition is now met for one phone, a Samsung A15 with Android 16 (`docs/device_tests.md`). Until `v1.0` is decided, use `v0.x` tags; they are marked as pre-releases.
+**Recommendation:** do not tag `v1.0` until the app has passed the smoke test on at least one real Android phone. That condition is now met for one phone, a Samsung Galaxy A15 with Android 16 (`docs/device_tests.md`). Until `v1.0` is decided, use `v0.x` tags; they are marked as pre-releases.

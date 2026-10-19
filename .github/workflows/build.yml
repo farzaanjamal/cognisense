@@ -66,9 +66,9 @@ jobs:
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
       # GitHub-hosted Ubuntu runners include the Android SDK (ANDROID_HOME), so no SDK setup step is needed.
-      - name: Build debug APKs (first real Gradle build of the app)
+      - name: Build debug APKs and run the app's unit tests (storage round trip)
         working-directory: android
-        run: ./gradlew --no-daemon --stacktrace :core:coreTests :app:assembleStandardDebug :app:assembleReviewerDebug
+        run: ./gradlew --no-daemon --stacktrace :core:coreTests :app:testStandardDebugUnitTest :app:assembleStandardDebug :app:assembleReviewerDebug
       - name: The merged manifest must request no permissions
         run: |
           found=0

@@ -2,15 +2,37 @@
 
 Format: Keep a Changelog. Versions: semantic, `-dev` until the first tagged release.
 
+## [0.6.2-dev] — 2026-10-19 (config 0.3, unchanged)
+### Added
+- **Storage round-trip test** (`android/app/src/test/.../CodecRoundTripTest.kt`): a JVM unit test in the app module, run by the cloud build (`:app:testStandardDebugUnitTest`). It covers:
+  - every trial record from scripted runs of all five tasks (every part, practice and scored, standard and review variants; 396 records);
+  - a record with a late-response latency;
+  - the session metadata.
+
+  Each item is encoded and decoded through the app's storage codec and must come back identical. With the codec's late-latency field deliberately dropped, the test fails. Test-only dependencies: JUnit 4.13.2 and org.json 20240303. The earlier one-off check of 175 records from the claude.ai session was never committed; this test replaces it.
+- `CrossPlatformCheck.run(...)` returns the scripted run's records, so the test can reuse the scripted child. `digest(...)` is unchanged: all 72 digests are identical before and after.
+
+### Changed
+- **Name:** Farzaan Jamal Khan (first name Farzaan, middle name Jamal, family name Khan), used consistently in `CITATION.cff` (given names "Farzaan Jamal", family name "Khan"), the README, `CLAUDE.md`, Protocol 1 and this changelog.
+- **Contact email** (README, `CITATION.cff`): farzaanjamal2009@gmail.com.
+- **Expert review status** (README, `CLAUDE.md`): invitations were sent to several psychology professors; ratings have been received; the analysis is pending. No ratings, reviewer names or comments are in the repository.
+- App version 0.6.2-dev.
+
+### Fixed
+- **Device test record** (`docs/device_tests.md`, README and other docs), corrected to match the paper's device-run section:
+  - **Device:** Samsung Galaxy A15, Android 16; all five tasks ran with no problems.
+  - **Touch timestamps:** not transcribed exactly; on Android 16 the app uses nanosecond event timestamps (a design value).
+  - **Refresh rate:** 60 Hz requested; the panel is rated 90 Hz adaptive; the measured rate was not recorded. 0.6.1-dev wrongly said "60 Hz measured".
+  - **Clock check:** pass, under 0.5 ms.
+  - **Dropped frames:** 2–10 per task (0.6.1-dev said 0–10).
+  - **Interruptions:** none.
+  - **App version:** the app reported 0.1.0-dev at the time (its version name was fixed in 0.6.1-dev).
+
 ## [0.6.1-dev] — 2026-10-18 (config 0.3, unchanged)
 ### Added
-- **First phone smoke test** (`docs/device_tests.md`): Samsung A15, Android 16, adult self-test by Farzaan Jamal Khan, no other participants. The test completed with no problems seen. The dashboard reported:
-  - refresh rate 60 Hz nominal and 60 Hz measured;
-  - clock check passed, with a difference under 0.5 ms;
-  - 0–10 dropped frames per task part;
-  - no interruptions.
+- **First phone smoke test** (`docs/device_tests.md`): Samsung Galaxy A15, Android 16, adult self-test by Farzaan Jamal Khan, no other participants. The test completed with no problems seen. Some of the values first recorded here were corrected in 0.6.2-dev; see that entry.
 
-  This is one device and one adult self-test: it shows that the app works on that phone, and says nothing about timing accuracy or about children. The test date, the app build and the per-part dropped-frame counts are TODO.
+  This is one device and one adult self-test: it shows that the app works on that phone, and says nothing about timing accuracy or about children.
 - **Protocol 1 deviation** (18 October 2026): one invited reviewer is the investigator's parent. Her ratings are excluded from the content validity indices, and her comments are used informally. Reviewers with a close personal relationship to the investigator are not counted toward the minimum of 6.
 - **Mutation check** (`android/core/mutation_check.sh`): makes the README's "6 of 6 planted defects detected" reproducible. It plants six defects one at a time, runs the core tests, confirms they fail, and restores the code:
   1. stimulus-duration frame rounding;
@@ -72,7 +94,7 @@ Nothing that a child sees during a task changed: stimuli, colours, timing, the g
   - The results page has a print style.
 
 ### Added (expert review, before any invitation)
-- README and paper: authorship section rewritten to state Farzaan Jamal's substantial contribution (idea, research question, system logic, task choices, design decisions, direction), with accurate AI disclosure.
+- README and paper: authorship section rewritten to state Farzaan Jamal Khan's substantial contribution (idea, research question, system logic, task choices, design decisions, direction), with accurate AI disclosure.
 - `CLAUDE.md`: handoff instructions so Claude Code sessions start with the project's context, rules, state and open tasks.
 - `docs/protocol1_expert_review.md`: Protocol 1 fixes the panel, materials, decision rules, second round, missing-data rules and reporting, all before any rating exists.
 - `analysis/cvi.py`: the protocol's decision bands are set (retain at or above the Lynn criterion; revise at .70–.77; remove below .70). Decisions use the same two-decimal rounding as the criterion, so 7 of 9 experts can no longer be both "meets criterion" and "revise". Only relevance can remove a task. With 5 or fewer experts, retaining requires full agreement. 13 tests.
@@ -106,7 +128,7 @@ Nothing that a child sees during a task changed: stimuli, colours, timing, the g
 
 ### Added
 - `README.md` rewritten: what, why, tasks, screenshots, architecture, research, status, limitations, ethics, development, AI use.
-- `CITATION.cff` (author: Farzaan Jamal).
+- `CITATION.cff` (author: Farzaan Jamal Khan).
 - `analysis/results/`: the simulation outputs used in the paper, recording the numpy version that produced them.
 - `examples/`: session files from the test's scripted participant (not a person), to show the data format. They are kept out of `/data/`, which stays ignored so real participant data can never be committed.
 - `docs/images/`: screenshots of the demo.
