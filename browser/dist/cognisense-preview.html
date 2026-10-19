@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; font-src data:; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="cognisense-sources" content="482747fb9a8add4f16fa57efcfa304012fbf19c393edee883d3eed277d64b973">
+<meta name="cognisense-sources" content="5eeb9a891956ab2e396d5572c257ecb08509e90e4b1b1b7c4a68782b659c5603">
 <link rel="icon" href="data:,">
 <title>Cognisense: research prototype demo</title>
 <style>
@@ -1344,6 +1344,7 @@ if (typeof String.prototype.startsWith === 'undefined') {
   initMetadataForClass(SoftwareTimingSource, 'SoftwareTimingSource', SoftwareTimingSource);
   initMetadataForObject(Portable, 'Portable');
   initMetadataForClass(sam$kotlin_Comparator$0_2, 'sam$kotlin_Comparator$0', VOID, VOID, [Comparator, FunctionAdapter]);
+  initMetadataForClass(sam$kotlin_Comparator$0_3, 'sam$kotlin_Comparator$0', VOID, VOID, [Comparator, FunctionAdapter]);
   initMetadataForObject(CrossPlatformCheck, 'CrossPlatformCheck');
   initMetadataForClass(PreviewApi, 'PreviewApi');
   initMetadataForClass(PreviewRun, 'PreviewRun');
@@ -14543,25 +14544,55 @@ if (typeof String.prototype.startsWith === 'undefined') {
   protoOf(sam$kotlin_Comparator$0_2).hashCode = function () {
     return hashCode(this.getFunctionDelegate_jtodtf_k$());
   };
-  function digest$at(pending, t, key, target, release) {
+  function sam$kotlin_Comparator$0_3(function_0) {
+    this.function_1 = function_0;
+  }
+  protoOf(sam$kotlin_Comparator$0_3).compare_bczr_k$ = function (a, b) {
+    return this.function_1(a, b);
+  };
+  protoOf(sam$kotlin_Comparator$0_3).compare = function (a, b) {
+    return this.compare_bczr_k$(a, b);
+  };
+  protoOf(sam$kotlin_Comparator$0_3).getFunctionDelegate_jtodtf_k$ = function () {
+    return this.function_1;
+  };
+  protoOf(sam$kotlin_Comparator$0_3).equals = function (other) {
+    var tmp;
+    if (!(other == null) ? isInterface(other, Comparator) : false) {
+      var tmp_0;
+      if (!(other == null) ? isInterface(other, FunctionAdapter) : false) {
+        tmp_0 = equals(this.getFunctionDelegate_jtodtf_k$(), other.getFunctionDelegate_jtodtf_k$());
+      } else {
+        tmp_0 = false;
+      }
+      tmp = tmp_0;
+    } else {
+      tmp = false;
+    }
+    return tmp;
+  };
+  protoOf(sam$kotlin_Comparator$0_3).hashCode = function () {
+    return hashCode(this.getFunctionDelegate_jtodtf_k$());
+  };
+  function run$at(pending, t, key, target, release) {
     // Inline function 'kotlin.collections.plusAssign' call
     var element = new ResponseEvent(t, key, 0.0, 0.0, target, release);
     pending.add_utx5q5_k$(element);
   }
-  function digest$at$default(pending, t, key, target, release, $super) {
+  function run$at$default(pending, t, key, target, release, $super) {
     target = target === VOID ? null : target;
     release = release === VOID ? false : release;
-    return digest$at(pending, t, key, target, release);
+    return run$at(pending, t, key, target, release);
   }
-  function CrossPlatformCheck$digest$lambda(a, b) {
+  function CrossPlatformCheck$run$lambda(a, b) {
     // Inline function 'kotlin.comparisons.compareValuesBy' call
-    // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+    // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.run.<anonymous>' call
     var tmp = a.eventTimeNanos_1;
-    // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+    // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.run.<anonymous>' call
     var tmp$ret$1 = b.eventTimeNanos_1;
     return compareValues(tmp, tmp$ret$1);
   }
-  function CrossPlatformCheck$digest$lambda_0(a, b) {
+  function CrossPlatformCheck$digest$lambda(a, b) {
     // Inline function 'kotlin.comparisons.compareValuesBy' call
     // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
     var tmp = a.get_key_18j28a_k$();
@@ -14569,14 +14600,14 @@ if (typeof String.prototype.startsWith === 'undefined') {
     var tmp$ret$1 = b.get_key_18j28a_k$();
     return compareValues(tmp, tmp$ret$1);
   }
-  function CrossPlatformCheck$digest$lambda_1(it) {
+  function CrossPlatformCheck$digest$lambda_0(it) {
     return it.get_key_18j28a_k$() + '=' + it.get_value_j01efc_k$();
   }
   function CrossPlatformCheck() {
     CrossPlatformCheck_instance = this;
     this.PERIOD_1 = new Long(16666667, 0);
   }
-  protoOf(CrossPlatformCheck).digest_jrflce_k$ = function (cfg, partId, phase, seed, review) {
+  protoOf(CrossPlatformCheck).run_hsvr79_k$ = function (cfg, partId, phase, seed, review) {
     var def = review ? cfg.review_8j6882_k$(partId) : cfg.standard_u9na03_k$(partId);
     var run = def.createRun_zct5ay_k$(new RunContext(phase, seed, 60.0, cfg.common_1));
     var rng = new SeededRandom(seed.xor_eoldvb_k$(new Long(24301, 0)));
@@ -14594,14 +14625,14 @@ if (typeof String.prototype.startsWith === 'undefined') {
       frames = frames + 1 | 0;
       // Inline function 'kotlin.contracts.contract' call
       if (!(frames < 3000000)) {
-        // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+        // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.run.<anonymous>' call
         var message = 'simulation did not finish';
         throw IllegalArgumentException_init_$Create$_0(toString_1(message));
       }
       // Inline function 'kotlin.collections.sortBy' call
       if (pending.get_size_woubt6_k$() > 1) {
         // Inline function 'kotlin.comparisons.compareBy' call
-        var tmp = CrossPlatformCheck$digest$lambda;
+        var tmp = CrossPlatformCheck$run$lambda;
         var tmp$ret$3 = new sam$kotlin_Comparator$0_2(tmp);
         sortWith_0(pending, tmp$ret$3);
       }
@@ -14626,11 +14657,11 @@ if (typeof String.prototype.startsWith === 'undefined') {
         stimStart = t;
         if (def instanceof GoNoGoTask) {
           if (rng.nextDouble_s2xvfg_k$() < 0.8) {
-            digest$at$default(pending, t.plus_gdf42y_k$(numberToLong(250 + rng.nextInt_kn2qxo_k$(450) | 0).times_99rz9a_k$(new Long(1000000, 0))), ResponseKey_SINGLE_getInstance());
+            run$at$default(pending, t.plus_gdf42y_k$(numberToLong(250 + rng.nextInt_kn2qxo_k$(450) | 0).times_99rz9a_k$(new Long(1000000, 0))), ResponseKey_SINGLE_getInstance());
           }
         } else {
           if (def instanceof FlankerTask) {
-            digest$at$default(pending, t.plus_gdf42y_k$(numberToLong(350 + rng.nextInt_kn2qxo_k$(600) | 0).times_99rz9a_k$(new Long(1000000, 0))), rng.nextDouble_s2xvfg_k$() < 0.5 ? ResponseKey_LEFT_getInstance() : ResponseKey_RIGHT_getInstance());
+            run$at$default(pending, t.plus_gdf42y_k$(numberToLong(350 + rng.nextInt_kn2qxo_k$(600) | 0).times_99rz9a_k$(new Long(1000000, 0))), rng.nextDouble_s2xvfg_k$() < 0.5 ? ResponseKey_LEFT_getInstance() : ResponseKey_RIGHT_getInstance());
           }
         }
       }
@@ -14654,7 +14685,7 @@ if (typeof String.prototype.startsWith === 'undefined') {
           // Inline function 'kotlin.also' call
           var this_0 = toMutableList(order);
           // Inline function 'kotlin.contracts.contract' call
-          // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+          // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.run.<anonymous>' call
           this_0.add_utx5q5_k$(this_0.removeAt_6niowx_k$(0));
           tmp_2 = this_0;
         } else {
@@ -14666,25 +14697,25 @@ if (typeof String.prototype.startsWith === 'undefined') {
         var tmp0_iterator = taps.iterator_jk1svi_k$();
         while (tmp0_iterator.hasNext_bitz1p_k$()) {
           var item = tmp0_iterator.next_20eer_k$();
-          // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+          // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.run.<anonymous>' call
           var tmp1 = index;
           index = tmp1 + 1 | 0;
           var k = checkIndexOverflow(tmp1);
           var tmp_3 = t;
           // Inline function 'kotlin.Long.times' call
           var tmp$ret$6 = (new Long(400, 0)).times_99rz9a_k$(toLong(k));
-          digest$at$default(pending, tmp_3.plus_gdf42y_k$(numberToLong(500).plus_gdf42y_k$(tmp$ret$6).times_99rz9a_k$(new Long(1000000, 0))), null, item);
+          run$at$default(pending, tmp_3.plus_gdf42y_k$(numberToLong(500).plus_gdf42y_k$(tmp$ret$6).times_99rz9a_k$(new Long(1000000, 0))), null, item);
         }
         seen.clear_j9egeb_k$();
       }
       if (c.board_1 == null && c.responseCue_1 && !prev.responseCue_1) {
         var press = t.plus_gdf42y_k$(new Long(300000000, 0));
-        digest$at$default(pending, press, ResponseKey_SINGLE_getInstance());
+        run$at$default(pending, press, ResponseKey_SINGLE_getInstance());
         // Inline function 'kotlin.Long.times' call
         var this_1 = stimDur;
         var other = 0.7 + 0.6 * rng.nextDouble_s2xvfg_k$();
         var tmp$ret$7 = this_1.toDouble_ygsx0s_k$() * other;
-        digest$at$default(pending, press.plus_gdf42y_k$(numberToLong(tmp$ret$7)), null, VOID, true);
+        run$at$default(pending, press.plus_gdf42y_k$(numberToLong(tmp$ret$7)), null, VOID, true);
       }
       var ch = c.choice_1;
       var tmp_4;
@@ -14698,57 +14729,63 @@ if (typeof String.prototype.startsWith === 'undefined') {
         var left = ensureNotNull(ch.left_1);
         var right = ensureNotNull(ch.right_1);
         var side = !left.active_1 ? ResponseKey_RIGHT_getInstance() : !right.active_1 ? ResponseKey_LEFT_getInstance() : rng.nextDouble_s2xvfg_k$() < 0.5 === left.longDelay_1 ? ResponseKey_LEFT_getInstance() : ResponseKey_RIGHT_getInstance();
-        digest$at$default(pending, t.plus_gdf42y_k$(new Long(700000000, 0)), side);
+        run$at$default(pending, t.plus_gdf42y_k$(new Long(700000000, 0)), side);
       }
       prev = c;
       t = t.plus_gdf42y_k$(new Long(16666667, 0));
     }
+    return to(def, run.records_hwjt4y_k$());
+  };
+  protoOf(CrossPlatformCheck).digest_jrflce_k$ = function (cfg, partId, phase, seed, review) {
+    var _destruct__k2r9zo = this.run_hsvr79_k$(cfg, partId, phase, seed, review);
+    var def = _destruct__k2r9zo.component1_7eebsc_k$();
+    var records = _destruct__k2r9zo.component2_7eebsb_k$();
     var sb = StringBuilder_init_$Create$_0();
-    var _iterator__ex2g4s = run.records_hwjt4y_k$().iterator_jk1svi_k$();
+    var _iterator__ex2g4s = records.iterator_jk1svi_k$();
     while (_iterator__ex2g4s.hasNext_bitz1p_k$()) {
       var r = _iterator__ex2g4s.next_20eer_k$();
-      var tmp_5 = sb.append_22ad7x_k$(r.taskId_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.taskVersion_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_cu3spi_k$(r.trialSeq_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.plan_1.condition_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.plan_1.stimulus_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_t8pm91_k$(r.outcome_1).append_58al37_k$(_Char___init__impl__6a9atx(124));
-      var tmp2_safe_receiver = r.rtMs_1;
+      var tmp = sb.append_22ad7x_k$(r.taskId_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.taskVersion_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_cu3spi_k$(r.trialSeq_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.plan_1.condition_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_22ad7x_k$(r.plan_1.stimulus_1).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_t8pm91_k$(r.outcome_1).append_58al37_k$(_Char___init__impl__6a9atx(124));
+      var tmp0_safe_receiver = r.rtMs_1;
+      var tmp_0;
+      if (tmp0_safe_receiver == null) {
+        tmp_0 = null;
+      } else {
+        // Inline function 'kotlin.let' call
+        // Inline function 'kotlin.contracts.contract' call
+        // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
+        tmp_0 = Portable_getInstance().fixed_brzvqy_k$(tmp0_safe_receiver, 3);
+      }
+      var tmp1_elvis_lhs = tmp_0;
+      var tmp_1 = tmp.append_22ad7x_k$(tmp1_elvis_lhs == null ? '-' : tmp1_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_uppzia_k$(r.stimulusFrames_1).append_58al37_k$(_Char___init__impl__6a9atx(124));
+      var tmp2_safe_receiver = r.onsetNanos_1;
+      var tmp3_elvis_lhs = tmp2_safe_receiver == null ? null : tmp2_safe_receiver.minus_eruey4_k$(r.trialStartNanos_1);
+      var tmp_2 = tmp_1.append_cu3spi_k$(tmp3_elvis_lhs == null ? new Long(-1, -1) : tmp3_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(124));
+      // Inline function 'kotlin.collections.sortedBy' call
+      var this_0 = r.details_1.get_entries_p20ztl_k$();
+      // Inline function 'kotlin.comparisons.compareBy' call
+      var tmp_3 = CrossPlatformCheck$digest$lambda;
+      var tmp$ret$2 = new sam$kotlin_Comparator$0_3(tmp_3);
+      var tmp_4 = sortedWith(this_0, tmp$ret$2);
+      tmp_2.append_22ad7x_k$(joinToString_1(tmp_4, ',', VOID, VOID, VOID, VOID, CrossPlatformCheck$digest$lambda_0)).append_58al37_k$(_Char___init__impl__6a9atx(10));
+    }
+    var _iterator__ex2g4s_0 = def.score_7j87ue_k$(records).iterator_jk1svi_k$();
+    while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
+      var m = _iterator__ex2g4s_0.next_20eer_k$();
+      var tmp_5 = sb.append_22ad7x_k$(m.name_1).append_58al37_k$(_Char___init__impl__6a9atx(61));
+      var tmp4_safe_receiver = m.value_1;
       var tmp_6;
-      if (tmp2_safe_receiver == null) {
+      if (tmp4_safe_receiver == null) {
         tmp_6 = null;
       } else {
         // Inline function 'kotlin.let' call
         // Inline function 'kotlin.contracts.contract' call
         // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
-        tmp_6 = Portable_getInstance().fixed_brzvqy_k$(tmp2_safe_receiver, 3);
+        tmp_6 = Portable_getInstance().fixed_brzvqy_k$(tmp4_safe_receiver, 6);
       }
-      var tmp3_elvis_lhs = tmp_6;
-      var tmp_7 = tmp_5.append_22ad7x_k$(tmp3_elvis_lhs == null ? '-' : tmp3_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(124)).append_uppzia_k$(r.stimulusFrames_1).append_58al37_k$(_Char___init__impl__6a9atx(124));
-      var tmp4_safe_receiver = r.onsetNanos_1;
-      var tmp5_elvis_lhs = tmp4_safe_receiver == null ? null : tmp4_safe_receiver.minus_eruey4_k$(r.trialStartNanos_1);
-      var tmp_8 = tmp_7.append_cu3spi_k$(tmp5_elvis_lhs == null ? new Long(-1, -1) : tmp5_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(124));
-      // Inline function 'kotlin.collections.sortedBy' call
-      var this_2 = r.details_1.get_entries_p20ztl_k$();
-      // Inline function 'kotlin.comparisons.compareBy' call
-      var tmp_9 = CrossPlatformCheck$digest$lambda_0;
-      var tmp$ret$10 = new sam$kotlin_Comparator$0_2(tmp_9);
-      var tmp_10 = sortedWith(this_2, tmp$ret$10);
-      tmp_8.append_22ad7x_k$(joinToString_1(tmp_10, ',', VOID, VOID, VOID, VOID, CrossPlatformCheck$digest$lambda_1)).append_58al37_k$(_Char___init__impl__6a9atx(10));
+      var tmp5_elvis_lhs = tmp_6;
+      tmp_5.append_22ad7x_k$(tmp5_elvis_lhs == null ? 'null' : tmp5_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(32)).append_t8pm91_k$(m.timingClass_1).append_58al37_k$(_Char___init__impl__6a9atx(32)).append_uppzia_k$(m.n_1).append_58al37_k$(_Char___init__impl__6a9atx(10));
     }
-    var _iterator__ex2g4s_0 = def.score_7j87ue_k$(run.records_hwjt4y_k$()).iterator_jk1svi_k$();
-    while (_iterator__ex2g4s_0.hasNext_bitz1p_k$()) {
-      var m = _iterator__ex2g4s_0.next_20eer_k$();
-      var tmp_11 = sb.append_22ad7x_k$(m.name_1).append_58al37_k$(_Char___init__impl__6a9atx(61));
-      var tmp6_safe_receiver = m.value_1;
-      var tmp_12;
-      if (tmp6_safe_receiver == null) {
-        tmp_12 = null;
-      } else {
-        // Inline function 'kotlin.let' call
-        // Inline function 'kotlin.contracts.contract' call
-        // Inline function 'org.cognisense.core.verify.CrossPlatformCheck.digest.<anonymous>' call
-        tmp_12 = Portable_getInstance().fixed_brzvqy_k$(tmp6_safe_receiver, 6);
-      }
-      var tmp7_elvis_lhs = tmp_12;
-      tmp_11.append_22ad7x_k$(tmp7_elvis_lhs == null ? 'null' : tmp7_elvis_lhs).append_58al37_k$(_Char___init__impl__6a9atx(32)).append_t8pm91_k$(m.timingClass_1).append_58al37_k$(_Char___init__impl__6a9atx(32)).append_uppzia_k$(m.n_1).append_58al37_k$(_Char___init__impl__6a9atx(10));
-    }
-    return Portable_getInstance().sha256Hex_ggg76c_k$(encodeToByteArray(sb.toString())) + ' ' + run.records_hwjt4y_k$().get_size_woubt6_k$();
+    return Portable_getInstance().sha256Hex_ggg76c_k$(encodeToByteArray(sb.toString())) + ' ' + records.get_size_woubt6_k$();
   };
   var CrossPlatformCheck_instance;
   function CrossPlatformCheck_getInstance() {

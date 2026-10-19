@@ -25,4 +25,4 @@ For the implemented tasks, **this file is authoritative**. `docs/task_specificat
 
 ## Every value is a proposed parameter
 
-None of these values has been piloted or expert-reviewed. They are the starting point the expert panel will rate (Protocol 1, `docs/protocol1_expert_review.md`).
+None of these values has been piloted, and the expert panel's ratings (Protocol 1, `docs/protocol1_expert_review.md`) have not yet been analysed. They are the values the panel rated.

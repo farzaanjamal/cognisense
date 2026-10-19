@@ -22,7 +22,7 @@
 | MotionSource interface; NoMotionSource | IMPLEMENTED | `core/motion/` |
 | ImuMotionSource | DESIGNED (stub throws; body placement undecided) | `core/motion/`, `hardware/` |
 | Session metadata, generated participant IDs, CSV/JSON export | IMPLEMENTED | `core/data/` |
-| Android app: rendering, input bridge, storage, three modes, Urdu/English UI | Code complete for all five core tasks; built by the cloud build; **runs on one phone** (Samsung A15, Android 16; adult smoke test, `docs/device_tests.md`) | `android/app/` |
+| Android app: rendering, input bridge, storage, three modes, Urdu/English UI | Code complete for all five core tasks; built by the cloud build; **runs on one phone** (Samsung Galaxy A15, Android 16; adult smoke test, `docs/device_tests.md`) | `android/app/` |
 | ESP32 firmware | DESIGNED (data contract only) | `hardware/` |
 
 ## 2. Layers

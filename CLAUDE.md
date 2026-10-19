@@ -4,7 +4,7 @@ Read this first in every session. It carries over the context of the claude.ai c
 
 ## The project
 
-Cognisense is **Farzaan Jamal's** project: an open-source, offline research prototype that runs five standard cognitive tasks (Go/No-Go, spatial span, Flanker, time reproduction, choice-delay) in a browser and on low-cost Android phones, for research with children aged 8–14 in Pakistan. Every measure is labelled by how much device timing error can distort it:
+Cognisense is **Farzaan Jamal Khan's** project (Farzaan is his first name, Jamal his middle name, Khan his family name): an open-source, offline research prototype that runs five standard cognitive tasks (Go/No-Go, spatial span, Flanker, time reproduction, choice-delay) in a browser and on low-cost Android phones, for research with children aged 8–14 in Pakistan. Every measure is labelled by how much device timing error can distort it:
 
 - **class A:** timing-independent;
 - **class B:** robust to a constant delay;
@@ -24,14 +24,16 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 7. **Task stage integrity** (web demo): nothing on the task stage is animated by CSS, stimuli appear in a single frame, and no feedback, sound or timer appears during scored trials.
 8. **Protocol 1 is fixed** (`docs/protocol1_expert_review.md`). Do not change `analysis/cvi.py` decision bands. Any deviation is recorded in the protocol's "Deviations" section with a date and reason.
 
-## Current state (18 October 2026)
+## Current state (19 October 2026)
 
-- **Software 0.6.1-dev, task config 0.3.** All 221 core checks, 13 + 7 analysis tests and the browser end-to-end tests pass. GitHub (`farzaanjamal/cognisense`) `main` holds 0.6.0-dev (merged 8 October); 0.6.1-dev is on a pull request.
-- **The Android app runs on one phone:** Samsung A15, Android 16, adult self-test by Farzaan, no problems seen (`docs/device_tests.md`). This shows the app works on that phone; it says nothing about timing accuracy or about children. The test date and app build are still TODO in that file.
+- **Software 0.6.2-dev, task config 0.3.** All 221 core checks, the app's 3 storage round-trip unit tests, 13 + 7 analysis tests and the browser end-to-end tests pass. GitHub (`farzaanjamal/cognisense`) `main` holds 0.6.1-dev (merged 19 October); 0.6.2-dev is on a pull request.
+- **The Android app runs on one phone:** Samsung Galaxy A15, Android 16, adult self-test by Farzaan; all five tasks ran with no problems (`docs/device_tests.md`, matching the paper's device-run section). This shows the app works on that phone; it says nothing about timing accuracy or about children. The test date is still TODO in that file.
 - **GitHub Pages is enabled;** the "pages" workflow publishes the web demo whenever `browser/dist/` changes on `main`.
 - **Protocol 1 has one deviation** (18 October 2026): a reviewer who is Farzaan's parent is excluded from the content validity indices, and close personal relations do not count toward the minimum of 6 reviewers.
 - **Release workflow:** on a `v*` tag without the signing secrets, the signed-APK job skips with a notice instead of failing. No tag or release exists yet; Farzaan decides on Zenodo first.
-- **Still TODO:** contact email (README, CITATION.cff), demo video link (README), paper link (README and `LINKS.paper` in `browser/web/app.js`).
+- **Expert review:** invitations were sent to several psychology professors; ratings have been received; the analysis is pending. Ratings, reviewer names and comments are never committed to the repository.
+- **Contact:** farzaanjamal2009@gmail.com (README, CITATION.cff).
+- **Still TODO:** demo video link (README), paper link (README and `LINKS.paper` in `browser/web/app.js`).
 - **Documents kept on claude.ai** (export them into the repository when possible: the paper into `paper/`, the others into `docs/expert-review/`; both folders are still empty):
   - the research paper (preprint v0.5; 8 [VERIFY] markers left);
   - the expert-review task booklet, rating form, and information and consent sheet;
@@ -44,6 +46,8 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
 # Mutation check: six planted defects, each must make the core tests fail (about 3 min)
 KOTLINC=/path/to/kotlinc/bin/kotlinc ./mutation_check.sh   # still in android/core
+# App unit tests (storage round trip): run by the cloud build; need the Android SDK
+cd android && ./gradlew :app:testStandardDebugUnitTest
 # Analysis (Python 3; numpy 2.4.4 for the simulation)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py
 # Web demo: rebuild after changing anything in browser/, config/ or the core,
@@ -57,7 +61,7 @@ The cloud build (`.github/workflows/build.yml`) runs all of these except the mut
 
 ## Open tasks, in priority order
 
-1. Expert review per Protocol 1: finish the placeholders ([your email address], [date], professor names) and the invitations. Count only reviewers without a close personal relationship to Farzaan toward the minimum of 6 (Deviations). Enter returned ratings into the CSV format `analysis/cvi.py` reads.
+1. Expert review per Protocol 1: ratings are in; analyse them. Count only reviewers without a close personal relationship to Farzaan toward the minimum of 6 (Deviations). Farzaan enters the ratings into the CSV format `analysis/cvi.py` reads, outside the repository (ratings, names and comments are not committed).
 2. Resolve the remaining [VERIFY] markers in the paper.
 3. Timing study with slow-motion video (no ethics approval needed; only phones are measured).
 4. Find a supervising academic; then Protocol 2 (child pilot) and the ethics application.

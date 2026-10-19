@@ -25,7 +25,7 @@ android {
         minSdk = 26        // Android 8.0: keeps older, cheaper field phones supported
         targetSdk = 35     // Android 15
         versionCode = 1
-        versionName = "0.6.1-dev"
+        versionName = "0.6.2-dev"
         buildConfigField("String", "GIT_COMMIT", "\"$gitCommit\"")
     }
     buildFeatures { buildConfig = true }
@@ -67,6 +67,10 @@ android {
             if (keystore != null) signingConfig = signingConfigs.getByName("release")
         }
     }
+    // JVM unit tests (storage round trip) read the shared task configuration.
+    testOptions {
+        unitTests.all { it.systemProperty("cognisense.config", rootProject.file("../config/tasks.json").absolutePath) }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -76,5 +80,9 @@ android {
 kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
 
 dependencies {
-    implementation(project(":core")) // the only dependency
+    implementation(project(":core")) // the only runtime dependency
+    // Test-only (never packaged in the app): JUnit, and the org.json library, because the
+    // android.jar on the JVM unit-test classpath contains only stubs of the framework's org.json.
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303")
 }

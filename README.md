@@ -84,15 +84,15 @@ Reproduce it with `python analysis/timing_simulation.py`; the outputs used in th
 | Component | Status | What the claim rests on |
 |---|---|---|
 | Five core tasks: logic, scoring, export | IMPLEMENTED | 221 automated checks, including simulated children; 6 of 6 planted defects detected (`android/core/mutation_check.sh`) |
-| Version 0.3 design fixes: balanced Go/No-Go (fast–slow–slow–fast, 16 No-Go per rate), late-response latencies kept, matched retest sequences for spatial span, choice-delay marked exploratory | IMPLEMENTED | Tests of balance, latencies (exact values), retest provenance and path-length matching; storage round trip; 72/72 identical runs across platforms |
+| Version 0.3 design fixes: balanced Go/No-Go (fast–slow–slow–fast, 16 No-Go per rate), late-response latencies kept, matched retest sequences for spatial span, choice-delay marked exploratory | IMPLEMENTED | Tests of balance, latencies (exact values), retest provenance and path-length matching; storage round trip of every scripted trial record (JVM unit test in the app, run by the cloud build); 72/72 identical runs across platforms |
 | Web demo (guided five-task flow, results visualisations) | IMPLEMENTED | End-to-end tests of every task and the guided flow in headless Chrome; zero network requests; no errors |
 | Shared configuration with SHA-256 per session | IMPLEMENTED | Loader and validation tests |
 | Timing-error simulation study | IMPLEMENTED | 7 unit tests; results reproducible from a fixed seed |
 | Content-validity analysis (`analysis/cvi.py`) | IMPLEMENTED | 13 tests, including published worked values and the Protocol 1 decision bands |
-| Android app (Expert Review, Session with first/retest sessions, Dashboard) | Builds in the cloud build (both variants; no permissions requested). **Runs on one phone** (Samsung A15, Android 16): adult smoke test passed with no problems seen | GitHub Actions build; one adult self-test, [`docs/device_tests.md`](docs/device_tests.md). Shows the app works on that phone; says nothing about timing accuracy or children |
+| Android app (Expert Review, Session with first/retest sessions, Dashboard) | Builds in the cloud build (both variants; no permissions requested). **Runs on one phone** (Samsung Galaxy A15, Android 16): adult self-test, all five tasks ran with no problems | GitHub Actions build; one adult self-test, [`docs/device_tests.md`](docs/device_tests.md). Shows the app works on that phone; says nothing about timing accuracy or children |
 | Hardware timing unit (ESP32 + photodiode), motion sensing | DESIGNED | Interfaces only |
 | Urdu interface text | Draft, unvalidated | Needs forward and back translation |
-| Expert content review | Protocol fixed in advance; reviewers being invited | [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md), including its Deviations section |
+| Expert content review | Invitations sent to several psychology professors; ratings received; analysis pending | [`docs/protocol1_expert_review.md`](docs/protocol1_expert_review.md), including its Deviations section. No ratings, names or comments are in the repository |
 | Device timing study (slow-motion video) | PLANNED | Measures phones only; no participants |
 | Child pilot | PLANNED | Requires a supervising academic, a supervising psychologist and ethics approval |
 
@@ -121,6 +121,9 @@ The full list is in section 5.4 of the paper.
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
 # Mutation check: plants six defects one at a time and confirms the tests catch each
 KOTLINC=/path/to/kotlinc/bin/kotlinc ./mutation_check.sh   # still in android/core
+
+# App unit tests: storage round trip of every scripted trial record (needs the Android SDK; the cloud build runs them)
+cd android && ./gradlew :app:testStandardDebugUnitTest
 
 # Analysis scripts (Python 3.8+; the simulation needs numpy, and numpy 2.4.4 reproduces analysis/results/ exactly)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py
@@ -152,7 +155,7 @@ No Android Studio? [`docs/cloud_build.md`](docs/cloud_build.md) explains how Git
 
 ## Authorship and contributions
 
-**Cognisense is Farzaan Jamal's work.** He did the substantial intellectual work behind it:
+**Cognisense is Farzaan Jamal Khan's work.** He did the substantial intellectual work behind it:
 
 - **The idea:** an assessment platform that could work for children in Pakistan.
 - **The research question:** can low-cost phones deliver cognitive tasks, and which measurements survive the phones' timing error?
@@ -165,7 +168,7 @@ The code, the simulation code and the first drafts of the documentation and pape
 
 ## Contact
 
-Farzaan Jamal: TODO: add a contact email address. Until then, use [GitHub issues](https://github.com/farzaanjamal/cognisense/issues).
+Farzaan Jamal Khan: [farzaanjamal2009@gmail.com](mailto:farzaanjamal2009@gmail.com). Questions and problem reports can also go to [GitHub issues](https://github.com/farzaanjamal/cognisense/issues).
 
 ## Citation
 

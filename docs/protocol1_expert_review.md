@@ -2,7 +2,7 @@
 
 **Status:** fixed on 7 October 2026, **before any invitation was sent or any rating collected**. The repository commit that adds this file timestamps it. Any later change is listed under "Deviations" in section 10, with its reason.
 
-**Investigator:** Farzaan Jamal. **Supervisor:** [name and institution, once confirmed].
+**Investigator:** Farzaan Jamal Khan. **Supervisor:** [name and institution, once confirmed].
 
 > Cognisense is a research prototype that records performance on computerised cognitive tasks; it does not diagnose, detect or identify ADHD or any other condition, has not been validated for screening, and its output must not be used to make decisions about any individual child.
 

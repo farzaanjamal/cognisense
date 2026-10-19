@@ -7,6 +7,8 @@ import org.cognisense.core.engine.Phase
 import org.cognisense.core.engine.ResponseEvent
 import org.cognisense.core.engine.ResponseKey
 import org.cognisense.core.engine.RunContext
+import org.cognisense.core.engine.TaskDefinition
+import org.cognisense.core.engine.TrialRecord
 import org.cognisense.core.rng.SeededRandom
 import org.cognisense.core.tasks.FlankerTask
 import org.cognisense.core.tasks.GoNoGoTask
@@ -24,7 +26,11 @@ import org.cognisense.core.util.Portable
 object CrossPlatformCheck {
     private const val PERIOD = 16_666_667L
 
-    fun digest(cfg: BatteryConfig, partId: String, phase: Phase, seed: Long, review: Boolean): String {
+    /**
+     * Runs one task phase with the scripted child and returns the definition and its trial records.
+     * Also used by the app's storage round-trip test, which needs realistic records from every task.
+     */
+    fun run(cfg: BatteryConfig, partId: String, phase: Phase, seed: Long, review: Boolean): Pair<TaskDefinition, List<TrialRecord>> {
         val def = if (review) cfg.review(partId) else cfg.standard(partId)
         val run = def.createRun(RunContext(phase, seed, 60.0, cfg.common))
         val rng = SeededRandom(seed xor 0x5EEDL)
@@ -83,18 +89,23 @@ object CrossPlatformCheck {
             prev = c
             t += PERIOD
         }
+        return def to run.records()
+    }
+
+    fun digest(cfg: BatteryConfig, partId: String, phase: Phase, seed: Long, review: Boolean): String {
+        val (def, records) = run(cfg, partId, phase, seed, review)
         val sb = StringBuilder()
-        for (r in run.records()) {
+        for (r in records) {
             sb.append(r.taskId).append('|').append(r.taskVersion).append('|').append(r.trialSeq).append('|')
                 .append(r.plan.condition).append('|').append(r.plan.stimulus).append('|').append(r.outcome).append('|')
                 .append(r.rtMs?.let { Portable.fixed(it, 3) } ?: "-").append('|').append(r.stimulusFrames).append('|')
                 .append(r.onsetNanos?.minus(r.trialStartNanos) ?: -1).append('|')
                 .append(r.details.entries.sortedBy { it.key }.joinToString(",") { "${it.key}=${it.value}" }).append('\n')
         }
-        for (m in def.score(run.records())) {
+        for (m in def.score(records)) {
             sb.append(m.name).append('=').append(m.value?.let { Portable.fixed(it, 6) } ?: "null")
                 .append(' ').append(m.timingClass).append(' ').append(m.n).append('\n')
         }
-        return Portable.sha256Hex(sb.toString().encodeToByteArray()) + " " + run.records().size
+        return Portable.sha256Hex(sb.toString().encodeToByteArray()) + " " + records.size
     }
 }
