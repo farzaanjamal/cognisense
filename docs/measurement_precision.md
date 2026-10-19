@@ -8,7 +8,7 @@
 
 > Cognisense is a research prototype that records performance on computerised cognitive tasks; it does not diagnose, detect or identify ADHD or any other condition, has not been validated for screening, and its output must not be used to make decisions about any individual child.
 
-**No timing figure in this document describes Cognisense.** Nothing has been measured on a device yet. Figures from other studies are cited as context, and every planned measurement is listed without values.
+**No timing figure in this document describes Cognisense.** The app has run on one phone in an adult smoke test (`docs/device_tests.md`), which checked that it works; no timing accuracy has been measured on any device. Figures from other studies are cited as context, and every planned measurement is listed without values.
 
 ---
 
@@ -91,8 +91,8 @@ Two points matter for interpretation:
 
 | Mitigation | Status |
 |---|---|
-| Response time taken from the MotionEvent timestamp, not callback time | IMPLEMENTED in core; Android code written (`TaskView.eventTimeNanos`; ns on API 34+, ms below); not yet run on a device |
-| Onset = frame time of the first frame containing the stimulus | IMPLEMENTED in core; Android code written (`TaskRunner`, Choreographer); not yet run on a device |
+| Response time taken from the MotionEvent timestamp, not callback time | IMPLEMENTED in core; Android code written (`TaskView.eventTimeNanos`; ns on API 34+, ms below); runs on one phone (smoke test); accuracy not measured |
+| Onset = frame time of the first frame containing the stimulus | IMPLEMENTED in core; Android code written (`TaskRunner`, Choreographer); runs on one phone (smoke test); accuracy not measured |
 | Engine never reads a clock; all scheduling targets the nearest frame | IMPLEMENTED; tested at 60, 90, 120 and 144 Hz in simulation |
 | Displayed stimulus duration and frame count logged per trial | IMPLEMENTED in core |
 | Dropped-frame detection and per-trial flags | IMPLEMENTED in core |
@@ -100,11 +100,11 @@ Two points matter for interpretation:
 | Interruptions end the trial as INTERRUPTED; the pause gap is not miscounted as dropped frames | IMPLEMENTED in core |
 | Onset marker that mirrors stimulus visibility (rising edge = onset, falling edge = offset) | IMPLEMENTED in core; drawing code written, inset 24 dp from the corner so rounded corners cannot clip it |
 | Logging of device model, OS, refresh rate (nominal and measured), pixel density, brightness, Do-Not-Disturb state, clock check | Fields IMPLEMENTED in core; collection code written (`DeviceInfo`, `TaskRunner` refresh probe) |
-| Fixed window brightness, immersive full screen, locked landscape, 60 Hz display mode requested, no permissions requested | Code written (`WindowControl`, manifest); not yet verified on a device |
+| Fixed window brightness, immersive full screen, locked landscape, 60 Hz display mode requested, no permissions requested | Code written (`WindowControl`, manifest); runs on one phone in the smoke test (`docs/device_tests.md`); no permissions requested (checked by the cloud build) |
 | Pre-session checklist (quiet mode, table, consent on paper, screen protector, battery) stored in session metadata | Code written |
 | 1 s fixation lead-in after an interruption, so no stimulus appears on the first frame back | IMPLEMENTED in core |
 
-"IMPLEMENTED in core" means the logic exists in `android/core` and passes simulation tests. It has not been run on a phone. Simulation verifies the engine's own logic; it cannot reveal device latency.
+"IMPLEMENTED in core" means the logic exists in `android/core` and passes simulation tests. Apart from one adult smoke test on one phone (`docs/device_tests.md`), it has not been run on real devices. Simulation verifies the engine's own logic; it cannot reveal device latency.
 
 ## 5. The hardware solution (DESIGNED)
 

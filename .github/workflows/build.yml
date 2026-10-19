@@ -92,18 +92,44 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: actions/setup-java@v5
-        with: { distribution: temurin, java-version: '17' }
-      - uses: gradle/actions/setup-gradle@v4
-      - name: Decode the signing key (from repository secrets; never committed)
+      # Without the signing secrets the job skips cleanly (green, with a notice) instead of failing,
+      # so tagging a version never shows a failed build. Secrets cannot be read in a job-level "if".
+      - name: Check that the signing secrets are set
+        id: signing
         env:
           KEYSTORE_BASE64: ${{ secrets.COGNISENSE_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.COGNISENSE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.COGNISENSE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.COGNISENSE_KEY_PASSWORD }}
         run: |
-          if [ -z "$KEYSTORE_BASE64" ]; then echo "::error::Signing secrets are not set. See docs/release_signing.md."; exit 1; fi
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          missing=""
+          [ -n "$KEYSTORE_BASE64" ] || missing="$missing COGNISENSE_KEYSTORE_BASE64"
+          [ -n "$KEYSTORE_PASSWORD" ] || missing="$missing COGNISENSE_KEYSTORE_PASSWORD"
+          [ -n "$KEY_ALIAS" ] || missing="$missing COGNISENSE_KEY_ALIAS"
+          [ -n "$KEY_PASSWORD" ] || missing="$missing COGNISENSE_KEY_PASSWORD"
+          if [ -n "$missing" ]; then
+            msg="Signed reviewer APK skipped: the signing secrets are not set (missing:$missing). No release was created. See docs/release_signing.md."
+            echo "::notice title=Signed reviewer APK skipped::$msg"
+            echo "$msg" >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.signing.outputs.ready == 'true'
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-java@v5
+        if: steps.signing.outputs.ready == 'true'
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.signing.outputs.ready == 'true'
+      - name: Decode the signing key (from repository secrets; never committed)
+        if: steps.signing.outputs.ready == 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.COGNISENSE_KEYSTORE_BASE64 }}
+        run: echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
       - name: Build the signed reviewer APK
+        if: steps.signing.outputs.ready == 'true'
         working-directory: android
         env:
           COGNISENSE_KEYSTORE: ${{ runner.temp }}/release.jks
@@ -112,6 +138,7 @@ jobs:
           COGNISENSE_KEY_PASSWORD: ${{ secrets.COGNISENSE_KEY_PASSWORD }}
         run: ./gradlew --no-daemon :app:assembleReviewerRelease
       - name: Attach APK, checksum and browser preview to a pre-release
+        if: steps.signing.outputs.ready == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

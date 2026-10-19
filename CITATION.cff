@@ -10,7 +10,8 @@ type: software
 authors:
   - given-names: "Farzaan"
     family-names: "Jamal"
-version: "0.5.0-dev"
+    # TODO: add email once a contact address is chosen (same as the README "Contact" section).
+version: "0.6.1-dev"
 license: MIT
 repository-code: "https://github.com/farzaanjamal/cognisense"
 url: "https://farzaanjamal.github.io/cognisense/"

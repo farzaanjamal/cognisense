@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; font-src data:; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
-<meta name="cognisense-sources" content="b99214af055b672e1d82c29d6a9725589123e2fa8964b4a0819b0d32cc6d83a2">
+<meta name="cognisense-sources" content="482747fb9a8add4f16fa57efcfa304012fbf19c393edee883d3eed277d64b973">
 <link rel="icon" href="data:,">
 <title>Cognisense: research prototype demo</title>
 <style>
@@ -15315,6 +15315,7 @@ if (typeof String.prototype.startsWith === 'undefined') {
   // ------------------------------------------------------------------ visitor-facing copy (English; the demo shell only)
   // Participant-facing text (task names, instructions, keyboard hints) stays in config/strings.json with its Urdu drafts.
   // Links appear only once they are set (when the repository and paper are public).
+  // TODO: set paper to the preprint link once it is posted (an empty link is hidden).
   const LINKS = { paper: '', code: 'https://github.com/farzaanjamal/cognisense', feedback: 'https://github.com/farzaanjamal/cognisense/issues' };
   const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const GUIDED = CFG.core_battery_order.map((code) => CFG.pool.find((p) => p.code === code));

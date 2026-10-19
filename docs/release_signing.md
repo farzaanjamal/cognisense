@@ -32,7 +32,7 @@ Secrets are encrypted by GitHub and never appear in logs.
 
 ## 3. Make a release
 
-Push a version tag. GitHub Desktop: *Repository → Create tag*, then push. With git: `git tag v0.3.0 && git push origin v0.3.0`.
+Push a version tag. GitHub Desktop: *Repository → Create tag*, then push. With git: `git tag v0.6.1 && git push origin v0.6.1` (use the current version number).
 
 The build workflow then:
 
@@ -40,4 +40,6 @@ The build workflow then:
 2. builds the signed reviewer APK;
 3. creates a **pre-release** with the APK, its SHA-256 checksum and the browser preview attached.
 
-**Recommendation:** do not tag `v1.0` until the app has passed the smoke test on at least one real Android phone. Until then, use `v0.x` tags; they are marked as pre-releases.
+**If the four secrets are not set**, the job "Signed reviewer APK on a version tag" does not fail. It shows a notice, "Signed reviewer APK skipped", naming the missing secrets, and finishes green without building an APK or creating a release. The checks and the unsigned debug builds still run as usual.
+
+**Recommendation:** do not tag `v1.0` until the app has passed the smoke test on at least one real Android phone. That condition is now met for one phone, a Samsung A15 with Android 16 (`docs/device_tests.md`). Until `v1.0` is decided, use `v0.x` tags; they are marked as pre-releases.

@@ -40,8 +40,8 @@ You do not need Android Studio or a powerful computer. GitHub builds the app on 
 | Android build, both variants | The app compiles and packages with the real Android tools |
 | Manifest check | The installed app requests no permissions at all |
 
-**What it cannot check:** whether the app behaves correctly on a real phone, and anything about timing. Those need one run on a real Android device (`android/README.md`, smoke test).
+**What it cannot check:** whether the app behaves correctly on a real phone, and anything about timing. The first needs the smoke test on a real Android device (`android/README.md`); results are recorded in `docs/device_tests.md`. Timing needs the separate timing study.
 
-## The first build will probably fail
+## If a build fails
 
-The Android code has been compiled against the Android API but never built with Gradle. The first cloud run is the first real build. Errors at that point are expected and usually quick to fix: send the error text.
+The cloud build has built the app with Gradle since 0.5.0-dev. If a run fails, open it in the Actions tab and send the error text from the failing step.

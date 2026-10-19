@@ -24,12 +24,15 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 7. **Task stage integrity** (web demo): nothing on the task stage is animated by CSS, stimuli appear in a single frame, and no feedback, sound or timer appears during scored trials.
 8. **Protocol 1 is fixed** (`docs/protocol1_expert_review.md`). Do not change `analysis/cvi.py` decision bands. Any deviation is recorded in the protocol's "Deviations" section with a date and reason.
 
-## Current state (7 October 2026)
+## Current state (18 October 2026)
 
-- **Software 0.6.0-dev, task config 0.3.** All 220 core checks, 13 + 7 analysis tests and the browser end-to-end tests pass. The Android app builds in GitHub Actions but **has never run on a phone**.
-- **GitHub (`farzaanjamal/cognisense`) holds an older version:** 0.5.0-dev plus the cloud-build fix. The 0.6.0 changes (balanced Go/No-Go, late-response latencies, spatial-span retest form, choice-delay exploratory, Protocol 1, decision bands, this file) were delivered as `cognisense.zip` and **still need to be committed and pushed**.
-- **GitHub Pages** must be enabled once: Settings → Pages → Source: GitHub Actions, then run the "pages" workflow.
-- **Documents kept on claude.ai** (export them into the repository when possible: the paper into `paper/`, the others into `docs/expert-review/`):
+- **Software 0.6.1-dev, task config 0.3.** All 221 core checks, 13 + 7 analysis tests and the browser end-to-end tests pass. GitHub (`farzaanjamal/cognisense`) `main` holds 0.6.0-dev (merged 8 October); 0.6.1-dev is on a pull request.
+- **The Android app runs on one phone:** Samsung A15, Android 16, adult self-test by Farzaan, no problems seen (`docs/device_tests.md`). This shows the app works on that phone; it says nothing about timing accuracy or about children. The test date and app build are still TODO in that file.
+- **GitHub Pages is enabled;** the "pages" workflow publishes the web demo whenever `browser/dist/` changes on `main`.
+- **Protocol 1 has one deviation** (18 October 2026): a reviewer who is Farzaan's parent is excluded from the content validity indices, and close personal relations do not count toward the minimum of 6 reviewers.
+- **Release workflow:** on a `v*` tag without the signing secrets, the signed-APK job skips with a notice instead of failing. No tag or release exists yet; Farzaan decides on Zenodo first.
+- **Still TODO:** contact email (README, CITATION.cff), demo video link (README), paper link (README and `LINKS.paper` in `browser/web/app.js`).
+- **Documents kept on claude.ai** (export them into the repository when possible: the paper into `paper/`, the others into `docs/expert-review/`; both folders are still empty):
   - the research paper (preprint v0.5; 8 [VERIFY] markers left);
   - the expert-review task booklet, rating form, and information and consent sheet;
   - the one-page summary.
@@ -37,8 +40,10 @@ Farzaan did the substantial intellectual work: the idea, the research question, 
 ## Commands
 
 ```bash
-# Core task logic: 220 checks (needs JDK 17+ and the Kotlin 2.0.21 compiler)
+# Core task logic: 221 checks (needs JDK 17+ and the Kotlin 2.0.21 compiler)
 cd android/core && KOTLINC=/path/to/kotlinc/bin/kotlinc ./run_tests.sh
+# Mutation check: six planted defects, each must make the core tests fail (about 3 min)
+KOTLINC=/path/to/kotlinc/bin/kotlinc ./mutation_check.sh   # still in android/core
 # Analysis (Python 3; numpy 2.4.4 for the simulation)
 cd analysis && python -m unittest test_cvi.py test_timing_simulation.py
 # Web demo: rebuild after changing anything in browser/, config/ or the core,
@@ -48,16 +53,14 @@ python3 browser/build.py --kotlin-home /path/to/kotlinc && python3 browser/build
 cd browser/test && npm install --no-save puppeteer-core@23 && CHROME_PATH=/path/to/chrome node preview_test.js T2
 ```
 
-The cloud build (`.github/workflows/build.yml`) runs all of these on every push.
+The cloud build (`.github/workflows/build.yml`) runs all of these except the mutation check on every push to `main` and on every pull request.
 
 ## Open tasks, in priority order
 
-1. Commit and push the 0.6.0 changes; confirm the cloud build is green; enable Pages.
-2. Phone smoke test (`android/README.md`): Farzaan installs the debug APK from the Actions artifacts. Fix whatever it finds.
-3. Expert review per Protocol 1: fill in the placeholders ([your email address], [date], professor names), then send. Enter returned ratings into the CSV format `analysis/cvi.py` reads.
-4. Resolve the remaining [VERIFY] markers in the paper.
-5. Timing study with slow-motion video (no ethics approval needed; only phones are measured).
-6. Find a supervising academic; then Protocol 2 (child pilot) and the ethics application.
+1. Expert review per Protocol 1: finish the placeholders ([your email address], [date], professor names) and the invitations. Count only reviewers without a close personal relationship to Farzaan toward the minimum of 6 (Deviations). Enter returned ratings into the CSV format `analysis/cvi.py` reads.
+2. Resolve the remaining [VERIFY] markers in the paper.
+3. Timing study with slow-motion video (no ethics approval needed; only phones are measured).
+4. Find a supervising academic; then Protocol 2 (child pilot) and the ethics application.
 
 ## Tools in this workspace
 

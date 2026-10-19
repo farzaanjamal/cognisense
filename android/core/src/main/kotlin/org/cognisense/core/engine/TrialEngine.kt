@@ -3,7 +3,8 @@ package org.cognisense.core.engine
 /**
  * Runs one phase of a fixed-timeline task (Go/No-Go, Flanker, and other timeline tasks).
  *
- * STATUS: IMPLEMENTED (simulation-tested at 60/90/120/144 Hz; not yet run on a device).
+ * STATUS: IMPLEMENTED (simulation-tested at 60/90/120/144 Hz; runs on one phone in an adult smoke test,
+ * docs/device_tests.md; its timing on real devices is not yet measured).
  *
  * The engine never reads a clock. It is driven by two inputs, each carrying its own timestamp:
  *   onFrame(frameTimeNanos)  — once per display frame (Choreographer vsync time)
